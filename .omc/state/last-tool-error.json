@@ -1,7 +1,0 @@
-{
-  "tool_name": "Bash",
-  "tool_input_preview": "{\"command\":\"git init && git add . && git commit -m \\\"$(cat <<'EOF'\\nfeat: initial commit — Nightious website\\n\\nFull Astro 5 static site with Tailwind v4, GSAP, and TypeScript.\\nImplements \\\"The Trans...",
-  "error": "Exit code 128\nhint: Using 'master' as the name for the initial branch. This default branch name\nhint: will change to \"main\" in Git 3.0. To configure the initial branch name\nhint: to use in all of your new repositories, which will suppress this warning,\nhint: call:\nhint:\nhint: \tgit config --global init.defaultBranch <name>\nhint:\nhint: Names commonly chosen instead of 'master' are 'main', 'trunk' and\nhint: 'development'. The just-created branch can be renamed via this command:\nhint:\nhint: \tgit bra...",
-  "timestamp": "2026-03-24T16:43:17.133Z",
-  "retry_count": 1
-}

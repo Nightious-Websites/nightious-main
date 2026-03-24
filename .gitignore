@@ -27,3 +27,11 @@ pnpm-debug.log*
 .idea/
 *.swp
 *.swo
+
+# OMC / Claude Code internal state
+.omc/
+.claude/
+.mcp.json
+
+# Logo source files (design assets, not deployed web assets)
+Nightious_Logos/
