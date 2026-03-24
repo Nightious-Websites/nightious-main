@@ -1,0 +1,24 @@
+{
+  "agents": [
+    {
+      "agent_id": "a4a89b74d266a22f1",
+      "agent_type": "fixer",
+      "started_at": "2026-03-24T16:43:01.467Z",
+      "parent_mode": "none",
+      "status": "completed",
+      "completed_at": "2026-03-24T16:43:18.319Z",
+      "duration_ms": 16852
+    },
+    {
+      "agent_id": "a46aa698380d74dbb",
+      "agent_type": "fixer",
+      "started_at": "2026-03-24T16:43:18.559Z",
+      "parent_mode": "none",
+      "status": "running"
+    }
+  ],
+  "total_spawned": 2,
+  "total_completed": 1,
+  "total_failed": 0,
+  "last_updated": "2026-03-24T16:43:18.661Z"
+}

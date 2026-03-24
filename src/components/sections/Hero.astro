@@ -1,0 +1,274 @@
+---
+import GradientBlobs from '@/components/ui/GradientBlobs.astro'
+---
+
+<section
+  class="relative min-h-dvh flex flex-col items-center justify-center overflow-hidden pt-16"
+  aria-label="Hero"
+>
+  <!-- Photo background -->
+  <div class="absolute inset-0 z-0" aria-hidden="true">
+    <img
+      src="/images/photos/hero-home.webp"
+      alt=""
+      class="w-full h-full object-cover object-center"
+      loading="eager"
+      width="1920"
+      height="1080"
+    />
+    <!-- Dark overlay -->
+    <div class="absolute inset-0" style="background: linear-gradient(to bottom, rgba(2,0,10,0.82) 0%, rgba(2,0,10,0.68) 60%, rgba(2,0,10,0.92) 100%);"></div>
+    <!-- Royal purple tint -->
+    <div class="absolute inset-0" style="background: rgba(120, 81, 169, 0.12);" aria-hidden="true"></div>
+  </div>
+
+  <!-- Futuristic grid overlay -->
+  <div class="absolute inset-0 bg-grid pointer-events-none" style="z-index: 3;" aria-hidden="true"></div>
+
+  <!-- Scan line -->
+  <div class="scan-line" aria-hidden="true"></div>
+
+  <!-- Gradient blobs sit above photo -->
+  <div class="absolute inset-0 z-10" aria-hidden="true">
+    <GradientBlobs />
+  </div>
+
+  <!-- Large icon watermark -->
+  <div class="absolute inset-0 z-10 flex items-center justify-end pointer-events-none" aria-hidden="true">
+    <img
+      src="/images/logos/icon-color.png"
+      alt=""
+      width="1123"
+      height="1123"
+      class="opacity-5 w-[520px] h-auto select-none"
+      aria-hidden="true"
+    />
+  </div>
+
+  <!-- HUD corner brackets -->
+  <div class="absolute inset-0 z-20 pointer-events-none" aria-hidden="true">
+    <!-- Top-left -->
+    <div class="absolute top-8 left-8 w-10 h-10" style="border-top: 1px solid rgba(168,85,247,0.5); border-left: 1px solid rgba(168,85,247,0.5);"></div>
+    <!-- Top-right -->
+    <div class="absolute top-8 right-8 w-10 h-10" style="border-top: 1px solid rgba(168,85,247,0.5); border-right: 1px solid rgba(168,85,247,0.5);"></div>
+    <!-- Bottom-left -->
+    <div class="absolute bottom-8 left-8 w-10 h-10" style="border-bottom: 1px solid rgba(168,85,247,0.5); border-left: 1px solid rgba(168,85,247,0.5);"></div>
+    <!-- Bottom-right -->
+    <div class="absolute bottom-8 right-8 w-10 h-10" style="border-bottom: 1px solid rgba(168,85,247,0.5); border-right: 1px solid rgba(168,85,247,0.5);"></div>
+  </div>
+
+  <div class="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+
+    <!-- System status indicator -->
+    <div
+      id="hero-status"
+      class="inline-flex items-center gap-2 mb-5 opacity-0"
+    >
+      <span class="pulse-dot" aria-hidden="true"></span>
+      <span class="font-display text-xs tracking-[0.25em]" style="color: rgba(34, 197, 94, 0.8);">SYSTEM OPERATIONAL</span>
+    </div>
+
+    <!-- Eyebrow -->
+    <p
+      id="hero-eyebrow"
+      class="font-display text-xs sm:text-sm tracking-[0.3em] mb-6 opacity-0"
+      style="color: var(--color-purple-mid);"
+    >
+      ● IT &amp; DIGITAL SOLUTIONS
+    </p>
+
+    <!-- H1 -->
+    <h1
+      id="hero-h1"
+      class="font-display text-5xl sm:text-6xl md:text-7xl tracking-widest text-glow mb-6 opacity-0"
+      style="color: var(--color-text-primary);"
+    >
+      We speak your language.<br />
+      <span class="gradient-text">Not tech jargon.</span>
+    </h1>
+
+    <!-- Neon divider -->
+    <div class="neon-divider max-w-md mx-auto mb-6 opacity-0" id="hero-divider" aria-hidden="true"></div>
+
+    <!-- Subheadline -->
+    <p
+      id="hero-sub"
+      class="text-lg sm:text-xl md:text-2xl max-w-2xl mx-auto leading-relaxed mb-8 opacity-0"
+      style="color: var(--color-text-muted);"
+    >
+      IT support, web design, and digital marketing explained in plain
+      English&mdash;delivered by a team that actually picks up the phone.
+    </p>
+
+    <!-- Jargon Translation Animation -->
+    <div
+      id="hero-translator"
+      class="glass-strong w-full max-w-xl mx-auto p-4 rounded-xl mb-10 opacity-0 overflow-hidden"
+    >
+      <p class="font-display text-xs tracking-widest mb-2" style="color: var(--color-purple-mid);">TRANSLATING...</p>
+      <div class="relative" style="min-height: 2.5em;">
+        <p id="translator-text" class="text-sm leading-relaxed" style="color: var(--color-text-muted);"></p>
+      </div>
+    </div>
+
+    <!-- CTAs -->
+    <div
+      id="hero-ctas"
+      class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-10 opacity-0"
+    >
+      <a href="/contact" class="btn-primary text-base cursor-pointer">
+        Talk to a Real Human
+      </a>
+      <a href="/services" class="btn-ghost text-base cursor-pointer">
+        See What We Do &rarr;
+      </a>
+    </div>
+
+    <!-- Social proof -->
+    <p
+      id="hero-proof"
+      class="text-sm opacity-0"
+      style="color: var(--color-text-muted);"
+    >
+      <span aria-label="5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+      &nbsp;4.9/5 &middot; Trusted by 50+ businesses &amp; creators nationwide
+    </p>
+  </div>
+
+  <!-- Scroll cue -->
+  <div
+    id="hero-scroll"
+    class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-0 z-20"
+    aria-hidden="true"
+  >
+    <span class="font-display text-xs tracking-[0.25em]" style="color: var(--color-purple-mid);">SCROLL TO EXPLORE</span>
+    <svg
+      class="scroll-arrow"
+      width="20"
+      height="20"
+      viewBox="0 0 20 20"
+      fill="none"
+      aria-hidden="true"
+    >
+      <path d="M10 4v12M4 10l6 6 6-6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color: var(--color-purple-mid);"/>
+    </svg>
+  </div>
+</section>
+
+<style>
+  .scroll-arrow {
+    animation: bounce 2s ease-in-out infinite;
+  }
+
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(6px); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .scroll-arrow { animation: none; }
+  }
+</style>
+
+<script>
+  import { gsap } from 'gsap'
+
+  const translationPairs = [
+    {
+      jargon: 'Deploying containerized microservices to K8s cluster...',
+      plain: 'Setting up your website on fast, reliable servers.',
+    },
+    {
+      jargon: 'Configuring zero-trust network segmentation protocols...',
+      plain: 'Making sure hackers can\'t get into your business.',
+    },
+    {
+      jargon: 'Provisioning cloud-native CI/CD pipeline infrastructure...',
+      plain: 'Automating the boring parts of your workflow.',
+    },
+    {
+      jargon: 'Remediating CVE vulnerabilities in legacy endpoints...',
+      plain: 'Fixing security holes before they become problems.',
+    },
+  ]
+
+  let heroTl: gsap.core.Timeline | null = null
+  let translatorTl: gsap.core.Timeline | null = null
+
+  function initHero() {
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
+    const status     = document.getElementById('hero-status')
+    const eyebrow    = document.getElementById('hero-eyebrow')
+    const h1         = document.getElementById('hero-h1')
+    const divider    = document.getElementById('hero-divider')
+    const sub        = document.getElementById('hero-sub')
+    const translator = document.getElementById('hero-translator')
+    const ctas       = document.getElementById('hero-ctas')
+    const proof      = document.getElementById('hero-proof')
+    const scroll     = document.getElementById('hero-scroll')
+    const textEl     = document.getElementById('translator-text')
+
+    if (reduced) {
+      ;[status, eyebrow, h1, divider, sub, translator, ctas, proof, scroll].forEach(el => {
+        if (el) el.style.opacity = '1'
+      })
+      // Show first plain English statically
+      if (textEl) {
+        textEl.textContent = translationPairs[0].plain
+        textEl.style.color = 'var(--color-purple-light)'
+      }
+      return
+    }
+
+    heroTl = gsap.timeline({ defaults: { ease: 'power3.out' } })
+
+    heroTl.fromTo(status,     { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.5 })
+      .fromTo(eyebrow,    { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.6 }, '-=0.2')
+      .fromTo(h1,         { opacity: 0, y: 30, scale: 0.96 }, { opacity: 1, y: 0, scale: 1, duration: 0.8 }, '-=0.3')
+      .fromTo(divider,    { opacity: 0, scaleX: 0 }, { opacity: 1, scaleX: 1, duration: 0.5, ease: 'power2.out' }, '-=0.4')
+      .fromTo(sub,        { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.6 }, '-=0.3')
+      .fromTo(translator, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5 }, '-=0.3')
+      .fromTo(ctas,       { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5 }, '-=0.2')
+      .fromTo(proof,      { opacity: 0 }, { opacity: 1, duration: 0.5 }, '-=0.2')
+      .fromTo(scroll,     { opacity: 0 }, { opacity: 1, duration: 0.5 }, '-=0.2')
+
+    // Start translation cycle after hero intro
+    if (textEl) {
+      translatorTl = gsap.timeline({ repeat: -1, delay: 1.5 })
+
+      translationPairs.forEach((pair) => {
+        // Show jargon
+        translatorTl!.call(() => {
+          textEl.textContent = pair.jargon
+          textEl.style.color = 'var(--color-text-muted)'
+        })
+        translatorTl!.fromTo(textEl, { opacity: 0 }, { opacity: 1, duration: 0.4 })
+        translatorTl!.to(textEl, { opacity: 0, duration: 0.4, delay: 1.5 })
+
+        // Show plain English
+        translatorTl!.call(() => {
+          textEl.textContent = pair.plain
+          textEl.style.color = 'var(--color-purple-light)'
+          textEl.style.textShadow = '0 0 20px rgba(168, 85, 247, 0.3)'
+        })
+        translatorTl!.fromTo(textEl, { opacity: 0 }, { opacity: 1, duration: 0.4 })
+        translatorTl!.to(textEl, { opacity: 0, duration: 0.4, delay: 2.5 })
+
+        // Clear glow before next pair
+        translatorTl!.call(() => {
+          textEl.style.textShadow = 'none'
+        })
+      })
+    }
+  }
+
+  document.addEventListener('astro:before-swap', () => {
+    heroTl?.kill()
+    heroTl = null
+    translatorTl?.kill()
+    translatorTl = null
+  })
+
+  document.addEventListener('astro:page-load', initHero)
+</script>

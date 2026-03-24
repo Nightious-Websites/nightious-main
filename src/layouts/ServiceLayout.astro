@@ -1,0 +1,36 @@
+---
+import BaseLayout from './BaseLayout.astro'
+import SchemaService from '@/components/seo/SchemaService.astro'
+import SchemaBreadcrumb from '@/components/seo/SchemaBreadcrumb.astro'
+
+interface Props {
+  title: string
+  description: string
+  slug: string
+  ogImage?: string
+}
+
+const { title, description, slug, ogImage = '/images/og/og-service-page.png' } = Astro.props
+
+// Keep page title under 60 chars — short names get the full suffix; long ones drop "for Small Businesses"
+const suffix = ' for Small Businesses | Nightious'
+const shortSuffix = ' | Nightious'
+const pageTitle =
+  (title + suffix).length <= 60 ? title + suffix : title + shortSuffix
+
+const breadcrumbItems = [
+  { name: 'Home', url: 'https://nightious.com' },
+  { name: 'Services', url: 'https://nightious.com/services' },
+  { name: title, url: `https://nightious.com/services/${slug}` },
+]
+---
+
+<BaseLayout
+  title={pageTitle}
+  description={description}
+  ogImage={ogImage}
+>
+  <SchemaService title={title} description={description} slug={slug} />
+  <SchemaBreadcrumb items={breadcrumbItems} />
+  <slot />
+</BaseLayout>

@@ -1,0 +1,314 @@
+@import "tailwindcss";
+
+/* ─── Self-hosted fonts ─────────────────────────────────────────────────────── */
+@font-face {
+  font-family: 'Orbitron';
+  src: url('/fonts/Orbitron-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Exo 2';
+  src: url('/fonts/Exo2-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Exo 2';
+  src: url('/fonts/Exo2-SemiBold.woff2') format('woff2');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ─── Design tokens ─────────────────────────────────────────────────────────── */
+:root {
+  --color-bg-deep:      #02000a;
+  --color-bg-section:   #05000f;
+  --color-purple-base:  #7c3aed;
+  --color-purple-mid:   #a855f7;
+  --color-purple-light: #e9d5ff;
+  --color-pink:         #e879f9;
+  --color-pink-deep:    #ec4899;
+  --color-blue:         #60a5fa;
+  --color-text-primary: #f3e8ff;
+  --color-text-muted:   rgba(233, 213, 255, 0.55);
+
+  /* Glass effect */
+  --glass-bg:           rgba(255, 255, 255, 0.05);
+  --glass-border:       rgba(255, 255, 255, 0.10);
+  --glass-radius:       16px;
+  --glass-blur:         24px;
+  --glass-shadow-outer: 0 0 40px rgba(168, 85, 247, 0.12);
+  --glass-shadow-inner: inset 0 0 20px rgba(168, 85, 247, 0.04);
+  --glass-shadow-ring:  0 0 0 1px rgba(255, 255, 255, 0.04);
+}
+
+/* ─── Base ───────────────────────────────────────────────────────────────────── */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-bg-deep);
+  color: var(--color-text-primary);
+  font-family: 'Exo 2', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ─── Glass utility ─────────────────────────────────────────────────────────── */
+.glass {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--glass-radius);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  box-shadow:
+    var(--glass-shadow-outer),
+    var(--glass-shadow-inner),
+    var(--glass-shadow-ring);
+}
+
+/* ─── Typography ────────────────────────────────────────────────────────────── */
+.font-display {
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 700;
+}
+
+.text-glow {
+  text-shadow:
+    0 0 40px rgba(168, 85, 247, 0.6),
+    0 0 80px rgba(168, 85, 247, 0.3);
+}
+
+.text-muted {
+  color: var(--color-text-muted);
+}
+
+/* ─── Focus ring ────────────────────────────────────────────────────────────── */
+:focus-visible {
+  outline: 2px solid var(--color-purple-mid);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* ─── Gradient button ───────────────────────────────────────────────────────── */
+.btn-primary {
+  background: linear-gradient(135deg, var(--color-purple-base), var(--color-pink-deep));
+  color: #fff;
+  font-family: 'Exo 2', sans-serif;
+  font-weight: 600;
+  border-radius: 8px;
+  padding: 0.75rem 1.75rem;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 44px;
+  min-width: 44px;
+  white-space: nowrap;
+}
+
+.btn-primary:hover {
+  opacity: 0.9;
+  transform: translateY(-2px);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+.btn-ghost {
+  color: var(--color-purple-light);
+  border: 1px solid rgba(168, 85, 247, 0.4);
+  font-family: 'Exo 2', sans-serif;
+  font-weight: 600;
+  border-radius: 8px;
+  padding: 0.75rem 1.75rem;
+  transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 44px;
+  min-width: 44px;
+  white-space: nowrap;
+}
+
+.btn-ghost:hover {
+  background: rgba(168, 85, 247, 0.1);
+  border-color: var(--color-purple-mid);
+  transform: translateY(-2px);
+}
+
+.btn-ghost:active {
+  transform: translateY(0);
+}
+
+/* ─── Card hover ────────────────────────────────────────────────────────────── */
+.card-hover {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card-hover:hover,
+.card-hover:focus-within {
+  transform: translateY(-4px);
+  box-shadow:
+    0 0 60px rgba(168, 85, 247, 0.2),
+    inset 0 0 20px rgba(168, 85, 247, 0.06),
+    0 0 0 1px rgba(168, 85, 247, 0.2);
+}
+
+/* ─── Blobs ─────────────────────────────────────────────────────────────────── */
+.blob {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  filter: blur(50px);
+}
+
+/* ─── Section alternating bg ────────────────────────────────────────────────── */
+.section-alt {
+  background-color: var(--color-bg-section);
+}
+
+/* ─── Reduced motion ────────────────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ─── Purple glow border ────────────────────────────────────────────────────── */
+.border-glow {
+  border: 1px solid rgba(168, 85, 247, 0.3);
+  box-shadow: 0 0 20px rgba(168, 85, 247, 0.1);
+}
+
+/* ─── Futuristic grid overlay ────────────────────────────────────────────────── */
+.bg-grid {
+  background-image:
+    linear-gradient(rgba(168, 85, 247, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(168, 85, 247, 0.045) 1px, transparent 1px);
+  background-size: 64px 64px;
+}
+
+/* ─── Glass strong variant ───────────────────────────────────────────────────── */
+.glass-strong {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(168, 85, 247, 0.22);
+  border-radius: var(--glass-radius);
+  backdrop-filter: blur(32px);
+  -webkit-backdrop-filter: blur(32px);
+  box-shadow:
+    0 0 80px rgba(168, 85, 247, 0.16),
+    inset 0 0 40px rgba(168, 85, 247, 0.04),
+    0 0 0 1px rgba(255, 255, 255, 0.05);
+}
+
+/* ─── Neon top border accent ─────────────────────────────────────────────────── */
+.neon-top {
+  position: relative;
+}
+.neon-top::before {
+  content: '';
+  position: absolute;
+  top: -1px;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(168, 85, 247, 0.8), rgba(232, 121, 249, 0.8), transparent);
+  border-radius: var(--glass-radius) var(--glass-radius) 0 0;
+}
+
+/* ─── Neon divider ───────────────────────────────────────────────────────────── */
+.neon-divider {
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(168, 85, 247, 0.5) 30%,
+    rgba(232, 121, 249, 0.5) 70%,
+    transparent 100%
+  );
+}
+
+/* ─── Glow number ────────────────────────────────────────────────────────────── */
+.glow-number {
+  text-shadow:
+    0 0 20px rgba(168, 85, 247, 0.9),
+    0 0 40px rgba(168, 85, 247, 0.5),
+    0 0 60px rgba(168, 85, 247, 0.25);
+}
+
+/* ─── Scan line animation ─────────────────────────────────────────────────────── */
+@keyframes scan {
+  0%   { transform: translateY(-100px); opacity: 0; }
+  10%  { opacity: 1; }
+  90%  { opacity: 1; }
+  100% { transform: translateY(100vh); opacity: 0; }
+}
+
+.scan-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, rgba(168, 85, 247, 0.4) 30%, rgba(232, 121, 249, 0.4) 70%, transparent 100%);
+  animation: scan 10s linear infinite;
+  pointer-events: none;
+  z-index: 15;
+}
+
+/* ─── Pulse dot ──────────────────────────────────────────────────────────────── */
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; box-shadow: 0 0 6px rgba(34, 197, 94, 0.8); }
+  50%       { opacity: 0.5; box-shadow: 0 0 12px rgba(34, 197, 94, 1); }
+}
+
+.pulse-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #22c55e;
+  box-shadow: 0 0 6px rgba(34, 197, 94, 0.8);
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scan-line { animation: none; }
+  .pulse-dot { animation: none; }
+}
+
+/* ─── Gradient text ─────────────────────────────────────────────────────────── */
+.gradient-text {
+  background: linear-gradient(135deg, var(--color-purple-light), var(--color-pink));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ─── Nav transition ────────────────────────────────────────────────────────── */
+#navbar {
+  transition: background 0.3s ease, backdrop-filter 0.3s ease, box-shadow 0.3s ease;
+}
+
+#navbar.scrolled {
+  background: rgba(2, 0, 10, 0.7);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: 0 1px 0 rgba(168, 85, 247, 0.15);
+}

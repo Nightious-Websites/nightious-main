@@ -1,0 +1,83 @@
+---
+interface Props {
+  categories: string[]
+}
+
+const { categories } = Astro.props
+---
+
+<div
+  role="tablist"
+  aria-label="Filter services by category"
+  class="flex flex-wrap gap-2 mb-8"
+  id="service-filter-tabs"
+>
+  <button
+    type="button"
+    role="tab"
+    aria-selected="true"
+    aria-controls="services-panel"
+    data-filter="all"
+    class="filter-tab btn-ghost text-xs py-2 px-4 active"
+  >
+    All
+  </button>
+  {categories.map(cat => (
+    <button
+      type="button"
+      role="tab"
+      aria-selected="false"
+      aria-controls="services-panel"
+      data-filter={cat.toLowerCase()}
+      class="filter-tab btn-ghost text-xs py-2 px-4"
+    >
+      {cat}
+    </button>
+  ))}
+</div>
+
+<style>
+  .filter-tab.active,
+  .filter-tab[aria-selected="true"] {
+    background: rgba(168, 85, 247, 0.2);
+    border-color: var(--color-purple-mid);
+    color: var(--color-purple-light);
+  }
+</style>
+
+<script>
+  function initFilterTabs() {
+    const tabs = document.querySelectorAll<HTMLButtonElement>('.filter-tab')
+    const cards = document.querySelectorAll<HTMLElement>('[data-category]')
+
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        const filter = tab.dataset.filter ?? 'all'
+
+        // Update tab state
+        tabs.forEach(t => {
+          t.setAttribute('aria-selected', 'false')
+          t.classList.remove('active')
+        })
+        tab.setAttribute('aria-selected', 'true')
+        tab.classList.add('active')
+
+        // Show/hide cards
+        cards.forEach(card => {
+          const category = card.dataset.category?.toLowerCase() ?? ''
+          const visible = filter === 'all' || category === filter
+
+          if (visible) {
+            card.classList.remove('hidden')
+            card.removeAttribute('aria-hidden')
+          } else {
+            card.classList.add('hidden')
+            card.setAttribute('aria-hidden', 'true')
+          }
+        })
+      })
+    })
+  }
+
+  document.addEventListener('astro:page-load', initFilterTabs)
+</script>

@@ -1,0 +1,62 @@
+---
+import { ViewTransitions } from 'astro:transitions'
+import SEO from '@/components/seo/SEO.astro'
+import NavBar from '@/components/ui/NavBar.astro'
+import Footer from '@/components/ui/Footer.astro'
+import IntercomWidget from '@/components/ui/Intercom.astro'
+import '@/styles/global.css'
+
+interface Props {
+  title: string
+  description: string
+  ogImage?: string
+  ogType?: 'website' | 'article'
+  noindex?: boolean
+}
+
+const { title, description, ogImage, ogType, noindex } = Astro.props
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Security meta tags -->
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self' 'unsafe-inline' https://widget.intercom.io https://js.intercom.io https://js.intercomcdn.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://static.intercomassets.com https://downloads.intercomcdn.com https://uploads.intercomusercontent.com https://*.intercomassets.com; font-src 'self' https://js.intercomcdn.com https://fonts.intercomcdn.com; connect-src 'self' https://formspree.io https://api-iam.intercom.io wss://nexus-websocket-a.intercom.io wss://nexus-websocket-b.intercom.io; frame-src https://intercom-sheets.com https://www.intercom.com; form-action 'self' https://formspree.io; frame-ancestors 'none'; base-uri 'self'; upgrade-insecure-requests;"
+    />
+    <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+    <meta http-equiv="X-Frame-Options" content="DENY" />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+
+    <!-- Font preloads -->
+    <link rel="preload" href="/fonts/Orbitron-Bold.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/Exo2-Regular.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/Exo2-SemiBold.woff2" as="font" type="font/woff2" crossorigin />
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <SEO
+      title={title}
+      description={description}
+      ogImage={ogImage}
+      ogType={ogType}
+      noindex={noindex}
+    />
+
+    <ViewTransitions />
+  </head>
+  <body>
+    <NavBar />
+
+    <main id="main-content">
+      <slot />
+    </main>
+
+    <Footer />
+    <IntercomWidget />
+  </body>
+</html>

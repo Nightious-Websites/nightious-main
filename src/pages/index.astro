@@ -1,0 +1,72 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro'
+import SchemaOrg from '@/components/seo/SchemaOrg.astro'
+import Hero from '@/components/sections/Hero.astro'
+import SocialProofBar from '@/components/sections/SocialProofBar.astro'
+import PainStatement from '@/components/sections/PainStatement.astro'
+import ServicesGrid from '@/components/sections/ServicesGrid.astro'
+import HowItWorks from '@/components/sections/HowItWorks.astro'
+import Testimonials from '@/components/sections/Testimonials.astro'
+import WhoWeHelp from '@/components/sections/WhoWeHelp.astro'
+import CtaSection from '@/components/sections/CtaSection.astro'
+import FaqSection from '@/components/sections/FaqSection.astro'
+import CtaBanner from '@/components/sections/CtaBanner.astro'
+---
+
+<BaseLayout
+  title="Web Design & IT Solutions for Small Businesses | Nightious"
+  description="Web design, AI integration, IT support & digital marketing for small businesses. No jargon. No long contracts. Get a free quote from Nightious today."
+  ogImage="/images/og/og-home.png"
+>
+  <SchemaOrg />
+  <Hero />
+  <SocialProofBar />
+  <PainStatement />
+  <ServicesGrid />
+  <HowItWorks />
+  <Testimonials />
+  <WhoWeHelp />
+  <CtaSection />
+  <FaqSection />
+  <CtaBanner />
+</BaseLayout>
+
+<script>
+  import { gsap } from 'gsap'
+  import { ScrollTrigger } from 'gsap/ScrollTrigger'
+  gsap.registerPlugin(ScrollTrigger)
+
+  function initScrollReveals() {
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    if (reduced) return
+
+    const sections = document.querySelectorAll('.reveal-section')
+    sections.forEach(section => {
+      const children = section.querySelectorAll('article, li, dt, .glass:not(article):not(li)')
+      const targets = children.length > 0 ? Array.from(children) : [section]
+
+      gsap.fromTo(
+        targets,
+        { opacity: 0, y: 40 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.6,
+          stagger: 0.1,
+          ease: 'power2.out',
+          scrollTrigger: {
+            trigger: section,
+            start: 'top 85%',
+            once: true,
+          },
+        }
+      )
+    })
+  }
+
+  document.addEventListener('astro:before-swap', () => {
+    ScrollTrigger.getAll().forEach(t => t.kill())
+  })
+
+  document.addEventListener('astro:page-load', initScrollReveals)
+</script>

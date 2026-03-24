@@ -1,0 +1,101 @@
+---
+const faqs = [
+  {
+    q: 'Do you require long-term contracts?',
+    a: 'No. We offer project-based work and flexible retainers. You\'re never locked in. If something isn\'t working, you can walk away — though most clients stick around.',
+  },
+  {
+    q: 'How quickly can you start?',
+    a: 'We typically respond within 4 business hours and can begin discovery the same week. Urgency is built into how we work, not a premium upsell.',
+  },
+  {
+    q: 'Do I need to be technical to work with you?',
+    a: 'Absolutely not. We translate everything into plain English. If you\'ve ever been confused by a tech consultant, you\'ll find working with us refreshingly different.',
+  },
+  {
+    q: 'What if I\'m not sure what I need?',
+    a: 'That\'s what the free consultation is for. Tell us your goal and we\'ll map out the options. You won\'t be pushed toward the most expensive one.',
+  },
+  {
+    q: 'Do you work with businesses outside the US?',
+    a: 'Yes. We work with clients worldwide. All communication is asynchronous-friendly, so time zones aren\'t a barrier.',
+  },
+]
+---
+
+<section class="py-20 reveal-section" aria-label="Frequently asked questions">
+  <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-14">
+      <p class="font-display text-xs tracking-[0.25em] mb-3" style="color: var(--color-purple-mid);">FAQ</p>
+      <h2 class="font-display text-3xl md:text-4xl" style="color: var(--color-text-primary);">
+        Common questions
+      </h2>
+    </div>
+
+    <dl class="flex flex-col gap-4">
+      {faqs.map((faq, i) => (
+        <div class="glass">
+          <dt>
+            <button
+              type="button"
+              class="w-full flex items-center justify-between gap-4 px-6 py-5 text-left"
+              aria-expanded="false"
+              aria-controls={`faq-answer-${i}`}
+              id={`faq-btn-${i}`}
+            >
+              <span class="text-sm font-semibold" style="color: var(--color-text-primary); font-family: 'Exo 2', sans-serif;">
+                {faq.q}
+              </span>
+              <svg
+                class="faq-icon flex-shrink-0 transition-transform duration-200"
+                width="20"
+                height="20"
+                viewBox="0 0 20 20"
+                fill="none"
+                aria-hidden="true"
+                style="color: var(--color-purple-mid);"
+              >
+                <path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+          </dt>
+          <dd
+            id={`faq-answer-${i}`}
+            role="region"
+            aria-labelledby={`faq-btn-${i}`}
+            class="faq-answer hidden px-6 pb-5"
+          >
+            <p class="text-sm leading-relaxed" style="color: var(--color-text-muted);">{faq.a}</p>
+          </dd>
+        </div>
+      ))}
+    </dl>
+  </div>
+</section>
+
+<style>
+  .faq-icon.open {
+    transform: rotate(180deg);
+  }
+</style>
+
+<script>
+  function initFaq() {
+    const buttons = document.querySelectorAll<HTMLButtonElement>('[id^="faq-btn-"]')
+
+    buttons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const expanded = btn.getAttribute('aria-expanded') === 'true'
+        const answerId = btn.getAttribute('aria-controls')
+        const answer = answerId ? document.getElementById(answerId) : null
+        const icon = btn.querySelector('.faq-icon')
+
+        btn.setAttribute('aria-expanded', String(!expanded))
+        answer?.classList.toggle('hidden')
+        icon?.classList.toggle('open')
+      })
+    })
+  }
+
+  document.addEventListener('astro:page-load', initFaq)
+</script>

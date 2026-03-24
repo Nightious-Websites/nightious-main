@@ -1,0 +1,39 @@
+---
+const stats = [
+  { value: '50+',    label: 'Businesses Served' },
+  { value: '4.9\u2605',  label: 'Average Rating' },
+  { value: '2 hrs',  label: 'Avg. Response Time' },
+  { value: '12',     label: 'Service Areas' },
+]
+---
+
+<section
+  class="py-12 reveal-section relative overflow-hidden"
+  aria-label="Social proof"
+>
+  <!-- Subtle grid behind this section -->
+  <div class="absolute inset-0 bg-grid pointer-events-none opacity-60" aria-hidden="true"></div>
+
+  <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- Eyebrow -->
+    <p class="font-display text-xs tracking-[0.3em] text-center mb-8" style="color: var(--color-purple-mid);">
+      Trusted by businesses who wanted tech without the headache.
+    </p>
+
+    <ul class="grid grid-cols-2 lg:grid-cols-4 gap-4 list-none">
+      {stats.map(stat => (
+        <li class="glass-strong neon-top flex flex-col items-center text-center gap-2 py-6 px-4 rounded-2xl">
+          <span
+            class="font-display text-3xl sm:text-4xl glow-number"
+            style="color: var(--color-purple-light);"
+          >
+            {stat.value}
+          </span>
+          <span class="font-display text-xs tracking-[0.15em]" style="color: var(--color-text-muted);">
+            {stat.label}
+          </span>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>

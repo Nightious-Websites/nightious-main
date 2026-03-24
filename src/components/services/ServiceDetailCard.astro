@@ -1,0 +1,44 @@
+---
+interface Props {
+  title: string
+  slug: string
+  tagline: string
+  category: string
+  icon: string
+}
+
+const { title, slug, tagline, category, icon } = Astro.props
+---
+
+<article
+  data-category={category.toLowerCase()}
+  class="glass card-hover p-6 flex flex-col gap-4 h-full"
+>
+  <div class="flex items-start justify-between gap-3">
+    <div
+      class="w-11 h-11 rounded-lg flex items-center justify-center text-xl flex-shrink-0"
+      style="background: rgba(124, 58, 237, 0.15);"
+      aria-hidden="true"
+    >
+      {icon}
+    </div>
+    <span
+      class="font-display text-xs tracking-widest py-1 px-2 rounded-full"
+      style="background: rgba(168, 85, 247, 0.12); color: var(--color-purple-mid); border: 1px solid rgba(168, 85, 247, 0.2);"
+    >
+      {category}
+    </span>
+  </div>
+
+  <h3 class="font-display text-sm" style="color: var(--color-text-primary);">{title}</h3>
+  <p class="text-sm leading-relaxed flex-1" style="color: var(--color-text-muted);">{tagline}</p>
+
+  <a
+    href={`/services/${slug}`}
+    aria-label={`Learn more about ${title}`}
+    class="text-xs font-semibold transition-colors hover:text-white"
+    style="color: var(--color-purple-mid);"
+  >
+    Learn more →
+  </a>
+</article>

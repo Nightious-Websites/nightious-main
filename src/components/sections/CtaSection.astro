@@ -1,0 +1,40 @@
+---
+interface Props {
+  heading?: string
+  sub?: string
+}
+
+const {
+  heading = 'Ready to get started?',
+  sub = 'Tell us what you need. We\'ll reply within 4 business hours with a clear plan — no jargon, no obligation.',
+} = Astro.props
+---
+
+<section
+  class="section-alt py-20 reveal-section relative overflow-hidden"
+  aria-label="Call to action"
+>
+  <!-- Background image -->
+  <div class="absolute inset-0 z-0" aria-hidden="true">
+    <img
+      src="/images/photos/home-cta.webp"
+      alt=""
+      class="w-full h-full object-cover object-center"
+      loading="lazy"
+      width="1920"
+      height="1080"
+    />
+    <div class="absolute inset-0" style="background: linear-gradient(to bottom, rgba(5,0,15,0.85) 0%, rgba(5,0,15,0.75) 50%, rgba(5,0,15,0.85) 100%);"></div>
+  </div>
+  <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+    <h2 class="font-display text-3xl md:text-4xl mb-4" style="color: var(--color-text-primary);">
+      {heading}
+    </h2>
+    <p class="text-base max-w-lg mx-auto mb-8" style="color: var(--color-text-muted);">
+      {sub}
+    </p>
+    <a href="/contact" class="btn-primary text-base cursor-pointer">
+      Get a Free Quote →
+    </a>
+  </div>
+</section>

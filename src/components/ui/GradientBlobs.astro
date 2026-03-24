@@ -1,0 +1,99 @@
+---
+// Ambient blobs — GSAP animated (motion-safe only), aria-hidden
+---
+
+<div class="blobs-container" aria-hidden="true">
+  <!-- Purple blob — large, top-left -->
+  <div
+    id="blob-purple"
+    class="blob"
+    style="
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(124, 58, 237, 0.35) 0%, transparent 70%);
+      top: -100px;
+      left: -150px;
+    "
+  ></div>
+
+  <!-- Pink blob — medium, top-right -->
+  <div
+    id="blob-pink"
+    class="blob"
+    style="
+      width: 450px;
+      height: 450px;
+      background: radial-gradient(circle, rgba(232, 121, 249, 0.25) 0%, transparent 70%);
+      top: -50px;
+      right: -100px;
+    "
+  ></div>
+
+  <!-- Blue blob — small, bottom-center -->
+  <div
+    id="blob-blue"
+    class="blob"
+    style="
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle, rgba(96, 165, 250, 0.2) 0%, transparent 70%);
+      bottom: 50px;
+      left: 50%;
+      transform: translateX(-50%);
+    "
+  ></div>
+</div>
+
+<script>
+  import { gsap } from 'gsap'
+
+  let blobTweens: gsap.core.Tween[] = []
+
+  function initBlobs() {
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    if (reduced) return
+
+    const blobPurple = document.getElementById('blob-purple')
+    const blobPink = document.getElementById('blob-pink')
+    const blobBlue = document.getElementById('blob-blue')
+
+    if (!blobPurple || !blobPink || !blobBlue) return
+
+    blobTweens = [
+      gsap.to(blobPurple, {
+        x: 80,
+        y: 60,
+        duration: 10,
+        ease: 'sine.inOut',
+        yoyo: true,
+        repeat: -1,
+      }),
+      gsap.to(blobPink, {
+        x: -60,
+        y: 80,
+        duration: 12,
+        ease: 'sine.inOut',
+        yoyo: true,
+        repeat: -1,
+        delay: 1.5,
+      }),
+      gsap.to(blobBlue, {
+        x: 40,
+        y: -50,
+        duration: 8,
+        ease: 'sine.inOut',
+        yoyo: true,
+        repeat: -1,
+        delay: 3,
+      }),
+    ]
+  }
+
+  function killBlobs() {
+    blobTweens.forEach(t => t.kill())
+    blobTweens = []
+  }
+
+  document.addEventListener('astro:before-swap', killBlobs)
+  document.addEventListener('astro:page-load', initBlobs)
+</script>

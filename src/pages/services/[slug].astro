@@ -1,0 +1,1045 @@
+---
+import ServiceLayout from '@/layouts/ServiceLayout.astro'
+import GlassCard from '@/components/ui/GlassCard.astro'
+import CtaSection from '@/components/sections/CtaSection.astro'
+import { getAllServices, entrySlug } from '@/utils/services'
+import { getServiceTheme, serviceThemes } from '@/utils/serviceTheme'
+import { getCollection } from 'astro:content'
+
+export async function getStaticPaths() {
+  const services = await getCollection('services')
+  return services.map(service => ({
+    params: { slug: entrySlug(service.id) },
+    props: { entry: service },
+  }))
+}
+
+const { entry } = Astro.props
+const { Content } = await entry.render()
+const slug = entrySlug(entry.id)
+const theme = getServiceTheme(slug)
+
+// Compute layout variant from alphabetical index
+const allSlugs = [
+  'ai-integration',
+  'computer-services',
+  'custom-services',
+  'digital-marketing',
+  'domain-solutions',
+  'email-solutions',
+  'online-privacy',
+  'organizational-effectiveness',
+  'software-services',
+  'streaming-consultation',
+  'training-documentation',
+  'website-solutions',
+]
+const slugIndex = allSlugs.indexOf(slug)
+const layoutVariant = (slugIndex >= 0 ? slugIndex : 0) % 4
+
+// Get related services
+const allServices = await getAllServices()
+const related = allServices.filter(s => entry.data.relatedSlugs.includes(entrySlug(s.id)))
+
+const categoryEmoji: Record<string, string> = {
+  Website: '🌐',
+  Email: '✉️',
+  Domain: '🔗',
+  AI: '🤖',
+  Marketing: '📈',
+  Computers: '💻',
+  Streaming: '🎙️',
+  Privacy: '🔒',
+  Operations: '⚙️',
+  Software: '🖥️',
+  Custom: '✨',
+  Training: '📚',
+}
+
+const emoji = categoryEmoji[entry.data.category] ?? '🔧'
+---
+
+<ServiceLayout
+  title={entry.data.title}
+  description={entry.data.description}
+  slug={slug}
+>
+  {/* ═══════════════════════════════════════════════════════════
+      HERO — Variant 0: Split Hero Left
+     ═══════════════════════════════════════════════════════════ */}
+  {layoutVariant === 0 && (
+    <section
+      class="svc-hero relative overflow-hidden"
+      style="min-height: 520px;"
+      aria-label={`${entry.data.title} hero`}
+      data-variant="0"
+    >
+      <div class="relative grid grid-cols-1 lg:grid-cols-2" style="min-height: 520px;">
+        {/* Text left */}
+        <div class="relative flex items-center" style="z-index: 10;">
+          {/* Left bg */}
+          <div
+            class="absolute inset-0"
+            style="background: linear-gradient(135deg, rgba(2,0,10,0.95) 0%, rgba(2,0,10,0.85) 100%);"
+            aria-hidden="true"
+          ></div>
+          <div
+            class="absolute inset-0"
+            style={`background: radial-gradient(ellipse at center, rgba(${theme.colorRgb}, 0.08) 0%, transparent 70%);`}
+            aria-hidden="true"
+          ></div>
+
+          <div class="relative pt-28 pb-16 px-6 sm:px-10 lg:px-14 w-full" style="z-index: 10;">
+            <nav aria-label="Breadcrumb" class="mb-8 svc-hero-el" style="opacity: 0;">
+              <ol class="flex items-center gap-2 text-xs" style="color: var(--color-text-muted);">
+                <li><a href="/" class="hover:text-white transition-colors">Home</a></li>
+                <li aria-hidden="true">/</li>
+                <li><a href="/services" class="hover:text-white transition-colors">Services</a></li>
+                <li aria-hidden="true">/</li>
+                <li style={`color: ${theme.colorLight};`} aria-current="page">{entry.data.title}</li>
+              </ol>
+            </nav>
+
+            <div class="max-w-lg">
+              <div
+                class="svc-hero-el w-14 h-14 rounded-xl flex items-center justify-center text-2xl mb-6"
+                style={`opacity: 0; background: rgba(${theme.colorRgb}, 0.18); border: 1px solid rgba(${theme.colorRgb}, 0.3);`}
+                aria-hidden="true"
+              >
+                {emoji}
+              </div>
+
+              <span
+                class="svc-hero-el font-display text-xs tracking-widest py-1 px-3 rounded-full inline-block mb-4"
+                style={`opacity: 0; background: rgba(${theme.colorRgb}, 0.12); color: ${theme.colorLight}; border: 1px solid rgba(${theme.colorRgb}, 0.25);`}
+              >
+                {entry.data.category}
+              </span>
+
+              <h1 class="svc-hero-el font-display text-4xl md:text-5xl mb-4" style="opacity: 0; color: var(--color-text-primary); text-shadow: 0 0 40px rgba(255,255,255,0.15);">
+                {entry.data.title}
+              </h1>
+              <p class="svc-hero-el text-lg leading-relaxed mb-8" style="opacity: 0; color: var(--color-text-muted);">
+                {entry.data.tagline}
+              </p>
+              <a href="/contact" class="svc-hero-el btn-primary text-base" style="opacity: 0;">
+                Get a Free Quote &rarr;
+              </a>
+            </div>
+          </div>
+        </div>
+
+        {/* Image right */}
+        <div class="relative overflow-hidden svc-hero-bg" style="min-height: 320px;">
+          <img
+            src={theme.heroImage}
+            alt=""
+            aria-hidden="true"
+            class="absolute inset-0 w-full h-full object-cover"
+            loading="eager"
+          />
+          <div
+            class="absolute inset-0"
+            style={`background: linear-gradient(to right, rgba(2,0,10,0.7) 0%, transparent 40%);`}
+            aria-hidden="true"
+          ></div>
+          <div
+            class="absolute inset-0"
+            style={`background: radial-gradient(circle at 70% 50%, rgba(${theme.colorRgb}, 0.15) 0%, transparent 60%);`}
+            aria-hidden="true"
+          ></div>
+
+          {/* Geometric overlay — floating circles */}
+          <svg
+            class="absolute inset-0 w-full h-full pointer-events-none svc-geo-overlay"
+            style="z-index: 3; opacity: 0.12;"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            preserveAspectRatio="xMidYMid slice"
+          >
+            <circle cx="70%" cy="30%" r="18%" fill="none" stroke={theme.color} stroke-width="0.8" class="geo-spin" style="transform-origin: 70% 30%;" />
+            <circle cx="80%" cy="60%" r="12%" fill="none" stroke={theme.color} stroke-width="0.5" class="geo-spin-reverse" style="transform-origin: 80% 60%;" />
+            <circle cx="55%" cy="70%" r="8%" fill="none" stroke={theme.color} stroke-width="0.5" class="geo-spin" style="transform-origin: 55% 70%;" />
+            <circle cx="65%" cy="45%" r="3%" fill={theme.color} fill-opacity="0.15" class="geo-pulse" />
+            <circle cx="85%" cy="25%" r="2%" fill={theme.color} fill-opacity="0.1" class="geo-pulse" />
+          </svg>
+        </div>
+      </div>
+    </section>
+  )}
+
+  {/* ═══════════════════════════════════════════════════════════
+      HERO — Variant 1: Centered Hero (enhanced current)
+     ═══════════════════════════════════════════════════════════ */}
+  {layoutVariant === 1 && (
+    <section
+      class="svc-hero relative overflow-hidden"
+      style="min-height: 520px;"
+      aria-label={`${entry.data.title} hero`}
+      data-variant="1"
+    >
+      <img
+        src={theme.heroImage}
+        alt=""
+        aria-hidden="true"
+        class="absolute inset-0 w-full h-full object-cover svc-hero-bg"
+        loading="eager"
+      />
+      <div
+        class="absolute inset-0"
+        style={`z-index: 1; background: linear-gradient(to bottom, rgba(2,0,10,0.75) 0%, rgba(2,0,10,0.5) 50%, rgba(2,0,10,0.88) 100%);`}
+        aria-hidden="true"
+      ></div>
+      <div
+        class="absolute inset-0"
+        style={`z-index: 2; background: radial-gradient(ellipse at top center, rgba(${theme.colorRgb}, 0.18) 0%, transparent 60%);`}
+        aria-hidden="true"
+      ></div>
+
+      {/* Geometric SVG — concentric rings */}
+      <svg
+        class="absolute inset-0 w-full h-full pointer-events-none svc-geo-overlay"
+        style="z-index: 3; opacity: 0.12;"
+        aria-hidden="true"
+        xmlns="http://www.w3.org/2000/svg"
+        preserveAspectRatio="xMidYMid slice"
+      >
+        <defs>
+          <radialGradient id={`rg-${slug}`} cx="50%" cy="0%" r="70%">
+            <stop offset="0%" stop-color={theme.color} stop-opacity="0.6" />
+            <stop offset="100%" stop-color={theme.color} stop-opacity="0" />
+          </radialGradient>
+        </defs>
+        <circle cx="50%" cy="-10%" r="45%" fill="none" stroke={theme.color} stroke-width="1" class="geo-spin" style="transform-origin: 50% -10%;" />
+        <circle cx="50%" cy="-10%" r="30%" fill="none" stroke={theme.color} stroke-width="0.5" class="geo-spin-reverse" style="transform-origin: 50% -10%;" />
+        <circle cx="50%" cy="-10%" r="15%" fill="none" stroke={theme.color} stroke-width="0.5" class="geo-spin" style="transform-origin: 50% -10%;" />
+        <line x1="0" y1="60%" x2="100%" y2="60%" stroke={theme.color} stroke-width="0.5" stroke-dasharray="4 8" />
+        <line x1="50%" y1="0" x2="50%" y2="100%" stroke={theme.color} stroke-width="0.5" stroke-dasharray="4 16" />
+        <polyline points="0,0 60,0 60,60" fill="none" stroke={theme.color} stroke-width="1" />
+        <polyline points="100%,0 calc(100% - 60px),0 calc(100% - 60px),60" fill="none" stroke={theme.color} stroke-width="1" />
+      </svg>
+
+      <div class="relative pt-32 pb-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center" style="z-index: 10;">
+        <nav aria-label="Breadcrumb" class="mb-8 svc-hero-el" style="opacity: 0;">
+          <ol class="flex items-center justify-center gap-2 text-xs" style="color: var(--color-text-muted);">
+            <li><a href="/" class="hover:text-white transition-colors">Home</a></li>
+            <li aria-hidden="true">/</li>
+            <li><a href="/services" class="hover:text-white transition-colors">Services</a></li>
+            <li aria-hidden="true">/</li>
+            <li style={`color: ${theme.colorLight};`} aria-current="page">{entry.data.title}</li>
+          </ol>
+        </nav>
+
+        <div class="max-w-3xl mx-auto">
+          <div
+            class="svc-hero-el w-14 h-14 rounded-xl flex items-center justify-center text-2xl mb-6 mx-auto"
+            style={`opacity: 0; background: rgba(${theme.colorRgb}, 0.18); border: 1px solid rgba(${theme.colorRgb}, 0.3);`}
+            aria-hidden="true"
+          >
+            {emoji}
+          </div>
+
+          <span
+            class="svc-hero-el font-display text-xs tracking-widest py-1 px-3 rounded-full inline-block mb-4"
+            style={`opacity: 0; background: rgba(${theme.colorRgb}, 0.12); color: ${theme.colorLight}; border: 1px solid rgba(${theme.colorRgb}, 0.25);`}
+          >
+            {entry.data.category}
+          </span>
+
+          <h1 class="svc-hero-el font-display text-4xl md:text-5xl lg:text-6xl mb-4" style="opacity: 0; color: var(--color-text-primary); text-shadow: 0 0 40px rgba(255,255,255,0.15);">
+            {entry.data.title}
+          </h1>
+          <p class="svc-hero-el text-lg md:text-xl leading-relaxed mb-8" style="opacity: 0; color: var(--color-text-muted);">
+            {entry.data.tagline}
+          </p>
+          <a href="/contact" class="svc-hero-el btn-primary text-base" style="opacity: 0;">
+            Get a Free Quote &rarr;
+          </a>
+        </div>
+      </div>
+    </section>
+  )}
+
+  {/* ═══════════════════════════════════════════════════════════
+      HERO — Variant 2: Split Hero Right
+     ═══════════════════════════════════════════════════════════ */}
+  {layoutVariant === 2 && (
+    <section
+      class="svc-hero relative overflow-hidden"
+      style="min-height: 520px;"
+      aria-label={`${entry.data.title} hero`}
+      data-variant="2"
+    >
+      <div class="relative grid grid-cols-1 lg:grid-cols-2" style="min-height: 520px;">
+        {/* Image left */}
+        <div class="relative overflow-hidden svc-hero-bg order-2 lg:order-1" style="min-height: 320px;">
+          <img
+            src={theme.heroImage}
+            alt=""
+            aria-hidden="true"
+            class="absolute inset-0 w-full h-full object-cover"
+            loading="eager"
+          />
+          <div
+            class="absolute inset-0"
+            style={`background: linear-gradient(to left, rgba(2,0,10,0.7) 0%, transparent 40%);`}
+            aria-hidden="true"
+          ></div>
+          <div
+            class="absolute inset-0"
+            style={`background: radial-gradient(circle at 30% 50%, rgba(${theme.colorRgb}, 0.15) 0%, transparent 60%);`}
+            aria-hidden="true"
+          ></div>
+
+          {/* Geometric overlay — diagonal lines and dots */}
+          <svg
+            class="absolute inset-0 w-full h-full pointer-events-none svc-geo-overlay"
+            style="z-index: 3; opacity: 0.12;"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            preserveAspectRatio="xMidYMid slice"
+          >
+            <line x1="0" y1="0" x2="100%" y2="100%" stroke={theme.color} stroke-width="0.5" stroke-dasharray="6 10" />
+            <line x1="20%" y1="0" x2="100%" y2="80%" stroke={theme.color} stroke-width="0.5" stroke-dasharray="6 10" />
+            <line x1="0" y1="20%" x2="80%" y2="100%" stroke={theme.color} stroke-width="0.5" stroke-dasharray="6 10" />
+            <line x1="40%" y1="0" x2="100%" y2="60%" stroke={theme.color} stroke-width="0.3" stroke-dasharray="4 12" />
+            <circle cx="25%" cy="35%" r="3" fill={theme.color} fill-opacity="0.3" class="geo-pulse" />
+            <circle cx="45%" cy="55%" r="2.5" fill={theme.color} fill-opacity="0.25" class="geo-pulse" />
+            <circle cx="15%" cy="70%" r="2" fill={theme.color} fill-opacity="0.2" class="geo-pulse" />
+            <circle cx="60%" cy="25%" r="2" fill={theme.color} fill-opacity="0.2" class="geo-pulse" />
+          </svg>
+        </div>
+
+        {/* Text right */}
+        <div class="relative flex items-center order-1 lg:order-2" style="z-index: 10;">
+          <div
+            class="absolute inset-0"
+            style="background: linear-gradient(225deg, rgba(2,0,10,0.95) 0%, rgba(2,0,10,0.85) 100%);"
+            aria-hidden="true"
+          ></div>
+          <div
+            class="absolute inset-0"
+            style={`background: radial-gradient(ellipse at center, rgba(${theme.colorRgb}, 0.08) 0%, transparent 70%);`}
+            aria-hidden="true"
+          ></div>
+
+          <div class="relative pt-28 pb-16 px-6 sm:px-10 lg:px-14 w-full" style="z-index: 10;">
+            <nav aria-label="Breadcrumb" class="mb-8 svc-hero-el" style="opacity: 0;">
+              <ol class="flex items-center gap-2 text-xs" style="color: var(--color-text-muted);">
+                <li><a href="/" class="hover:text-white transition-colors">Home</a></li>
+                <li aria-hidden="true">/</li>
+                <li><a href="/services" class="hover:text-white transition-colors">Services</a></li>
+                <li aria-hidden="true">/</li>
+                <li style={`color: ${theme.colorLight};`} aria-current="page">{entry.data.title}</li>
+              </ol>
+            </nav>
+
+            <div class="max-w-lg">
+              <div
+                class="svc-hero-el w-14 h-14 rounded-xl flex items-center justify-center text-2xl mb-6"
+                style={`opacity: 0; background: rgba(${theme.colorRgb}, 0.18); border: 1px solid rgba(${theme.colorRgb}, 0.3);`}
+                aria-hidden="true"
+              >
+                {emoji}
+              </div>
+
+              <span
+                class="svc-hero-el font-display text-xs tracking-widest py-1 px-3 rounded-full inline-block mb-4"
+                style={`opacity: 0; background: rgba(${theme.colorRgb}, 0.12); color: ${theme.colorLight}; border: 1px solid rgba(${theme.colorRgb}, 0.25);`}
+              >
+                {entry.data.category}
+              </span>
+
+              <h1 class="svc-hero-el font-display text-4xl md:text-5xl mb-4" style="opacity: 0; color: var(--color-text-primary); text-shadow: 0 0 40px rgba(255,255,255,0.15);">
+                {entry.data.title}
+              </h1>
+              <p class="svc-hero-el text-lg leading-relaxed mb-8" style="opacity: 0; color: var(--color-text-muted);">
+                {entry.data.tagline}
+              </p>
+              <a href="/contact" class="svc-hero-el btn-primary text-base" style="opacity: 0;">
+                Get a Free Quote &rarr;
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  )}
+
+  {/* ═══════════════════════════════════════════════════════════
+      HERO — Variant 3: Immersive Hero
+     ═══════════════════════════════════════════════════════════ */}
+  {layoutVariant === 3 && (
+    <section
+      class="svc-hero relative overflow-hidden"
+      style="min-height: 580px;"
+      aria-label={`${entry.data.title} hero`}
+      data-variant="3"
+    >
+      <img
+        src={theme.heroImage}
+        alt=""
+        aria-hidden="true"
+        class="absolute inset-0 w-full h-full object-cover svc-hero-bg"
+        loading="eager"
+      />
+      <div
+        class="absolute inset-0"
+        style={`z-index: 1; background: linear-gradient(to top, rgba(2,0,10,0.92) 0%, rgba(2,0,10,0.4) 40%, rgba(2,0,10,0.6) 100%);`}
+        aria-hidden="true"
+      ></div>
+      <div
+        class="absolute inset-0"
+        style={`z-index: 2; background: radial-gradient(ellipse at bottom left, rgba(${theme.colorRgb}, 0.2) 0%, transparent 60%);`}
+        aria-hidden="true"
+      ></div>
+
+      {/* Geometric overlay — grid/matrix */}
+      <svg
+        class="absolute inset-0 w-full h-full pointer-events-none svc-geo-overlay"
+        style="z-index: 3; opacity: 0.08;"
+        aria-hidden="true"
+        xmlns="http://www.w3.org/2000/svg"
+        preserveAspectRatio="xMidYMid slice"
+      >
+        <defs>
+          <pattern id={`grid-${slug}`} width="60" height="60" patternUnits="userSpaceOnUse">
+            <path d="M 60 0 L 0 0 0 60" fill="none" stroke={theme.color} stroke-width="0.4" />
+          </pattern>
+        </defs>
+        <rect width="100%" height="100%" fill={`url(#grid-${slug})`} />
+        <circle cx="20%" cy="40%" r="2" fill={theme.color} fill-opacity="0.4" class="geo-pulse" />
+        <circle cx="50%" cy="20%" r="2" fill={theme.color} fill-opacity="0.3" class="geo-pulse" />
+        <circle cx="80%" cy="60%" r="2" fill={theme.color} fill-opacity="0.3" class="geo-pulse" />
+        <circle cx="35%" cy="75%" r="1.5" fill={theme.color} fill-opacity="0.25" class="geo-pulse" />
+      </svg>
+
+      {/* Content at bottom-left */}
+      <div class="relative flex items-end" style="z-index: 10; min-height: 580px;">
+        <div class="pt-32 pb-14 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+          <nav aria-label="Breadcrumb" class="mb-8 svc-hero-el" style="opacity: 0;">
+            <ol class="flex items-center gap-2 text-xs" style="color: var(--color-text-muted);">
+              <li><a href="/" class="hover:text-white transition-colors">Home</a></li>
+              <li aria-hidden="true">/</li>
+              <li><a href="/services" class="hover:text-white transition-colors">Services</a></li>
+              <li aria-hidden="true">/</li>
+              <li style={`color: ${theme.colorLight};`} aria-current="page">{entry.data.title}</li>
+            </ol>
+          </nav>
+
+          <div class="max-w-2xl">
+            <div class="flex items-center gap-4 mb-6">
+              <div
+                class="svc-hero-el w-14 h-14 rounded-xl flex items-center justify-center text-2xl"
+                style={`opacity: 0; background: rgba(${theme.colorRgb}, 0.18); border: 1px solid rgba(${theme.colorRgb}, 0.3);`}
+                aria-hidden="true"
+              >
+                {emoji}
+              </div>
+              <span
+                class="svc-hero-el font-display text-xs tracking-widest py-1 px-3 rounded-full inline-block"
+                style={`opacity: 0; background: rgba(${theme.colorRgb}, 0.12); color: ${theme.colorLight}; border: 1px solid rgba(${theme.colorRgb}, 0.25);`}
+              >
+                {entry.data.category}
+              </span>
+            </div>
+
+            <h1 class="svc-hero-el font-display text-5xl md:text-6xl lg:text-7xl mb-4" style="opacity: 0; color: var(--color-text-primary); text-shadow: 0 0 60px rgba(255,255,255,0.12);">
+              {entry.data.title}
+            </h1>
+            <p class="svc-hero-el text-lg md:text-xl leading-relaxed mb-8" style="opacity: 0; color: var(--color-text-muted);">
+              {entry.data.tagline}
+            </p>
+            <a href="/contact" class="svc-hero-el btn-primary text-base" style="opacity: 0;">
+              Get a Free Quote &rarr;
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  )}
+
+  {/* ═══════════════════════════════════════════════════════════
+      SECTION BRIDGE — Gradient transition from hero to content
+     ═══════════════════════════════════════════════════════════ */}
+  <div class="svc-bridge relative" aria-hidden="true">
+    <div
+      class="absolute inset-0"
+      style={`background: linear-gradient(to bottom, var(--color-bg-deep) 0%, var(--color-bg-section) 100%);`}
+    ></div>
+    <div
+      class="absolute inset-0"
+      style={`background: radial-gradient(ellipse 80% 100% at 50% 0%, rgba(${theme.colorRgb}, 0.06) 0%, transparent 70%);`}
+    ></div>
+    <div style="height: 4rem;"></div>
+  </div>
+
+  {/* ═══════════════════════════════════════════════════════════
+      SERVICE OVERVIEW — Description + image accent in glass card
+     ═══════════════════════════════════════════════════════════ */}
+  <section class="svc-overview relative py-16" aria-label="Service overview">
+    {/* Background glow */}
+    <div
+      class="absolute inset-0 pointer-events-none"
+      style={`background: radial-gradient(ellipse 60% 50% at 20% 50%, rgba(${theme.colorRgb}, 0.04) 0%, transparent 70%);`}
+      aria-hidden="true"
+    ></div>
+
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 lg:grid-cols-5 gap-8 items-center">
+        {/* Text content — 3/5 */}
+        <div class="lg:col-span-3 svc-overview-el" style="opacity: 0;">
+          <GlassCard class="p-8 md:p-10">
+            <span
+              class="font-display text-xs tracking-widest py-1 px-3 rounded-full inline-block mb-6"
+              style={`background: rgba(${theme.colorRgb}, 0.1); color: ${theme.colorLight}; border: 1px solid rgba(${theme.colorRgb}, 0.2);`}
+            >
+              Overview
+            </span>
+            <h2 class="font-display text-2xl md:text-3xl mb-4" style="color: var(--color-text-primary);">
+              {entry.data.description}
+            </h2>
+            <div class="flex flex-wrap gap-3">
+              <a href="#service-details" class="btn-ghost text-sm" style={`border-color: rgba(${theme.colorRgb}, 0.4); color: ${theme.colorLight};`}>
+                See what's included &darr;
+              </a>
+              <a href="/contact" class="btn-primary text-sm">
+                Get a Free Quote &rarr;
+              </a>
+            </div>
+          </GlassCard>
+        </div>
+
+        {/* Image accent — 2/5 */}
+        <div class="lg:col-span-2 svc-overview-el" style="opacity: 0;">
+          <div class="relative rounded-2xl overflow-hidden">
+            <img
+              src={theme.contentImage2}
+              alt={`${entry.data.title} overview`}
+              class="w-full h-auto object-cover rounded-2xl"
+              loading="lazy"
+              style="aspect-ratio: 4/3;"
+            />
+            <div
+              class="absolute inset-0 rounded-2xl"
+              style={`background: linear-gradient(135deg, rgba(${theme.colorRgb}, 0.25) 0%, transparent 50%, rgba(2,0,10,0.4) 100%);`}
+              aria-hidden="true"
+            ></div>
+            {/* Floating category badge */}
+            <div
+              class="absolute bottom-4 left-4 glass px-4 py-2 flex items-center gap-3"
+              style={`border-color: rgba(${theme.colorRgb}, 0.3);`}
+            >
+              <span class="text-xl" aria-hidden="true">{emoji}</span>
+              <span class="font-display text-xs tracking-widest" style={`color: ${theme.colorLight};`}>{entry.data.category}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {/* ═══════════════════════════════════════════════════════════
+      SERVICE DETAILS — Full-width immersive markdown content
+     ═══════════════════════════════════════════════════════════ */}
+  <section id="service-details" class="section-alt relative py-20" aria-label="Service details">
+    {/* Layered background effects */}
+    <div
+      class="absolute inset-0 pointer-events-none"
+      style={`background: radial-gradient(ellipse 70% 50% at 80% 30%, rgba(${theme.colorRgb}, 0.05) 0%, transparent 70%);`}
+      aria-hidden="true"
+    ></div>
+    <div
+      class="absolute inset-0 pointer-events-none"
+      style={`background: radial-gradient(ellipse 50% 60% at 10% 80%, rgba(${theme.colorRgb}, 0.03) 0%, transparent 60%);`}
+      aria-hidden="true"
+    ></div>
+
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* Section header */}
+      <div class="mb-12 svc-content-el" style="opacity: 0;">
+        <span
+          class="font-display text-xs tracking-widest py-1 px-3 rounded-full inline-block mb-4"
+          style={`background: rgba(${theme.colorRgb}, 0.1); color: ${theme.colorLight}; border: 1px solid rgba(${theme.colorRgb}, 0.2);`}
+        >
+          Service Details
+        </span>
+        <h2 class="font-display text-3xl md:text-4xl" style="color: var(--color-text-primary);">
+          Everything you get with {entry.data.title}
+        </h2>
+      </div>
+
+      {/* Full-width content with inline image accents */}
+      <div class="svc-content-el" style="opacity: 0;">
+        <GlassCard class="svc-details-card p-8 md:p-12">
+          {/* Inline image — floated on desktop */}
+          <div class="svc-details-image-float">
+            <div class="relative rounded-xl overflow-hidden mb-6 lg:mb-0 lg:float-right lg:ml-8 lg:w-2/5">
+              <img
+                src={theme.contentImage1}
+                alt={`${entry.data.title} details`}
+                class="w-full h-auto object-cover rounded-xl"
+                loading="lazy"
+                style="aspect-ratio: 16/10;"
+              />
+              <div
+                class="absolute inset-0 rounded-xl"
+                style={`background: linear-gradient(180deg, transparent 50%, rgba(${theme.colorRgb}, 0.15) 100%);`}
+                aria-hidden="true"
+              ></div>
+            </div>
+          </div>
+
+          <div class="service-content">
+            <Content />
+          </div>
+
+          {/* Second image — inline after content */}
+          <div class="relative rounded-xl overflow-hidden mt-8">
+            <img
+              src={theme.contentImage2}
+              alt={`${entry.data.title} in action`}
+              class="w-full h-auto object-cover rounded-xl"
+              loading="lazy"
+              style="aspect-ratio: 21/9; max-height: 320px;"
+            />
+            <div
+              class="absolute inset-0 rounded-xl"
+              style={`background: linear-gradient(to right, rgba(2,0,10,0.6) 0%, rgba(${theme.colorRgb}, 0.12) 50%, rgba(2,0,10,0.6) 100%);`}
+              aria-hidden="true"
+            ></div>
+            <div
+              class="absolute inset-0 flex items-center justify-center px-8"
+            >
+              <p
+                class="font-display text-lg md:text-xl text-center max-w-2xl"
+                style="color: var(--color-text-primary); text-shadow: 0 2px 16px rgba(0,0,0,0.7);"
+              >
+                {entry.data.description}
+              </p>
+            </div>
+          </div>
+        </GlassCard>
+      </div>
+    </div>
+  </section>
+
+  {/* ═══════════════════════════════════════════════════════════
+      WHY NIGHTIOUS — Themed glass panel CTA section
+     ═══════════════════════════════════════════════════════════ */}
+  <section class="svc-why relative py-20" aria-label={`Why choose Nightious for ${entry.data.title}`}>
+    {/* Background effects */}
+    <div
+      class="absolute inset-0 pointer-events-none"
+      style={`background: radial-gradient(ellipse 60% 50% at 50% 50%, rgba(${theme.colorRgb}, 0.06) 0%, transparent 70%);`}
+      aria-hidden="true"
+    ></div>
+
+    {/* Geometric SVG accent */}
+    <svg
+      class="absolute inset-0 w-full h-full pointer-events-none"
+      style="opacity: 0.04;"
+      aria-hidden="true"
+      xmlns="http://www.w3.org/2000/svg"
+      preserveAspectRatio="xMidYMid slice"
+    >
+      <circle cx="15%" cy="30%" r="12%" fill="none" stroke={theme.color} stroke-width="0.5" class="geo-spin" style="transform-origin: 15% 30%;" />
+      <circle cx="85%" cy="70%" r="10%" fill="none" stroke={theme.color} stroke-width="0.5" class="geo-spin-reverse" style="transform-origin: 85% 70%;" />
+      <circle cx="50%" cy="50%" r="2" fill={theme.color} fill-opacity="0.2" class="geo-pulse" />
+      <circle cx="20%" cy="75%" r="1.5" fill={theme.color} fill-opacity="0.15" class="geo-pulse" />
+      <circle cx="80%" cy="25%" r="1.5" fill={theme.color} fill-opacity="0.15" class="geo-pulse" />
+    </svg>
+
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
+        {/* Left column — heading + CTA */}
+        <div class="svc-why-el" style="opacity: 0;">
+          <span
+            class="font-display text-xs tracking-widest py-1 px-3 rounded-full inline-block mb-6"
+            style={`background: rgba(${theme.colorRgb}, 0.1); color: ${theme.colorLight}; border: 1px solid rgba(${theme.colorRgb}, 0.2);`}
+          >
+            Why Nightious
+          </span>
+          <h2 class="font-display text-3xl md:text-4xl mb-6" style="color: var(--color-text-primary);">
+            Why choose Nightious for {entry.data.title}?
+          </h2>
+          <p class="text-base leading-relaxed mb-8" style="color: var(--color-text-muted);">
+            We don't do cookie-cutter. Every {entry.data.category.toLowerCase()} engagement is scoped around your goals, your timeline, and your budget.
+          </p>
+          <div class="flex flex-wrap gap-4">
+            <a href="/contact" class="btn-primary text-base">
+              Start a Conversation &rarr;
+            </a>
+            <a href="/services" class="btn-ghost text-sm" style={`border-color: rgba(${theme.colorRgb}, 0.3); color: ${theme.colorLight};`}>
+              Browse All Services
+            </a>
+          </div>
+        </div>
+
+        {/* Right column — value cards */}
+        <div class="flex flex-col gap-4 svc-why-el" style="opacity: 0;">
+          <div
+            class="glass p-6 flex items-start gap-4 card-hover"
+            style={`border-color: rgba(${theme.colorRgb}, 0.2);`}
+          >
+            <div
+              class="flex-shrink-0 w-10 h-10 rounded-lg flex items-center justify-center text-lg"
+              style={`background: rgba(${theme.colorRgb}, 0.15); border: 1px solid rgba(${theme.colorRgb}, 0.25);`}
+              aria-hidden="true"
+            >&#9989;</div>
+            <div>
+              <p class="text-sm font-semibold mb-1" style="color: var(--color-text-primary);">Tailored to your business</p>
+              <p class="text-sm leading-relaxed" style="color: var(--color-text-muted);">Every solution is scoped around your specific goals and challenges — no generic packages.</p>
+            </div>
+          </div>
+
+          <div
+            class="glass p-6 flex items-start gap-4 card-hover"
+            style={`border-color: rgba(${theme.colorRgb}, 0.2);`}
+          >
+            <div
+              class="flex-shrink-0 w-10 h-10 rounded-lg flex items-center justify-center text-lg"
+              style={`background: rgba(${theme.colorRgb}, 0.15); border: 1px solid rgba(${theme.colorRgb}, 0.25);`}
+              aria-hidden="true"
+            >&#9889;</div>
+            <div>
+              <p class="text-sm font-semibold mb-1" style="color: var(--color-text-primary);">Fast, transparent delivery</p>
+              <p class="text-sm leading-relaxed" style="color: var(--color-text-muted);">Clear milestones and regular updates so you always know exactly where your project stands.</p>
+            </div>
+          </div>
+
+          <div
+            class="glass p-6 flex items-start gap-4 card-hover"
+            style={`border-color: rgba(${theme.colorRgb}, 0.2);`}
+          >
+            <div
+              class="flex-shrink-0 w-10 h-10 rounded-lg flex items-center justify-center text-lg"
+              style={`background: rgba(${theme.colorRgb}, 0.15); border: 1px solid rgba(${theme.colorRgb}, 0.25);`}
+              aria-hidden="true"
+            >&#128172;</div>
+            <div>
+              <p class="text-sm font-semibold mb-1" style="color: var(--color-text-primary);">Post-launch support</p>
+              <p class="text-sm leading-relaxed" style="color: var(--color-text-muted);">Full documentation handoff and ongoing support — we don't disappear once the work ships.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {/* ═══════════════════════════════════════════════════════════
+      RELATED SERVICES (shared across all variants)
+     ═══════════════════════════════════════════════════════════ */}
+  {related.length > 0 && (
+    <section class="svc-related py-16" aria-label="Related services">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 class="font-display text-2xl mb-8" style="color: var(--color-text-primary);">
+          Related services
+        </h2>
+        <ul class="grid grid-cols-1 sm:grid-cols-3 gap-5 list-none">
+          {related.map(rel => {
+            const relSlug = entrySlug(rel.id)
+            const relTheme = serviceThemes[relSlug] ?? serviceThemes['website-solutions']
+            return (
+              <li class="svc-related-card" style="opacity: 0;">
+                <a
+                  href={`/services/${relSlug}`}
+                  class="glass card-hover flex flex-col h-full overflow-hidden"
+                >
+                  <div class="relative overflow-hidden" style="height: 140px; flex-shrink: 0;">
+                    <img
+                      src={relTheme.heroImage}
+                      alt=""
+                      aria-hidden="true"
+                      class="w-full h-full object-cover"
+                      loading="lazy"
+                    />
+                    <div
+                      class="absolute inset-0"
+                      style={`background: linear-gradient(to bottom, rgba(${relTheme.colorRgb}, 0.2) 0%, rgba(2,0,10,0.6) 100%);`}
+                      aria-hidden="true"
+                    ></div>
+                    <span
+                      class="absolute bottom-3 left-3 text-xl"
+                      aria-hidden="true"
+                    >{categoryEmoji[rel.data.category] ?? '🔧'}</span>
+                  </div>
+
+                  <div class="p-5 flex flex-col gap-2 flex-1">
+                    <h3 class="font-display text-sm" style="color: var(--color-text-primary);">{rel.data.title}</h3>
+                    <p class="text-sm leading-relaxed flex-1" style="color: var(--color-text-muted);">{rel.data.tagline}</p>
+                    <span
+                      class="text-xs font-semibold mt-1"
+                      style={`color: ${relTheme.colorLight};`}
+                    >Learn more &rarr;</span>
+                  </div>
+                </a>
+              </li>
+            )
+          })}
+        </ul>
+      </div>
+    </section>
+  )}
+
+  <CtaSection
+    heading={`Ready to talk about ${entry.data.title}?`}
+    sub={`Tell us what you need. We'll reply within 4 business hours with a clear plan.`}
+  />
+</ServiceLayout>
+
+<style is:global>
+  .service-content h2 {
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    color: var(--color-text-primary);
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    letter-spacing: 0.05em;
+  }
+
+  .service-content ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .service-content li {
+    font-size: 0.875rem;
+    line-height: 1.7;
+    color: var(--color-text-muted);
+    padding-left: 1.5rem;
+    position: relative;
+  }
+
+  .service-content li::before {
+    content: '\203A';
+    position: absolute;
+    left: 0;
+    color: var(--color-purple-mid);
+    font-weight: 600;
+  }
+
+  .service-content strong {
+    color: var(--color-text-primary);
+    font-weight: 600;
+  }
+
+  .service-content p {
+    font-size: 0.875rem;
+    line-height: 1.7;
+    color: var(--color-text-muted);
+    margin-bottom: 1rem;
+  }
+
+  /* Details card — clear float after content */
+  .svc-details-card::after {
+    content: '';
+    display: table;
+    clear: both;
+  }
+
+  /* Float image responsive behaviour */
+  @media (max-width: 1023px) {
+    .svc-details-image-float .lg\:float-right {
+      float: none !important;
+      width: 100% !important;
+      margin-left: 0 !important;
+    }
+  }
+
+  /* Geometric overlay animations */
+  @keyframes spin-slow {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  @keyframes spin-slow-reverse {
+    from { transform: rotate(360deg); }
+    to { transform: rotate(0deg); }
+  }
+
+  @keyframes pulse-glow {
+    0%, 100% { opacity: 0.08; }
+    50% { opacity: 0.18; }
+  }
+
+  .geo-spin {
+    animation: spin-slow 90s linear infinite;
+  }
+
+  .geo-spin-reverse {
+    animation: spin-slow-reverse 120s linear infinite;
+  }
+
+  .geo-pulse {
+    animation: pulse-glow 4s ease-in-out infinite;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .geo-spin,
+    .geo-spin-reverse,
+    .geo-pulse {
+      animation: none;
+    }
+
+    /* Ensure animated elements are visible even if JS fails */
+    .svc-hero-el,
+    .svc-overview-el,
+    .svc-content-el,
+    .svc-why-el,
+    .svc-related-card {
+      opacity: 1 !important;
+    }
+  }
+</style>
+
+<script>
+  import { gsap } from 'gsap'
+  import { ScrollTrigger } from 'gsap/ScrollTrigger'
+
+  gsap.registerPlugin(ScrollTrigger)
+
+  function initServiceAnimations() {
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    const hero = document.querySelector('.svc-hero')
+    if (!hero) return
+
+    const heroEls = hero.querySelectorAll('.svc-hero-el')
+
+    // If reduced motion, just show everything
+    if (reduced) {
+      document.querySelectorAll('.svc-hero-el, .svc-overview-el, .svc-content-el, .svc-why-el, .svc-related-card').forEach(el => {
+        ;(el as HTMLElement).style.opacity = '1'
+      })
+      return
+    }
+
+    // Hero text entrance — sequential fade-in
+    const tl = gsap.timeline({ defaults: { ease: 'power3.out' } })
+    heroEls.forEach((el, i) => {
+      tl.fromTo(
+        el,
+        { opacity: 0, y: 20 },
+        { opacity: 1, y: 0, duration: 0.5 },
+        i === 0 ? 0 : `-=0.3`
+      )
+    })
+
+    // Hero background parallax
+    const heroBg = hero.querySelector('.svc-hero-bg')
+    if (heroBg) {
+      gsap.to(heroBg, {
+        y: -50,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: hero,
+          start: 'top top',
+          end: 'bottom top',
+          scrub: true,
+        },
+      })
+    }
+
+    // Service overview section reveal
+    const overview = document.querySelector('.svc-overview')
+    if (overview) {
+      const overviewEls = overview.querySelectorAll('.svc-overview-el')
+      if (overviewEls.length > 0) {
+        gsap.fromTo(
+          overviewEls,
+          { opacity: 0, y: 30 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.7,
+            stagger: 0.2,
+            ease: 'power2.out',
+            scrollTrigger: {
+              trigger: overview,
+              start: 'top 80%',
+              toggleActions: 'play none none none',
+            },
+          }
+        )
+      }
+    }
+
+    // Service details content reveal
+    const contentEls = document.querySelectorAll('.svc-content-el')
+    if (contentEls.length > 0) {
+      gsap.fromTo(
+        contentEls,
+        { opacity: 0, y: 30 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.7,
+          stagger: 0.2,
+          ease: 'power2.out',
+          scrollTrigger: {
+            trigger: '#service-details',
+            start: 'top 80%',
+            toggleActions: 'play none none none',
+          },
+        }
+      )
+    }
+
+    // Why Nightious section reveal
+    const whySection = document.querySelector('.svc-why')
+    if (whySection) {
+      const whyEls = whySection.querySelectorAll('.svc-why-el')
+      if (whyEls.length > 0) {
+        gsap.fromTo(
+          whyEls,
+          { opacity: 0, y: 30 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.7,
+            stagger: 0.2,
+            ease: 'power2.out',
+            scrollTrigger: {
+              trigger: whySection,
+              start: 'top 80%',
+              toggleActions: 'play none none none',
+            },
+          }
+        )
+      }
+    }
+
+    // Related services stagger reveal
+    const relatedCards = document.querySelectorAll('.svc-related-card')
+    if (relatedCards.length > 0) {
+      gsap.fromTo(
+        relatedCards,
+        { opacity: 0, y: 30 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.5,
+          stagger: 0.12,
+          ease: 'power2.out',
+          scrollTrigger: {
+            trigger: '.svc-related',
+            start: 'top 85%',
+            toggleActions: 'play none none none',
+          },
+        }
+      )
+    }
+  }
+
+  // Kill all ScrollTriggers before page swap to prevent memory leaks
+  document.addEventListener('astro:before-swap', () => {
+    ScrollTrigger.getAll().forEach(t => t.kill())
+  })
+
+  // Init after navigation
+  document.addEventListener('astro:page-load', initServiceAnimations)
+</script>

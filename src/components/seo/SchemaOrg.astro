@@ -1,0 +1,35 @@
+---
+// JSON-LD: Organization + WebSite — homepage only
+const schema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://nightious.com/#organization",
+      "name": "Nightious",
+      "url": "https://nightious.com",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://nightious.com/favicon.svg",
+      },
+      "description": "Web design, AI integration, IT support & digital marketing for small businesses and content creators.",
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "customer service",
+        "url": "https://nightious.com/contact",
+      },
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://nightious.com/#website",
+      "url": "https://nightious.com",
+      "name": "Nightious",
+      "publisher": {
+        "@id": "https://nightious.com/#organization",
+      },
+    },
+  ],
+}
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(schema)} />

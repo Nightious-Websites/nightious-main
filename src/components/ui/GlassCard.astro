@@ -1,0 +1,14 @@
+---
+interface Props {
+  class?: string
+  as?: string
+  hover?: boolean
+}
+
+const { class: className = '', as: Tag = 'div', hover = false } = Astro.props
+const classes = ['glass', hover ? 'card-hover' : '', className].filter(Boolean).join(' ')
+---
+
+<Tag class={classes}>
+  <slot />
+</Tag>

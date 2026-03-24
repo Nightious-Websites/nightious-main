@@ -1,0 +1,64 @@
+---
+const testimonials = [
+  {
+    quote: "Nightious is the first IT company that didn't make me feel stupid. They explained everything in plain English, and I finally understand what I'm actually paying for.",
+    name: 'Sarah Mitchell',
+    role: 'CEO, TechStart Inc.',
+    stars: 5,
+  },
+  {
+    quote: "They reduced our tech overhead by 40% AND explained every decision. No surprises on the invoice, no jargon in the emails. That's rare.",
+    name: 'James Rodriguez',
+    role: 'Operations Director, CloudNine Systems',
+    stars: 5,
+  },
+  {
+    quote: "I used to Google every tech term my old IT company used. With Nightious, I never have to. They just explain it. Our team loves them.",
+    name: 'Emily Chen',
+    role: 'Owner, DataFlow Analytics',
+    stars: 5,
+  },
+]
+---
+
+<section class="py-20 reveal-section relative overflow-hidden" aria-label="Testimonials">
+  <!-- Background image -->
+  <div class="absolute inset-0 z-0" aria-hidden="true">
+    <img
+      src="/images/photos/home-testimonials.webp"
+      alt=""
+      class="w-full h-full object-cover object-center"
+      loading="lazy"
+      width="1920"
+      height="1080"
+    />
+    <div class="absolute inset-0" style="background: rgba(2, 0, 10, 0.85);"></div>
+  </div>
+  <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-14">
+      <p class="font-display text-xs tracking-[0.25em] mb-3" style="color: var(--color-purple-mid);">CLIENT RESULTS</p>
+      <h2 class="font-display text-3xl md:text-4xl" style="color: var(--color-text-primary);">
+        Real results for real businesses
+      </h2>
+    </div>
+
+    <ul class="grid grid-cols-1 md:grid-cols-3 gap-6 list-none">
+      {testimonials.map(t => (
+        <li>
+          <article class="glass p-7 flex flex-col gap-5 h-full">
+            <div aria-label={`${t.stars} out of 5 stars`} class="text-base" style="color: var(--color-purple-mid);">
+              {'\u2605'.repeat(t.stars)}
+            </div>
+            <blockquote class="text-sm leading-relaxed flex-1 italic" style="color: var(--color-text-muted);">
+              &ldquo;{t.quote}&rdquo;
+            </blockquote>
+            <footer>
+              <p class="text-sm font-semibold" style="color: var(--color-text-primary);">{t.name}</p>
+              <p class="text-xs" style="color: var(--color-text-muted);">{t.role}</p>
+            </footer>
+          </article>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>

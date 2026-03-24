@@ -1,0 +1,355 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro'
+import SchemaBreadcrumb from '@/components/seo/SchemaBreadcrumb.astro'
+import GlassCard from '@/components/ui/GlassCard.astro'
+
+const breadcrumbItems = [
+  { name: 'Home', url: 'https://nightious.com' },
+  { name: 'Contact', url: 'https://nightious.com/contact' },
+]
+
+const serviceOptions = [
+  'Website Solutions',
+  'Email Solutions',
+  'Domain Solutions',
+  'AI Integration',
+  'Digital Marketing',
+  'Computer Services',
+  'Streaming Consultation',
+  'Online Privacy',
+  'Organizational Effectiveness',
+  'Software Services',
+  'Custom Services',
+  'Training & Documentation',
+  "Not sure yet",
+]
+---
+
+<BaseLayout
+  title="Get a Free Quote — Contact Nightious"
+  description="Send us a message and we'll typically reply within 2 hours. No jargon, no obligation. Start with a free quote from Nightious today."
+  ogImage="/images/og/og-contact.png"
+>
+  <SchemaBreadcrumb items={breadcrumbItems} />
+
+  <!-- Hero -->
+  <section
+    class="relative pt-32 pb-8 overflow-hidden"
+    aria-label="Contact hero"
+  >
+    <div
+      class="absolute inset-0 pointer-events-none"
+      style="background: radial-gradient(ellipse at top center, rgba(124, 58, 237, 0.18) 0%, transparent 60%);"
+      aria-hidden="true"
+    ></div>
+    <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <p class="font-display text-xs tracking-[0.25em] mb-3" style="color: var(--color-purple-mid);">FREE CONSULTATION</p>
+      <h1 class="font-display text-4xl md:text-5xl mb-4 text-glow" style="color: var(--color-text-primary);">Let's Talk</h1>
+      <p class="text-base max-w-lg mx-auto" style="color: var(--color-text-muted);">
+        Describe your situation. We typically reply within 2 hours with a plain-English plan — no jargon, no obligation.
+      </p>
+    </div>
+  </section>
+
+  <!-- Form + Trust -->
+  <section class="py-12 pb-20" aria-label="Contact form">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 lg:grid-cols-7 gap-10">
+
+        <!-- Form -->
+        <div class="lg:col-span-3 xl:col-span-3">
+          <GlassCard class="p-8">
+            <!-- Success state (hidden by default) -->
+            <div
+              id="form-success"
+              class="hidden flex-col items-center text-center gap-5 py-8"
+            >
+              <div
+                class="w-16 h-16 rounded-full flex items-center justify-center text-2xl"
+                style="background: rgba(124, 58, 237, 0.2);"
+              >
+                ✓
+              </div>
+              <h2 class="font-display text-xl" style="color: var(--color-text-primary);">Message received!</h2>
+              <p class="text-sm" style="color: var(--color-text-muted);">
+                We've got your message — expect a reply within 4 business hours.
+              </p>
+              <a href="/" class="btn-ghost text-sm">Back to Home</a>
+            </div>
+
+            <!-- Form -->
+            <form
+              id="contact-form"
+              action="https://formspree.io/f/[FORM_ID]"
+              method="POST"
+              novalidate
+              class="flex flex-col gap-5"
+            >
+              <!-- Honeypot -->
+              <input
+                type="text"
+                name="_gotcha"
+                style="display:none"
+                tabindex="-1"
+                autocomplete="off"
+              />
+
+              <!-- Name -->
+              <div class="flex flex-col gap-1.5">
+                <label for="contact-name" class="text-xs font-semibold tracking-wide" style="color: var(--color-purple-light); font-family: 'Exo 2', sans-serif;">
+                  Your name <span aria-hidden="true">*</span>
+                </label>
+                <input
+                  type="text"
+                  id="contact-name"
+                  name="name"
+                  required
+                  autocomplete="name"
+                  placeholder="Jane Smith"
+                  class="form-input"
+                />
+              </div>
+
+              <!-- Email -->
+              <div class="flex flex-col gap-1.5">
+                <label for="contact-email" class="text-xs font-semibold tracking-wide" style="color: var(--color-purple-light); font-family: 'Exo 2', sans-serif;">
+                  Email address <span aria-hidden="true">*</span>
+                </label>
+                <input
+                  type="email"
+                  id="contact-email"
+                  name="email"
+                  required
+                  autocomplete="email"
+                  inputmode="email"
+                  placeholder="jane@yourbusiness.com"
+                  class="form-input"
+                />
+              </div>
+
+              <!-- Service -->
+              <div class="flex flex-col gap-1.5">
+                <label for="contact-service" class="text-xs font-semibold tracking-wide" style="color: var(--color-purple-light); font-family: 'Exo 2', sans-serif;">
+                  Service (optional)
+                </label>
+                <select
+                  id="contact-service"
+                  name="service"
+                  class="form-input"
+                >
+                  <option value="">Select a service (optional)</option>
+                  {serviceOptions.map(opt => (
+                    <option value={opt}>{opt}</option>
+                  ))}
+                </select>
+              </div>
+
+              <!-- Message -->
+              <div class="flex flex-col gap-1.5">
+                <label for="contact-message" class="text-xs font-semibold tracking-wide" style="color: var(--color-purple-light); font-family: 'Exo 2', sans-serif;">
+                  What do you need? <span aria-hidden="true">*</span>
+                </label>
+                <textarea
+                  id="contact-message"
+                  name="message"
+                  required
+                  minlength="10"
+                  maxlength="2000"
+                  rows="5"
+                  placeholder="Tell us what you're trying to achieve or what problem you're facing..."
+                  class="form-input resize-y"
+                ></textarea>
+              </div>
+
+              <!-- Error message -->
+              <p
+                id="form-error"
+                class="hidden text-sm"
+                style="color: #f87171;"
+                role="alert"
+                aria-live="polite"
+              ></p>
+
+              <button type="submit" id="form-submit" class="btn-primary justify-center">
+                Send My Message
+              </button>
+            </form>
+          </GlassCard>
+        </div>
+
+        <!-- Trust signals -->
+        <aside class="lg:col-span-2 xl:col-span-2 flex flex-col gap-6">
+          <GlassCard class="p-6 flex flex-col gap-4">
+            <p class="font-display text-xs tracking-widest" style="color: var(--color-purple-mid);">WHY NIGHTIOUS</p>
+            <ul class="flex flex-col gap-4 list-none">
+              <li class="flex items-start gap-3">
+                <span class="text-lg" aria-hidden="true">★★★★★</span>
+                <span class="text-sm" style="color: var(--color-text-muted);">4.9/5 rating across 50+ clients</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <span class="text-lg" aria-hidden="true">⚡</span>
+                <span class="text-sm" style="color: var(--color-text-muted);">Typically replies within 2 hours</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <span class="text-lg" aria-hidden="true">🔒</span>
+                <span class="text-sm" style="color: var(--color-text-muted);">Your information is private and never shared</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <span class="text-lg" aria-hidden="true">📍</span>
+                <address class="text-sm not-italic" style="color: var(--color-text-muted);">
+                  7901 4th St N, Suite 300<br />
+                  St. Petersburg, FL 33702
+                </address>
+              </li>
+            </ul>
+          </GlassCard>
+
+          <GlassCard class="p-6 flex flex-col gap-4">
+            <p class="font-display text-xs tracking-widest" style="color: var(--color-purple-mid);">WHAT HAPPENS NEXT</p>
+            <ol class="flex flex-col gap-4 list-none">
+              <li class="flex items-start gap-3">
+                <span
+                  class="w-7 h-7 rounded-full flex items-center justify-center font-display text-xs flex-shrink-0 mt-0.5"
+                  style="background: rgba(124, 58, 237, 0.2); color: var(--color-purple-light); border: 1px solid rgba(168, 85, 247, 0.3);"
+                >1</span>
+                <span class="text-sm" style="color: var(--color-text-muted);">We review your message — typically within 2 hours</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <span
+                  class="w-7 h-7 rounded-full flex items-center justify-center font-display text-xs flex-shrink-0 mt-0.5"
+                  style="background: rgba(124, 58, 237, 0.2); color: var(--color-purple-light); border: 1px solid rgba(168, 85, 247, 0.3);"
+                >2</span>
+                <span class="text-sm" style="color: var(--color-text-muted);">You receive a plain-English breakdown of your options</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <span
+                  class="w-7 h-7 rounded-full flex items-center justify-center font-display text-xs flex-shrink-0 mt-0.5"
+                  style="background: rgba(124, 58, 237, 0.2); color: var(--color-purple-light); border: 1px solid rgba(168, 85, 247, 0.3);"
+                >3</span>
+                <span class="text-sm" style="color: var(--color-text-muted);">We get to work — no long contracts required</span>
+              </li>
+            </ol>
+          </GlassCard>
+        </aside>
+
+        <!-- Image panel — desktop only -->
+        <div class="hidden xl:block xl:col-span-2 relative rounded-2xl overflow-hidden" style="min-height: 600px;">
+          <img
+            src="/images/photos/contact-side.webp"
+            alt=""
+            class="absolute inset-0 w-full h-full object-cover"
+            loading="lazy"
+            width="1200"
+            height="900"
+            aria-hidden="true"
+          />
+          <div
+            class="absolute inset-0"
+            style="background: linear-gradient(to bottom, rgba(2,0,10,0.3) 0%, rgba(120,81,169,0.25) 60%, rgba(2,0,10,0.8) 100%);"
+            aria-hidden="true"
+          ></div>
+          <!-- Logo overlay at bottom -->
+          <div class="absolute bottom-8 left-0 right-0 flex flex-col items-center gap-3">
+            <img
+              src="/images/logos/logo-complete-white.png"
+              alt="Nightious"
+              class="h-10 w-auto object-contain"
+              width="300"
+              height="72"
+            />
+            <p class="text-xs text-center px-4" style="color: rgba(233,213,255,0.6);">
+              St. Petersburg, FL · Serving clients nationwide
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .form-input {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(168, 85, 247, 0.2);
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    color: var(--color-text-primary);
+    font-family: 'Exo 2', sans-serif;
+    font-size: 0.875rem;
+    width: 100%;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    min-height: 44px;
+  }
+
+  .form-input::placeholder {
+    color: var(--color-text-muted);
+  }
+
+  .form-input:focus {
+    outline: none;
+    border-color: var(--color-purple-mid);
+    box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.15);
+  }
+
+  .form-input option {
+    background: #1a0a2e;
+    color: var(--color-text-primary);
+  }
+
+  textarea.form-input {
+    min-height: 120px;
+  }
+</style>
+
+<script>
+  function initContactForm() {
+    const form = document.getElementById('contact-form') as HTMLFormElement | null
+    const successEl = document.getElementById('form-success')
+    const errorEl = document.getElementById('form-error')
+    const submitBtn = document.getElementById('form-submit') as HTMLButtonElement | null
+
+    if (!form) return
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault()
+
+      if (!submitBtn) return
+      submitBtn.disabled = true
+      submitBtn.textContent = 'Sending…'
+
+      if (errorEl) {
+        errorEl.classList.add('hidden')
+        errorEl.textContent = ''
+      }
+
+      try {
+        const data = new FormData(form)
+        const response = await fetch(form.action, {
+          method: 'POST',
+          body: data,
+          headers: { Accept: 'application/json' },
+        })
+
+        if (response.ok) {
+          form.classList.add('hidden')
+          if (successEl) {
+            successEl.classList.remove('hidden')
+            successEl.classList.add('flex')
+          }
+        } else {
+          throw new Error('Submission failed')
+        }
+      } catch {
+        if (errorEl) {
+          errorEl.textContent = 'Something went wrong. Please try again or email us directly.'
+          errorEl.classList.remove('hidden')
+        }
+        submitBtn.disabled = false
+        submitBtn.textContent = 'Send My Message'
+      }
+    })
+  }
+
+  document.addEventListener('astro:page-load', initContactForm)
+</script>

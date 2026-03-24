@@ -1,0 +1,97 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro'
+import SchemaBreadcrumb from '@/components/seo/SchemaBreadcrumb.astro'
+import ServiceFilterTabs from '@/components/services/ServiceFilterTabs.astro'
+import ServiceDetailCard from '@/components/services/ServiceDetailCard.astro'
+import CtaBanner from '@/components/sections/CtaBanner.astro'
+import { getAllServices, entrySlug } from '@/utils/services'
+
+const services = await getAllServices()
+const categories = [...new Set(services.map(s => s.data.category))]
+
+const categoryEmoji: Record<string, string> = {
+  Website: '🌐',
+  Email: '✉️',
+  Domain: '🔗',
+  AI: '🤖',
+  Marketing: '📈',
+  Computers: '💻',
+  Streaming: '🎙️',
+  Privacy: '🔒',
+  Operations: '⚙️',
+  Software: '🖥️',
+  Custom: '✨',
+  Training: '📚',
+}
+
+const breadcrumbItems = [
+  { name: 'Home', url: 'https://nightious.com' },
+  { name: 'Services', url: 'https://nightious.com/services' },
+]
+---
+
+<BaseLayout
+  title="All Services — Web, AI, IT Support & More | Nightious"
+  description="Explore Nightious's 12 service areas: web design, AI integration, digital marketing, IT support, email setup, streaming, privacy & more."
+  ogImage="/images/og/og-services.png"
+>
+  <SchemaBreadcrumb items={breadcrumbItems} />
+
+  <!-- Hero -->
+  <section
+    class="relative pt-32 pb-16 overflow-hidden"
+    aria-label="Services hero"
+  >
+    <!-- Background image -->
+    <div class="absolute inset-0 pointer-events-none" aria-hidden="true">
+      <img
+        src="/images/photos/tech-screens.jpg"
+        alt=""
+        class="w-full h-full object-cover object-center"
+        loading="eager"
+        width="1920"
+        height="1080"
+      />
+      <div class="absolute inset-0" style="background: linear-gradient(to bottom, rgba(2,0,10,0.82) 0%, rgba(2,0,10,0.75) 60%, rgba(2,0,10,0.95) 100%);"></div>
+      <div class="absolute inset-0" style="background: radial-gradient(ellipse at top center, rgba(124, 58, 237, 0.2) 0%, transparent 60%);"></div>
+    </div>
+    <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <p class="font-display text-xs tracking-[0.25em] mb-3" style="color: var(--color-purple-mid);">12 SERVICE AREAS</p>
+      <h1 class="font-display text-4xl md:text-5xl mb-4 text-glow" style="color: var(--color-text-primary);">What We Do</h1>
+      <p class="text-base max-w-xl mx-auto" style="color: var(--color-text-muted);">
+        From your first website to full operational transformation — every service is delivered in plain English.
+      </p>
+    </div>
+  </section>
+
+  <!-- Filter + Grid -->
+  <section class="py-12" aria-label="Service categories">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="sr-only">All Services</h2>
+
+      <ServiceFilterTabs categories={categories} />
+
+      <!-- All cards — server-rendered for SEO crawlers -->
+      <ul
+        id="services-panel"
+        role="tabpanel"
+        aria-label="Filtered services"
+        class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 list-none"
+      >
+        {services.map(service => (
+          <li>
+            <ServiceDetailCard
+              title={service.data.title}
+              slug={entrySlug(service.id)}
+              tagline={service.data.tagline}
+              category={service.data.category}
+              icon={categoryEmoji[service.data.category] ?? '🔧'}
+            />
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <CtaBanner />
+</BaseLayout>

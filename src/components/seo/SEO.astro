@@ -1,0 +1,61 @@
+---
+import { SEO as AstroSEO } from 'astro-seo'
+
+interface Props {
+  title: string
+  description: string
+  ogImage?: string
+  ogType?: 'website' | 'article'
+  noindex?: boolean
+}
+
+const {
+  title,
+  description,
+  ogImage = '/images/og/og-home.png',
+  ogType = 'website',
+  noindex = false,
+} = Astro.props
+
+function removeTrailingSlash(str: string) {
+  return str.replace(/\/+$/, '')
+}
+
+const canonicalURL = removeTrailingSlash(
+  new URL(Astro.url.pathname, Astro.site).toString()
+)
+
+const ogImageAbsolute = new URL(ogImage, Astro.site).toString()
+---
+
+<AstroSEO
+  title={title}
+  description={description}
+  canonical={canonicalURL}
+  noindex={noindex}
+  openGraph={{
+    basic: {
+      title,
+      type: ogType,
+      image: ogImageAbsolute,
+      url: canonicalURL,
+    },
+    optional: {
+      description,
+      siteName: 'Nightious',
+      locale: 'en_US',
+    },
+    image: {
+      width: 1200,
+      height: 630,
+      alt: title,
+    },
+  }}
+  twitter={{
+    card: 'summary_large_image',
+    title,
+    description,
+    image: ogImageAbsolute,
+    imageAlt: title,
+  }}
+/>
