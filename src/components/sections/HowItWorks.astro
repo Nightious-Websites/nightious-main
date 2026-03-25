@@ -18,7 +18,7 @@ const steps = [
 ]
 ---
 
-<section class="py-20 reveal-section overflow-hidden" aria-label="How it works">
+<section class="py-20 overflow-hidden" aria-label="How it works">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="text-center mb-16">
       <p class="font-display text-xs tracking-[0.25em] mb-3" style="color: var(--color-purple-mid);">THE PROCESS</p>
@@ -43,7 +43,6 @@ const steps = [
         {steps.map((step, i) => (
           <li
             class="process-step flex flex-col gap-4 opacity-0"
-            style={i === 1 ? 'transform: translateY(20px);' : ''}
           >
             <!-- Step circle -->
             <div
