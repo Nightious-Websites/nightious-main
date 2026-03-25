@@ -1,31 +1,35 @@
 ---
-const promises = [
-  'Plain English, always',
-  'We pick up the phone',
-  'No hidden fees',
-  'Nationwide service',
-  'Real humans, not bots',
-  'We explain every step',
+const items = [
+  'Website Solutions',
+  'Email Solutions',
+  'AI Integration',
+  'Digital Marketing',
+  'Computer Services',
+  'Streaming Consultation',
+  'Online Privacy',
+  'Domain Solutions',
+  'Software Services',
+  'Organizational Effectiveness',
+  'Custom Services',
+  'Training & Documentation',
 ]
 ---
 
-<section class="section-alt overflow-hidden" aria-hidden="true">
+<section class="section-alt overflow-hidden" aria-label="Our services">
   <div class="glass-strong neon-top overflow-hidden">
-    <div id="ticker-track" class="flex whitespace-nowrap">
-      <!-- First copy -->
-      <div class="flex items-center flex-shrink-0" id="ticker-copy-1">
-        {promises.map(p => (
+    <div class="ticker-track flex whitespace-nowrap">
+      <div class="flex items-center flex-shrink-0">
+        {items.map(item => (
           <span class="flex items-center gap-6 px-6 py-4">
-            <span class="font-display text-xs tracking-widest gradient-text">{p}</span>
+            <span class="font-display text-xs tracking-widest gradient-text">{item}</span>
             <span style="color: var(--color-text-muted);" aria-hidden="true">·</span>
           </span>
         ))}
       </div>
-      <!-- Second copy for seamless loop -->
-      <div class="flex items-center flex-shrink-0" aria-hidden="true" id="ticker-copy-2">
-        {promises.map(p => (
+      <div class="flex items-center flex-shrink-0" aria-hidden="true">
+        {items.map(item => (
           <span class="flex items-center gap-6 px-6 py-4">
-            <span class="font-display text-xs tracking-widest gradient-text">{p}</span>
+            <span class="font-display text-xs tracking-widest gradient-text">{item}</span>
             <span style="color: var(--color-text-muted);">·</span>
           </span>
         ))}
@@ -34,32 +38,17 @@ const promises = [
   </div>
 </section>
 
-<script>
-  import { gsap } from 'gsap'
-
-  let tickerTl: gsap.core.Timeline | null = null
-
-  function initTicker() {
-    const copy1 = document.getElementById('ticker-copy-1')
-    if (!copy1) return
-
-    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    if (reduced) return
-
-    const track = copy1.parentElement as HTMLElement
-    if (!track) return
-
-    const width = copy1.offsetWidth
-    if (!width) return
-
-    tickerTl = gsap.timeline({ repeat: -1 })
-    tickerTl.fromTo(
-      track,
-      { x: 0 },
-      { x: -width, duration: 20, ease: 'none' }
-    )
+<style>
+  @keyframes ticker-scroll {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
   }
-
-  document.addEventListener('astro:before-swap', () => { tickerTl?.kill(); tickerTl = null })
-  document.addEventListener('astro:page-load', initTicker)
-</script>
+  .ticker-track {
+    animation: ticker-scroll 40s linear infinite;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .ticker-track {
+      animation: none;
+    }
+  }
+</style>
