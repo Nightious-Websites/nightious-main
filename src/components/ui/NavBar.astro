@@ -36,7 +36,7 @@ const bundleLinks = [
     <!-- Logo -->
     <a href="/" aria-label="Nightious — Home" class="flex-shrink-0">
       <img
-        src="/images/logos/logo-white.png"
+        src={`${import.meta.env.BASE_URL}images/logos/logo-white.png`}
         alt="Nightious"
         width="160"
         height="40"
@@ -176,8 +176,8 @@ const bundleLinks = [
   >
     <div class="flex items-center justify-between px-6 py-5 border-b" style="border-color: rgba(168, 85, 247, 0.15);">
       <div class="flex items-center gap-2">
-        <img src="/images/logos/icon-white.png" alt="" width="28" height="28" class="h-7 w-7 object-contain" aria-hidden="true" />
-        <img src="/images/logos/logo-text-white.png" alt="Nightious" width="110" height="26" class="h-6 w-auto object-contain" />
+        <img src={`${import.meta.env.BASE_URL}images/logos/icon-white.png`} alt="" width="28" height="28" class="h-7 w-7 object-contain" aria-hidden="true" />
+        <img src={`${import.meta.env.BASE_URL}images/logos/logo-text-white.png`} alt="Nightious" width="110" height="26" class="h-6 w-auto object-contain" />
       </div>
       <button
         id="drawer-close"
