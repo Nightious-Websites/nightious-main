@@ -24,6 +24,11 @@ const {
   columnCount = 3,
 } = Astro.props
 
+const RGB_RE = /^\d{1,3},\s*\d{1,3},\s*\d{1,3}$/
+if (!RGB_RE.test(accentRgb)) {
+  throw new Error(`LivingGrid: accentRgb must be "R, G, B" format, got: ${JSON.stringify(accentRgb)}`)
+}
+
 const mainGridClass = columnCount === 2
   ? 'grid grid-cols-1 md:grid-cols-2 gap-4'
   : 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'
@@ -481,6 +486,7 @@ const mainGridClass = columnCount === 2
       const rawFeatures = tile.dataset.features ?? '[]'
       let features: string[] = []
       try { features = JSON.parse(rawFeatures) } catch { features = [] }
+      if (!Array.isArray(features) || !features.every(f => typeof f === 'string')) features = []
 
       buildOverlayContent(content, title, desc, features, slug, accentRgb)
 

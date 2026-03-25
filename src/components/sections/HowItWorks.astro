@@ -64,6 +64,7 @@ const steps = [
             <!-- Content -->
             <div class="glass p-6">
               <h3 class="font-display text-sm mb-3" style="color: var(--color-text-primary);">{step.heading}</h3>
+              {/* SECURITY: bodyHtml must remain compile-time static. Never accept from CMS, DB, or user input without sanitization. */}
               <p class="text-sm leading-relaxed" style="color: var(--color-text-primary);" set:html={step.bodyHtml} />
             </div>
           </li>
