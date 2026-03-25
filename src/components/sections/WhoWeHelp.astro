@@ -23,7 +23,7 @@ const audiences = [
 ]
 ---
 
-<section class="section-alt py-20 reveal-section" aria-label="Who we help">
+<section class="py-20 reveal-section" aria-label="Who we help">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="text-center mb-14">
       <p class="font-display text-xs tracking-[0.25em] mb-3" style="color: var(--color-purple-mid);">WHO WE HELP</p>
@@ -35,11 +35,11 @@ const audiences = [
       </p>
     </div>
 
-    <ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 list-none">
-      {audiences.map(audience => (
-        <li class="glass card-hover neon-top p-6 flex flex-col gap-4">
+    <ul class="grid grid-cols-1 sm:grid-cols-2 gap-5 list-none">
+      {audiences.map((audience, i) => (
+        <li class="glass card-hover neon-top p-8 flex flex-col gap-4">
           <div
-            class="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0"
+            class={`rounded-lg flex items-center justify-center flex-shrink-0 ${i === 0 ? 'w-12 h-12' : 'w-10 h-10'}`}
             style="background: rgba(124, 58, 237, 0.15); color: var(--color-purple-mid);"
             aria-hidden="true"
           >
