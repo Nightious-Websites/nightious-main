@@ -1,0 +1,36 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro'
+
+export interface Props {
+  title: string
+  description: string
+  audience: string
+  accentColor: string
+  accentRgb: string
+  ogImage?: string
+}
+
+const { title, description, audience, accentColor, accentRgb, ogImage } = Astro.props
+---
+
+<BaseLayout title={title} description={description} ogImage={ogImage}>
+  <div style={`--accent: ${accentColor}; --accent-rgb: ${accentRgb};`}>
+    <slot name="hero" />
+    <slot name="grid" />
+    <slot name="crosssell" />
+
+    <!-- CTA -->
+    <section class="py-16 text-center" style="background-color: var(--color-bg-deep);">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex gap-4 justify-center items-center flex-wrap">
+        <a
+          href="/services"
+          class="btn-ghost cursor-pointer"
+          style={`border-color: rgba(${accentRgb}, 0.4); color: rgba(${accentRgb}, 1);`}
+        >
+          View All Services &rarr;
+        </a>
+        <a href="/contact" class="btn-primary cursor-pointer">Talk to Us &rarr;</a>
+      </div>
+    </section>
+  </div>
+</BaseLayout>

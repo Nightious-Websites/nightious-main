@@ -1,0 +1,200 @@
+---
+const conversations = [
+  {
+    question: "My website looks outdated and nobody can find us on Google",
+    answer: "We rebuild it from scratch — fast, mobile-first, SEO baked in from day one. Most clients see ranking improvements within weeks.",
+    service: "Website Solutions",
+    href: "/services/website-solutions",
+  },
+  {
+    question: "We're spending hours every week on stuff that should be automated",
+    answer: "We build AI workflows that handle the repetitive work — routing, reporting, data entry. Your team gets back to the stuff that actually moves the needle.",
+    service: "AI Integration",
+    href: "/services/ai-integration",
+  },
+  {
+    question: "I keep getting hacked and I don't know how to lock things down",
+    answer: "Full security audit, VPN, password manager, 2FA on every account. We find the gaps and close them. Most setups take a day.",
+    service: "Online Privacy",
+    href: "/services/online-privacy",
+  },
+  {
+    question: "My stream looks amateur compared to everyone else on Twitch",
+    answer: "OBS setup, overlays, audio, multi-platform — we get your production quality where it needs to be in one session.",
+    service: "Streaming Consultation",
+    href: "/services/streaming-consultation",
+  },
+  {
+    question: "We need a website, email, domain, and marketing but don't know where to start",
+    answer: "That's what the free consultation is for. We figure out what you actually need, build a plan, and quote it — no surprises.",
+    service: "Get Started",
+    href: "/contact",
+  },
+]
+---
+
+<noscript><style>.chat-pair, .typing-indicator { opacity: 1 !important; }</style></noscript>
+
+<section
+  class="relative py-20 overflow-hidden"
+  aria-label="How we help"
+  style="background-color: var(--color-bg-deep);"
+>
+  <!-- Particle field bg (subtle) -->
+  <div
+    class="absolute inset-0 pointer-events-none"
+    style="background: radial-gradient(ellipse at 50% 50%, rgba(168,85,247,0.05) 0%, transparent 70%);"
+    aria-hidden="true"
+  ></div>
+
+  <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- Header -->
+    <div class="text-center mb-12">
+      <p class="font-display text-xs tracking-[0.25em] mb-3" style="color: var(--color-purple-mid);">HOW WE HELP</p>
+      <h2 class="font-display text-3xl md:text-4xl" style="color: var(--color-text-primary);">
+        Real problems. Real fixes.
+      </h2>
+    </div>
+
+    <!-- Chat container -->
+    <div class="max-w-2xl mx-auto flex flex-col gap-5">
+      {conversations.map((conv, i) => (
+        <div class="chat-pair opacity-0" data-index={i}>
+          <!-- Customer question (right-aligned) -->
+          <div class="flex justify-end mb-3">
+            <div
+              class="max-w-[75%] px-4 py-3 rounded-2xl rounded-br-sm"
+              style="background: rgba(168,85,247,0.1); border: 1px solid rgba(168,85,247,0.2);"
+            >
+              <p class="text-sm" style="color: var(--color-purple-light);">{conv.question}</p>
+            </div>
+          </div>
+
+          <!-- Nightious response (left-aligned) -->
+          <div class="flex items-start gap-3">
+            <img
+              src="/images/logos/icon-color.png"
+              alt=""
+              width="32"
+              height="32"
+              class="w-8 h-8 rounded-full object-contain flex-shrink-0 mt-1"
+              style="background: rgba(168,85,247,0.15); padding: 4px;"
+              aria-hidden="true"
+            />
+            <div
+              class="max-w-[75%] px-4 py-3 rounded-2xl rounded-tl-sm"
+              style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);"
+            >
+              <p class="text-sm leading-relaxed" style="color: var(--color-text-muted);">{conv.answer}</p>
+              <a
+                href={conv.href}
+                class="text-xs font-display mt-2 inline-block"
+                style="color: rgba(168,85,247,0.8);"
+              >
+                {conv.service} &rarr;
+              </a>
+            </div>
+          </div>
+        </div>
+      ))}
+
+      <!-- Typing indicator (always visible at bottom after last pair reveals) -->
+      <div class="typing-indicator flex items-start gap-3 opacity-0">
+        <img
+          src="/images/logos/icon-color.png"
+          alt=""
+          width="32"
+          height="32"
+          class="w-8 h-8 rounded-full object-contain flex-shrink-0"
+          style="background: rgba(168,85,247,0.15); padding: 4px;"
+          aria-hidden="true"
+        />
+        <div
+          class="px-4 py-3 rounded-2xl rounded-tl-sm"
+          style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06);"
+        >
+          <div class="flex gap-1.5">
+            <span class="typing-dot w-2 h-2 rounded-full" style="background: rgba(168,85,247,0.5);"></span>
+            <span class="typing-dot w-2 h-2 rounded-full" style="background: rgba(168,85,247,0.35);"></span>
+            <span class="typing-dot w-2 h-2 rounded-full" style="background: rgba(168,85,247,0.2);"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  @keyframes typing-bounce {
+    0%, 60%, 100% { transform: translateY(0); }
+    30% { transform: translateY(-4px); }
+  }
+  .typing-dot:nth-child(1) { animation: typing-bounce 1.4s infinite 0s; }
+  .typing-dot:nth-child(2) { animation: typing-bounce 1.4s infinite 0.2s; }
+  .typing-dot:nth-child(3) { animation: typing-bounce 1.4s infinite 0.4s; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .typing-dot { animation: none; }
+  }
+</style>
+
+<script>
+  import { gsap } from 'gsap'
+  import { ScrollTrigger } from 'gsap/ScrollTrigger'
+  gsap.registerPlugin(ScrollTrigger)
+
+  let chatTl: gsap.core.Timeline | null = null
+
+  function initChatBubbles() {
+    const pairs = document.querySelectorAll<HTMLElement>('.chat-pair')
+    const typingIndicator = document.querySelector<HTMLElement>('.typing-indicator')
+    if (!pairs.length) return
+
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    if (reduced) {
+      pairs.forEach(p => { p.style.opacity = '1' })
+      if (typingIndicator) typingIndicator.style.opacity = '1'
+      return
+    }
+
+    chatTl = gsap.timeline({
+      scrollTrigger: { trigger: pairs[0], start: 'top 75%', once: true },
+    })
+
+    pairs.forEach((pair, i) => {
+      const question = pair.querySelector<HTMLElement>('.justify-end')
+      const response = pair.querySelector<HTMLElement>('.items-start')
+
+      // Reveal pair container
+      chatTl!.to(pair, { opacity: 1, duration: 0.01 }, i === 0 ? 0 : '>+0.3')
+
+      // Question slides in from right
+      if (question) {
+        chatTl!.fromTo(
+          question,
+          { opacity: 0, x: 30 },
+          { opacity: 1, x: 0, duration: 0.4, ease: 'power2.out' },
+          '<'
+        )
+      }
+
+      // Response slides in from left (after short delay)
+      if (response) {
+        chatTl!.fromTo(
+          response,
+          { opacity: 0, x: -30 },
+          { opacity: 1, x: 0, duration: 0.4, ease: 'power2.out' },
+          '>+0.4'
+        )
+      }
+    })
+
+    // Show typing indicator at the end
+    if (typingIndicator) {
+      chatTl.to(typingIndicator, { opacity: 1, duration: 0.3 }, '>+0.3')
+    }
+  }
+
+  document.addEventListener('astro:before-swap', () => { chatTl?.kill(); chatTl = null })
+  document.addEventListener('astro:page-load', initChatBubbles)
+</script>

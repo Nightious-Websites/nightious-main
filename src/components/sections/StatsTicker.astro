@@ -1,0 +1,54 @@
+---
+const items = [
+  'Website Solutions',
+  'Email Solutions',
+  'AI Integration',
+  'Digital Marketing',
+  'Computer Services',
+  'Streaming Consultation',
+  'Online Privacy',
+  'Domain Solutions',
+  'Software Services',
+  'Organizational Effectiveness',
+  'Custom Services',
+  'Training & Documentation',
+]
+---
+
+<section class="section-alt overflow-hidden" aria-label="Our services">
+  <div class="glass-strong neon-top overflow-hidden">
+    <div class="ticker-track flex whitespace-nowrap">
+      <div class="flex items-center flex-shrink-0">
+        {items.map(item => (
+          <span class="flex items-center gap-6 px-6 py-4">
+            <span class="font-display text-xs tracking-widest gradient-text">{item}</span>
+            <span style="color: var(--color-text-muted);" aria-hidden="true">·</span>
+          </span>
+        ))}
+      </div>
+      <div class="flex items-center flex-shrink-0" aria-hidden="true">
+        {items.map(item => (
+          <span class="flex items-center gap-6 px-6 py-4">
+            <span class="font-display text-xs tracking-widest gradient-text">{item}</span>
+            <span style="color: var(--color-text-muted);">·</span>
+          </span>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  @keyframes ticker-scroll {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+  .ticker-track {
+    animation: ticker-scroll 40s linear infinite;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .ticker-track {
+      animation: none;
+    }
+  }
+</style>

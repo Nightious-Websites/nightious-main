@@ -20,6 +20,12 @@ const services = [
   { slug: 'custom-services',            title: 'Custom Services',             icon: '✨' },
   { slug: 'training-documentation',     title: 'Training & Documentation',    icon: '📚' },
 ]
+
+const bundleLinks = [
+  { href: '/for-businesses', label: 'Businesses', rgb: '59, 130, 246', color: '#93c5fd' },
+  { href: '/for-creators', label: 'Creators', rgb: '236, 72, 153', color: '#f9a8d4' },
+  { href: '/for-individuals', label: 'Individuals', rgb: '34, 197, 94', color: '#86efac' },
+]
 ---
 
 <header id="navbar" class="fixed top-0 left-0 right-0 z-50">
@@ -49,6 +55,20 @@ const services = [
       >
         Home
       </a>
+
+      {bundleLinks.map(b => (
+        <a
+          href={b.href}
+          aria-current={isActive(b.href) ? 'page' : undefined}
+          class="nav-link text-xs font-semibold tracking-wide transition-colors px-3 py-1.5 rounded-md"
+          style={isActive(b.href)
+            ? `background: rgba(${b.rgb}, 0.2); border: 1px solid rgba(${b.rgb}, 0.3); color: ${b.color}; font-family: 'Exo 2', sans-serif;`
+            : `background: rgba(${b.rgb}, 0.1); color: ${b.color}; font-family: 'Exo 2', sans-serif;`
+          }
+        >
+          {b.label}
+        </a>
+      ))}
 
       <!-- Services with dropdown -->
       <div class="services-nav relative" id="services-nav">
@@ -180,6 +200,20 @@ const services = [
       >
         Home
       </a>
+
+      <!-- Bundle links (mobile) -->
+      <div class="flex flex-col gap-1 py-2">
+        {bundleLinks.map(b => (
+          <a
+            href={b.href}
+            aria-current={isActive(b.href) ? 'page' : undefined}
+            class="drawer-link py-2.5 px-3 rounded-lg text-sm font-semibold transition-colors"
+            style={`color: ${b.color}; font-family: 'Exo 2', sans-serif; border-left: 2px solid rgba(${b.rgb}, 0.5); padding-left: 12px;`}
+          >
+            For {b.label}
+          </a>
+        ))}
+      </div>
 
       <!-- Services accordion in mobile -->
       <div>

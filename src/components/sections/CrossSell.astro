@@ -1,0 +1,34 @@
+---
+interface CrossSellBundle {
+  href: string
+  label: string
+  accentRgb: string
+  count: number
+}
+
+interface Props {
+  bundles: CrossSellBundle[]
+}
+
+const { bundles } = Astro.props
+---
+
+<section class="py-12" style="background-color: var(--color-bg-deep);">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+    <p class="text-sm mb-6" style="color: var(--color-text-muted);">Not quite what you're looking for?</p>
+    <div class="flex gap-4 justify-center flex-wrap">
+      {bundles.map(b => (
+        <a
+          href={b.href}
+          class="glass card-hover px-6 py-4 text-center rounded-lg"
+          style={`border-color: rgba(${b.accentRgb}, 0.2);`}
+        >
+          <p class="font-display text-sm mb-1" style={`color: rgba(${b.accentRgb}, 1);`}>
+            {b.label} &rarr;
+          </p>
+          <p class="text-xs" style="color: var(--color-text-muted);">{b.count} services</p>
+        </a>
+      ))}
+    </div>
+  </div>
+</section>

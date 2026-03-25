@@ -4,33 +4,22 @@
 <section
   class="py-20 reveal-section relative overflow-hidden"
   aria-label="Final call to action"
+  style="background-color: var(--color-bg-deep);"
 >
-  <!-- Background image -->
-  <div class="absolute inset-0 z-0" aria-hidden="true">
-    <img
-      src="/images/photos/home-ctabanner.webp"
-      alt=""
-      class="w-full h-full object-cover object-center"
-      loading="lazy"
-      width="1920"
-      height="600"
-    />
-    <div class="absolute inset-0" style="background: rgba(2,0,10,0.82);"></div>
-  </div>
-
-  <!-- Grid overlay -->
-  <div class="absolute inset-0 z-10 bg-grid pointer-events-none" aria-hidden="true"></div>
-
-  <!-- Subtle gradient glow -->
+  <!-- Ambient radial glow -->
   <div
-    class="absolute inset-0 z-10 pointer-events-none"
-    style="background: linear-gradient(135deg, rgba(124, 58, 237, 0.12) 0%, rgba(236, 72, 153, 0.08) 100%);"
+    id="cta-glow"
+    class="absolute inset-0 pointer-events-none"
+    style="opacity: 0.15; background: radial-gradient(ellipse at center, rgba(124, 58, 237, 0.15) 0%, transparent 65%);"
     aria-hidden="true"
   ></div>
 
-  <div class="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="relative glass-strong neon-top p-8 md:p-12 flex flex-col md:flex-row items-center justify-between gap-8">
-      <!-- HUD corner accents inside the card -->
+  <!-- Grid overlay -->
+  <div class="absolute inset-0 bg-grid pointer-events-none" aria-hidden="true"></div>
+
+  <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="relative glass-strong neon-top p-8 md:p-12 flex flex-col md:flex-row items-center justify-between gap-8 max-w-5xl mx-auto">
+      <!-- HUD corner accents -->
       <div class="absolute top-4 left-4 w-5 h-5 pointer-events-none" style="border-top: 1px solid rgba(168,85,247,0.4); border-left: 1px solid rgba(168,85,247,0.4);" aria-hidden="true"></div>
       <div class="absolute bottom-4 right-4 w-5 h-5 pointer-events-none" style="border-bottom: 1px solid rgba(168,85,247,0.4); border-right: 1px solid rgba(168,85,247,0.4);" aria-hidden="true"></div>
 
@@ -47,4 +36,33 @@
       </a>
     </div>
   </div>
+  <!-- reveal-section fallback: no .glass children, so page-level reveal fades the whole section -->
 </section>
+
+<script>
+  import { gsap } from 'gsap'
+  import { ScrollTrigger } from 'gsap/ScrollTrigger'
+  gsap.registerPlugin(ScrollTrigger)
+
+  let glowTl: gsap.core.Timeline | null = null
+
+  function initGlow() {
+    const glow = document.getElementById('cta-glow')
+    if (!glow) return
+
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    if (reduced) return
+
+    // Start at spec-defined base opacity (set in HTML), pulse subtly to 0.25
+    glowTl = gsap.timeline({
+      repeat: -1,
+      yoyo: true,
+      scrollTrigger: { trigger: glow, start: 'top 90%', toggleActions: 'play pause resume pause' },
+    })
+
+    glowTl.to(glow, { opacity: 0.25, duration: 3, ease: 'sine.inOut' })
+  }
+
+  document.addEventListener('astro:before-swap', () => { glowTl?.kill(); glowTl = null })
+  document.addEventListener('astro:page-load', initGlow)
+</script>

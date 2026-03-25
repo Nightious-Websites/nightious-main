@@ -2,31 +2,27 @@
 import BaseLayout from '@/layouts/BaseLayout.astro'
 import SchemaOrg from '@/components/seo/SchemaOrg.astro'
 import Hero from '@/components/sections/Hero.astro'
-import SocialProofBar from '@/components/sections/SocialProofBar.astro'
-import PainStatement from '@/components/sections/PainStatement.astro'
-import ServicesGrid from '@/components/sections/ServicesGrid.astro'
+import StatsTicker from '@/components/sections/StatsTicker.astro'
+import ChatBubbles from '@/components/sections/ChatBubbles.astro'
+import BundleGateway from '@/components/sections/BundleGateway.astro'
 import HowItWorks from '@/components/sections/HowItWorks.astro'
 import Testimonials from '@/components/sections/Testimonials.astro'
-import WhoWeHelp from '@/components/sections/WhoWeHelp.astro'
-import CtaSection from '@/components/sections/CtaSection.astro'
 import FaqSection from '@/components/sections/FaqSection.astro'
 import CtaBanner from '@/components/sections/CtaBanner.astro'
 ---
 
 <BaseLayout
   title="Web Design & IT Solutions for Small Businesses | Nightious"
-  description="Web design, AI integration, IT support & digital marketing for small businesses. No jargon. No long contracts. Get a free quote from Nightious today."
+  description="Web design, AI integration, IT support & digital marketing for businesses, creators, and individuals. No long contracts. Free quote from Nightious."
   ogImage="/images/og/og-home.png"
 >
   <SchemaOrg />
   <Hero />
-  <SocialProofBar />
-  <PainStatement />
-  <ServicesGrid />
+  <StatsTicker />
+  <ChatBubbles />
+  <BundleGateway />
   <HowItWorks />
   <Testimonials />
-  <WhoWeHelp />
-  <CtaSection />
   <FaqSection />
   <CtaBanner />
 </BaseLayout>

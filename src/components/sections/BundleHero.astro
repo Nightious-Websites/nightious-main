@@ -1,0 +1,42 @@
+---
+interface Props {
+  audience: string
+  headline: string
+  tagline: string
+  accentRgb: string
+  serviceCount: number
+}
+
+const { audience, headline, tagline, accentRgb, serviceCount } = Astro.props
+---
+
+<section
+  class="relative py-24 lg:py-32 overflow-hidden"
+  aria-label={`Services for ${audience}`}
+  style="background-color: var(--color-bg-deep);"
+>
+  <div
+    class="absolute inset-0 pointer-events-none"
+    style={`background-image: radial-gradient(circle, rgba(${accentRgb}, 0.4) 1px, transparent 1px); background-size: 28px 28px; opacity: 0.15;`}
+    aria-hidden="true"
+  ></div>
+  <div
+    class="absolute inset-0 pointer-events-none"
+    style={`background: radial-gradient(ellipse at center, rgba(${accentRgb}, 0.1) 0%, transparent 65%);`}
+    aria-hidden="true"
+  ></div>
+  <!-- Grid overlay -->
+  <div class="absolute inset-0 bg-grid pointer-events-none" aria-hidden="true"></div>
+
+  <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+    <p class="font-display text-xs tracking-[0.25em] mb-4" style={`color: rgba(${accentRgb}, 0.8);`}>
+      FOR {audience.toUpperCase()}
+    </p>
+    <h1 class="font-display text-4xl sm:text-5xl lg:text-6xl tracking-wide mb-4" style="color: var(--color-text-primary);">
+      {headline}
+    </h1>
+    <p class="text-base sm:text-lg max-w-2xl mx-auto" style="color: var(--color-text-muted);">
+      {serviceCount} services {tagline}
+    </p>
+  </div>
+</section>

@@ -1,64 +1,124 @@
 ---
-const testimonials = [
-  {
-    quote: "Nightious is the first IT company that didn't make me feel stupid. They explained everything in plain English, and I finally understand what I'm actually paying for.",
-    name: 'Sarah Mitchell',
-    role: 'CEO, TechStart Inc.',
-    stars: 5,
-  },
-  {
-    quote: "They reduced our tech overhead by 40% AND explained every decision. No surprises on the invoice, no jargon in the emails. That's rare.",
-    name: 'James Rodriguez',
-    role: 'Operations Director, CloudNine Systems',
-    stars: 5,
-  },
-  {
-    quote: "I used to Google every tech term my old IT company used. With Nightious, I never have to. They just explain it. Our team loves them.",
-    name: 'Emily Chen',
-    role: 'Owner, DataFlow Analytics',
-    stars: 5,
-  },
+const row1 = [
+  { quote: "They redesigned our site in two weeks. Traffic doubled the next month.", name: "Sarah M.", role: "Mitchell & Co. Accounting" },
+  { quote: "Set up our entire AI pipeline in a week. We've saved 20+ hours a month since.", name: "James R.", role: "Riverside Auto Services" },
+  { quote: "Finally, an IT company that picks up the phone. Fixed our email issues same day.", name: "Emily C.", role: "Chen's Catering Co." },
+  { quote: "They built custom automation for our booking system. No one else even understood what we needed.", name: "Marcus T.", role: "Clearview Dental" },
+]
+
+const row2 = [
+  { quote: "My stream setup went from amateur to professional in one session. Worth every penny.", name: "Alex K.", role: "Content Creator" },
+  { quote: "Got us off GoDaddy, set up Cloudflare, migrated our email — zero downtime.", name: "Priya N.", role: "Northside Legal Group" },
+  { quote: "The privacy audit found three accounts that had been breached. They locked everything down that afternoon.", name: "David L.", role: "Freelance Photographer" },
+  { quote: "We needed a site, email, and marketing plan. They handled all of it and came in under budget.", name: "Rachel W.", role: "Bloom Beauty Studio" },
 ]
 ---
 
-<section class="py-20 reveal-section relative overflow-hidden" aria-label="Testimonials">
-  <!-- Background image -->
-  <div class="absolute inset-0 z-0" aria-hidden="true">
-    <img
-      src="/images/photos/home-testimonials.webp"
-      alt=""
-      class="w-full h-full object-cover object-center"
-      loading="lazy"
-      width="1920"
-      height="1080"
-    />
-    <div class="absolute inset-0" style="background: rgba(2, 0, 10, 0.85);"></div>
-  </div>
-  <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="text-center mb-14">
+<section class="py-20 relative overflow-hidden" aria-label="Client testimonials" style="background-color: var(--color-bg-deep);">
+  <!-- Ambient glow -->
+  <div
+    class="absolute inset-0 pointer-events-none"
+    style="background: radial-gradient(ellipse at center, rgba(168,85,247,0.06) 0%, transparent 60%);"
+    aria-hidden="true"
+  ></div>
+
+  <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-12">
       <p class="font-display text-xs tracking-[0.25em] mb-3" style="color: var(--color-purple-mid);">CLIENT RESULTS</p>
       <h2 class="font-display text-3xl md:text-4xl" style="color: var(--color-text-primary);">
-        Real results for real businesses
+        Don't take our word for it
       </h2>
     </div>
-
-    <ul class="grid grid-cols-1 md:grid-cols-3 gap-6 list-none">
-      {testimonials.map(t => (
-        <li>
-          <article class="glass p-7 flex flex-col gap-5 h-full">
-            <div aria-label={`${t.stars} out of 5 stars`} class="text-base" style="color: var(--color-purple-mid);">
-              {'\u2605'.repeat(t.stars)}
-            </div>
-            <blockquote class="text-sm leading-relaxed flex-1 italic" style="color: var(--color-text-muted);">
-              &ldquo;{t.quote}&rdquo;
-            </blockquote>
-            <footer>
-              <p class="text-sm font-semibold" style="color: var(--color-text-primary);">{t.name}</p>
-              <p class="text-xs" style="color: var(--color-text-muted);">{t.role}</p>
-            </footer>
-          </article>
-        </li>
-      ))}
-    </ul>
   </div>
+
+  <!-- Row 1: scrolls left -->
+  <div class="marquee-row marquee-row--left mb-4 overflow-hidden">
+    <div class="marquee-track flex gap-4">
+      {[...row1, ...row1].map(t => (
+        <article class="testimonial-card glass flex-shrink-0 w-72 p-6 flex flex-col gap-3" style="border-color: rgba(168,85,247,0.1);">
+          <div class="text-sm" style="color: var(--color-purple-mid);" aria-label="5 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+          <blockquote class="text-sm leading-relaxed flex-1" style="color: var(--color-text-primary);">
+            &ldquo;{t.quote}&rdquo;
+          </blockquote>
+          <footer>
+            <p class="text-sm font-semibold" style="color: var(--color-text-primary);">{t.name}</p>
+            <p class="text-xs" style="color: var(--color-text-muted);">{t.role}</p>
+          </footer>
+        </article>
+      ))}
+    </div>
+  </div>
+
+  <!-- Row 2: scrolls right -->
+  <div class="marquee-row marquee-row--right overflow-hidden">
+    <div class="marquee-track flex gap-4">
+      {[...row2, ...row2].map(t => (
+        <article class="testimonial-card glass flex-shrink-0 w-72 p-6 flex flex-col gap-3" style="border-color: rgba(168,85,247,0.1);">
+          <div class="text-sm" style="color: var(--color-purple-mid);" aria-label="5 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+          <blockquote class="text-sm leading-relaxed flex-1" style="color: var(--color-text-primary);">
+            &ldquo;{t.quote}&rdquo;
+          </blockquote>
+          <footer>
+            <p class="text-sm font-semibold" style="color: var(--color-text-primary);">{t.name}</p>
+            <p class="text-xs" style="color: var(--color-text-muted);">{t.role}</p>
+          </footer>
+        </article>
+      ))}
+    </div>
+  </div>
+
+  <!-- Gradient edge masks -->
+  <div class="absolute top-0 left-0 bottom-0 w-16 sm:w-24 pointer-events-none z-10" style="background: linear-gradient(to right, var(--color-bg-deep), transparent);" aria-hidden="true"></div>
+  <div class="absolute top-0 right-0 bottom-0 w-16 sm:w-24 pointer-events-none z-10" style="background: linear-gradient(to left, var(--color-bg-deep), transparent);" aria-hidden="true"></div>
 </section>
+
+<style>
+  @keyframes marquee-left {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+  @keyframes marquee-right {
+    from { transform: translateX(-50%); }
+    to { transform: translateX(0); }
+  }
+
+  .marquee-row--left .marquee-track {
+    animation: marquee-left 35s linear infinite;
+  }
+  .marquee-row--right .marquee-track {
+    animation: marquee-right 40s linear infinite;
+  }
+
+  /* Pause on hover */
+  .marquee-row:hover .marquee-track {
+    animation-play-state: paused;
+  }
+
+  /* Hovered card gets subtle lift + glow */
+  .testimonial-card {
+    transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+  }
+  .testimonial-card:hover {
+    transform: scale(1.03);
+    box-shadow: 0 0 30px rgba(168,85,247,0.15);
+    border-color: rgba(168,85,247,0.3) !important;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .marquee-row--left .marquee-track,
+    .marquee-row--right .marquee-track {
+      animation: none;
+    }
+    /* Show cards in a static wrap layout */
+    .marquee-track {
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .marquee-row {
+      max-width: 1280px;
+      margin-left: auto;
+      margin-right: auto;
+      padding: 0 1rem;
+    }
+  }
+</style>

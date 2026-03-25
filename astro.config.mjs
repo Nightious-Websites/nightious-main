@@ -5,6 +5,7 @@ import robotsTxt from 'astro-robots-txt'
 
 export default defineConfig({
   site: 'https://nightious.com',
+  base: process.env.SITE_BASE ?? '/',
   output: 'static',
   trailingSlash: 'never',
   integrations: [

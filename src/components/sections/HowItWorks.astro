@@ -3,103 +3,119 @@ const steps = [
   {
     number: '01',
     heading: 'Tell us what you need',
-    bodyHtml: 'Fill out our quick contact form — no phone tag, no lengthy questionnaires. Just tell us the problem you\'re trying to solve. <strong style="color: var(--color-purple-light);">We\'ll never make you feel stupid for asking.</strong>',
+    bodyHtml: 'Fill out the contact form or give us a call. No questionnaires, no runaround. Just tell us what\'s not working. <strong style="color: var(--color-purple-light);">We respond within 4 hours.</strong>',
   },
   {
     number: '02',
-    heading: 'We build a plain-English plan',
-    bodyHtml: 'We\'ll review your situation and send a clear, jargon-free proposal. No hidden fees, no long-term commitments required. <strong style="color: var(--color-purple-light);">You\'ll know exactly what you\'re getting before you spend a penny.</strong>',
+    heading: 'We send you a clear plan',
+    bodyHtml: 'We look at your situation and put together a proposal. What we\'ll do, what it costs, how long it takes. <strong style="color: var(--color-purple-light);">No hidden fees. No long-term lock-in.</strong>',
   },
   {
     number: '03',
-    heading: 'We handle it. You understand it.',
-    bodyHtml: 'We do the technical work end-to-end and keep you updated in plain English throughout. <strong style="color: var(--color-purple-light);">When we\'re done, we\'ll explain everything we did — and why.</strong>',
+    heading: 'We get it done',
+    bodyHtml: 'We handle the work end-to-end and keep you posted along the way. When it\'s finished, we make sure you know how everything works. <strong style="color: var(--color-purple-light);">Ongoing support if you need it.</strong>',
   },
 ]
 ---
 
-<section class="section-alt py-20 reveal-section overflow-hidden" aria-label="How it works">
+<section class="py-20 overflow-hidden" aria-label="How it works">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+    <div class="text-center mb-16">
+      <p class="font-display text-xs tracking-[0.25em] mb-3" style="color: var(--color-purple-mid);">THE PROCESS</p>
+      <h2 class="font-display text-3xl md:text-4xl" style="color: var(--color-text-primary);">
+        How it works
+      </h2>
+    </div>
 
-      <!-- Photo panel -->
-      <div class="relative rounded-2xl overflow-hidden order-2 lg:order-1" style="min-height: 420px;">
-        <img
-          src="/images/photos/home-howitworks.webp"
-          alt="Nightious team collaborating on a client project"
-          class="w-full h-full object-cover absolute inset-0"
-          loading="lazy"
-          width="1200"
-          height="800"
-        />
-        <div
-          class="absolute inset-0"
-          style="background: linear-gradient(to top, rgba(5,0,15,0.85) 0%, rgba(5,0,15,0.3) 60%, transparent 100%);"
-          aria-hidden="true"
-        ></div>
-        <div
-          class="absolute inset-0"
-          style="background: rgba(120,81,169,0.15);"
-          aria-hidden="true"
-        ></div>
-        <!-- Floating stat card -->
-        <div class="absolute bottom-6 left-6 glass-strong px-5 py-3 flex items-center gap-3">
-          <img
-            src="/images/logos/icon-white.png"
-            alt=""
-            width="32"
-            height="32"
-            class="w-8 h-8 object-contain opacity-80"
-            aria-hidden="true"
-          />
-          <div>
-            <p class="font-display text-xs tracking-widest" style="color: var(--color-purple-light);">NIGHTIOUS</p>
-            <p class="text-xs" style="color: var(--color-text-muted);">Serving clients nationwide</p>
-          </div>
-        </div>
-      </div>
+    <!-- Desktop: horizontal grid with connecting line -->
+    <!-- Mobile: vertical stack -->
+    <div class="relative">
 
-      <!-- Steps -->
-      <div class="order-1 lg:order-2">
-        <p class="font-display text-xs tracking-[0.25em] mb-3" style="color: var(--color-purple-mid);">THE PROCESS</p>
-        <h2 class="font-display text-3xl md:text-4xl mb-10" style="color: var(--color-text-primary);">
-          How it works
-        </h2>
+      <!-- Horizontal connector line (desktop only) -->
+      <div
+        id="process-line"
+        class="hidden lg:block absolute top-6 left-0 right-0 pointer-events-none"
+        style="height: 1px; background: linear-gradient(to right, transparent, rgba(168,85,247,0.4), transparent); transform-origin: left center; transform: scaleX(0);"
+        aria-hidden="true"
+      ></div>
 
-        <ol class="flex flex-col gap-0 list-none">
-          {steps.map((step, i) => (
-            <li class="flex items-start gap-5">
-              <!-- Number column with connector line -->
-              <div class="flex flex-col items-center flex-shrink-0">
-                <!-- Step circle -->
-                <div
-                  class="w-12 h-12 rounded-full flex items-center justify-center font-display text-sm mt-0.5 relative"
-                  style={`background: rgba(124, 58, 237, ${0.12 + i * 0.06}); border: 1px solid rgba(168, 85, 247, 0.45); color: var(--color-purple-light); box-shadow: 0 0 20px rgba(168, 85, 247, ${0.15 + i * 0.05}), inset 0 0 10px rgba(168, 85, 247, 0.05);`}
-                >
-                  {step.number}
-                </div>
-                <!-- Connector line (not after last step) -->
-                {i < steps.length - 1 && (
-                  <div
-                    class="w-px flex-1 mt-2 mb-2"
-                    style="min-height: 40px; background: linear-gradient(to bottom, rgba(168, 85, 247, 0.4), rgba(168, 85, 247, 0.1));"
-                    aria-hidden="true"
-                  ></div>
-                )}
-              </div>
-              <!-- Step content -->
-              <div class={i < steps.length - 1 ? 'pb-10' : ''}>
-                <h3 class="font-display text-sm mb-2 mt-3" style="color: var(--color-text-primary);">{step.heading}</h3>
-                <p class="text-sm leading-relaxed" style="color: var(--color-text-muted);" set:html={step.bodyHtml} />
-              </div>
-            </li>
-          ))}
-        </ol>
+      <ol class="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12 list-none">
+        {steps.map((step, i) => (
+          <li
+            class="process-step flex flex-col gap-4 opacity-0"
+          >
+            <!-- Step circle -->
+            <div
+              class="w-12 h-12 rounded-full flex items-center justify-center font-display text-sm flex-shrink-0"
+              style={`background: rgba(124, 58, 237, ${0.12 + i * 0.06}); border: 1px solid rgba(168, 85, 247, 0.45); color: var(--color-purple-light); box-shadow: 0 0 20px rgba(168, 85, 247, ${0.15 + i * 0.05}), inset 0 0 10px rgba(168, 85, 247, 0.05);`}
+            >
+              {step.number}
+            </div>
 
-        <div class="mt-10">
-          <a href="/contact" class="btn-primary cursor-pointer">Get Started &rarr;</a>
-        </div>
-      </div>
+            <!-- Mobile connector line (vertical) -->
+            {i < steps.length - 1 && (
+              <div
+                class="lg:hidden w-px ml-6"
+                style="height: 32px; background: linear-gradient(to bottom, rgba(168,85,247,0.4), rgba(168,85,247,0.1));"
+                aria-hidden="true"
+              ></div>
+            )}
+
+            <!-- Content -->
+            <div class="glass p-6">
+              <h3 class="font-display text-sm mb-3" style="color: var(--color-text-primary);">{step.heading}</h3>
+              <p class="text-sm leading-relaxed" style="color: var(--color-text-primary);" set:html={step.bodyHtml} />
+            </div>
+          </li>
+        ))}
+      </ol>
+    </div>
+
+    <div class="text-center mt-12">
+      <a href="/contact" class="btn-primary cursor-pointer">Get Started &rarr;</a>
     </div>
   </div>
 </section>
+
+<script>
+  import { gsap } from 'gsap'
+  import { ScrollTrigger } from 'gsap/ScrollTrigger'
+  gsap.registerPlugin(ScrollTrigger)
+
+  let processTl: gsap.core.Timeline | null = null
+
+  function initProcess() {
+    const steps = document.querySelectorAll<HTMLElement>('.process-step')
+    const line = document.getElementById('process-line')
+    if (!steps.length) return
+
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    if (reduced) {
+      steps.forEach(s => { s.style.opacity = '1'; s.style.transform = '' })
+      if (line) line.style.transform = 'scaleX(1)'
+      return
+    }
+
+    processTl = gsap.timeline({
+      scrollTrigger: { trigger: steps[0], start: 'top 80%', once: true },
+    })
+
+    processTl.fromTo(
+      steps,
+      { opacity: 0, y: 30 },
+      { opacity: 1, y: 0, stagger: 0.15, duration: 0.6, ease: 'power2.out' }
+    )
+
+    if (line) {
+      processTl.fromTo(
+        line,
+        { scaleX: 0 },
+        { scaleX: 1, duration: 0.6, ease: 'power2.out' },
+        '<'
+      )
+    }
+  }
+
+  document.addEventListener('astro:before-swap', () => { processTl?.kill(); processTl = null })
+  document.addEventListener('astro:page-load', initProcess)
+</script>

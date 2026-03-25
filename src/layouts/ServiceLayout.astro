@@ -7,10 +7,11 @@ interface Props {
   title: string
   description: string
   slug: string
+  category?: string
   ogImage?: string
 }
 
-const { title, description, slug, ogImage = '/images/og/og-service-page.png' } = Astro.props
+const { title, description, slug, category, ogImage = '/images/og/og-service-page.png' } = Astro.props
 
 // Keep page title under 60 chars — short names get the full suffix; long ones drop "for Small Businesses"
 const suffix = ' for Small Businesses | Nightious'
@@ -30,7 +31,7 @@ const breadcrumbItems = [
   description={description}
   ogImage={ogImage}
 >
-  <SchemaService title={title} description={description} slug={slug} />
+  <SchemaService title={title} description={description} slug={slug} category={category} />
   <SchemaBreadcrumb items={breadcrumbItems} />
   <slot />
 </BaseLayout>

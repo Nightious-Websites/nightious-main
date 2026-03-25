@@ -1,0 +1,104 @@
+---
+const bundles = [
+  {
+    href: '/for-businesses',
+    label: 'For Businesses',
+    emoji: '🏢',
+    rgb: '59, 130, 246',
+    color: '#93c5fd',
+    tagline: 'IT, websites, marketing, AI, and everything your business runs on.',
+    topServices: ['AI Integration', 'Website Solutions'],
+    moreCount: 8,
+  },
+  {
+    href: '/for-creators',
+    label: 'For Creators',
+    emoji: '🎥',
+    rgb: '236, 72, 153',
+    color: '#f9a8d4',
+    tagline: 'Streaming, web presence, audience growth, and the tools to go pro.',
+    topServices: ['Streaming Setup', 'Digital Marketing'],
+    moreCount: 7,
+  },
+  {
+    href: '/for-individuals',
+    label: 'For Individuals',
+    emoji: '🔒',
+    rgb: '34, 197, 94',
+    color: '#86efac',
+    tagline: 'Privacy, device support, and personal tech that just works.',
+    topServices: ['Online Privacy', 'Computer Services'],
+    moreCount: 3,
+  },
+]
+---
+
+<section class="py-20 overflow-hidden relative" aria-label="Our solutions" style="background-color: var(--color-bg-deep);">
+  <!-- Ambient glow -->
+  <div class="absolute inset-0 pointer-events-none" style="background: radial-gradient(ellipse at center, rgba(168,85,247,0.06) 0%, transparent 60%);" aria-hidden="true"></div>
+
+  <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-12">
+      <p class="font-display text-xs tracking-[0.25em] mb-3" style="color: var(--color-purple-mid);">OUR SOLUTIONS</p>
+      <h2 class="font-display text-3xl md:text-4xl" style="color: var(--color-text-primary);">Built for how you work</h2>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      {bundles.map(b => (
+        <a href={b.href} class="bundle-card glass card-hover p-8 flex flex-col items-center text-center gap-4 opacity-0"
+           style={`border-color: rgba(${b.rgb}, 0.2);`}>
+          <span class="text-4xl">{b.emoji}</span>
+          <h3 class="font-display text-lg" style={`color: ${b.color};`}>{b.label}</h3>
+          <p class="text-sm leading-relaxed" style="color: var(--color-text-muted);">{b.tagline}</p>
+          <div class="flex flex-col gap-1">
+            {b.topServices.map(s => (
+              <span class="text-xs" style={`color: rgba(${b.rgb}, 0.7);`}>{s}</span>
+            ))}
+            <span class="text-xs" style="color: var(--color-text-muted);">+ {b.moreCount} more</span>
+          </div>
+          <span class="font-display text-xs mt-auto" style={`color: ${b.color};`}>Explore &rarr;</span>
+        </a>
+      ))}
+    </div>
+
+    <div class="text-center mt-8">
+      <a href="/services" class="text-sm" style="color: rgba(168,85,247,0.7);">
+        or view all 12 services &rarr;
+      </a>
+    </div>
+  </div>
+
+  <noscript><style>.bundle-card { opacity: 1 !important; }</style></noscript>
+</section>
+
+<script>
+  import { gsap } from 'gsap'
+  import { ScrollTrigger } from 'gsap/ScrollTrigger'
+  gsap.registerPlugin(ScrollTrigger)
+
+  let gatewayTl: gsap.core.Timeline | null = null
+
+  function initGateway() {
+    const cards = document.querySelectorAll<HTMLElement>('.bundle-card')
+    if (!cards.length) return
+
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    if (reduced) {
+      cards.forEach(c => { c.style.opacity = '1' })
+      return
+    }
+
+    gatewayTl = gsap.timeline({
+      scrollTrigger: { trigger: cards[0], start: 'top 85%', once: true },
+    })
+
+    gatewayTl.fromTo(
+      cards,
+      { opacity: 0, y: 40 },
+      { opacity: 1, y: 0, stagger: 0.12, duration: 0.5, ease: 'power2.out' }
+    )
+  }
+
+  document.addEventListener('astro:before-swap', () => { gatewayTl?.kill(); gatewayTl = null })
+  document.addEventListener('astro:page-load', initGateway)
+</script>
