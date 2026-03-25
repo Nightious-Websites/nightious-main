@@ -1,0 +1,134 @@
+---
+import BundleLayout from '@/layouts/BundleLayout.astro'
+import BundleHero from '@/components/sections/BundleHero.astro'
+import LivingGrid from '@/components/sections/LivingGrid.astro'
+import CrossSell from '@/components/sections/CrossSell.astro'
+
+const accentRgb = '236, 72, 153'
+const accentColor = '#ec4899'
+
+const services = [
+  {
+    slug: 'streaming-consultation',
+    title: 'Streaming Consultation',
+    icon: '<path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5l4.72-4.72a.75.75 0 0 1 1.28.53v11.38a.75.75 0 0 1-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25h-9A2.25 2.25 0 0 0 2.25 7.5v9a2.25 2.25 0 0 0 2.25 2.25Z" />',
+    tier: 'hero' as const,
+    description:
+      'OBS setup, multi-platform streaming, overlays, hardware recs, and monetization strategy — everything to level up your production quality.',
+    features: [
+      'OBS Studio setup & tuning',
+      'Multi-platform streaming',
+      'Overlay & alert design',
+      'Monetization strategy',
+    ],
+  },
+  {
+    slug: 'website-solutions',
+    title: 'Website Solutions',
+    icon: '<path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9.004 9.004 0 0 0 8.716-6.747M12 21a9.004 9.004 0 0 1-8.716-6.747M12 21c2.485 0 4.5-4.038 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.038-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 0 1 7.843 4.582M12 3a8.997 8.997 0 0 0-7.843 4.582m15.686 0A11.953 11.953 0 0 1 12 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0 1 21 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0 1 12 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 0 1 3 12c0-1.605.42-3.113 1.157-4.418" />',
+    tier: 'standard' as const,
+    description:
+      'A professional site that represents your brand. Portfolio, landing pages, e-commerce — built custom, not from a template.',
+    features: ['Custom portfolio sites', 'E-commerce integration', 'Mobile-first design'],
+  },
+  {
+    slug: 'digital-marketing',
+    title: 'Digital Marketing',
+    icon: '<path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 0 1 3 19.875v-6.75ZM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V8.625ZM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V4.125Z" />',
+    tier: 'standard' as const,
+    description:
+      'Grow your audience with SEO, content strategy, and targeted ads on YouTube, TikTok, and Reddit.',
+    features: ['YouTube & TikTok ads', 'Content strategy', 'SEO & audience growth'],
+  },
+  {
+    slug: 'domain-solutions',
+    title: 'Domain Solutions',
+    icon: '<path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 0 1 1.242 7.244l-4.5 4.5a4.5 4.5 0 0 1-6.364-6.364l1.757-1.757m13.35-.622 1.757-1.757a4.5 4.5 0 0 0-6.364-6.364l-4.5 4.5a4.5 4.5 0 0 0 1.242 7.244" />',
+    tier: 'standard' as const,
+    description:
+      'Your brand name, locked down. Domain registration, DNS, SSL — professional from the URL up.',
+    features: ['Domain registration', 'DNS management', 'Brand protection'],
+  },
+  {
+    slug: 'online-privacy',
+    title: 'Online Privacy',
+    icon: '<path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75m-3-7.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285Z" />',
+    tier: 'standard' as const,
+    description:
+      'Protect your identity and accounts. VPN, 2FA, password management, and data broker removal for public-facing creators.',
+    features: ['Security audit', 'VPN & 2FA setup', 'Data broker removal'],
+  },
+  {
+    slug: 'email-solutions',
+    title: 'Email Solutions',
+    icon: '<path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" />',
+    tier: 'compact' as const,
+    description:
+      'Professional email on your domain. Newsletters, transactional emails, and deliverability — configured right.',
+    features: ['Custom domain email', 'Newsletter setup', 'Deliverability tuning'],
+  },
+  {
+    slug: 'ai-integration',
+    title: 'AI Integration',
+    icon: '<path stroke-linecap="round" stroke-linejoin="round" d="M8.25 3v1.5M4.5 8.25H3m18 0h-1.5M4.5 12H3m18 0h-1.5m-15 3.75H3m18 0h-1.5M8.25 19.5V21M12 3v1.5m0 15V21m3.75-18v1.5m0 15V21m-9-1.5h10.5a2.25 2.25 0 0 0 2.25-2.25V6.75a2.25 2.25 0 0 0-2.25-2.25H6.75A2.25 2.25 0 0 0 4.5 6.75v10.5a2.25 2.25 0 0 0 2.25 2.25Zm.75-12h9v9h-9v-9Z" />',
+    tier: 'compact' as const,
+    description:
+      'Creator-focused AI workflows: scheduling, community response, uploads, audience management, and automated reporting.',
+    features: ['Content scheduling AI', 'Community automation', 'Audience analytics'],
+  },
+  {
+    slug: 'custom-services',
+    title: 'Custom Services',
+    icon: '<path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75a4.5 4.5 0 0 1-4.884 4.484c-1.076-.091-2.264.071-2.95.904l-7.152 8.684a2.548 2.548 0 1 1-3.586-3.586l8.684-7.152c.833-.686.995-1.874.904-2.95a4.5 4.5 0 0 1 6.336-4.486l-3.276 3.276a3.004 3.004 0 0 0 2.25 2.25l3.276-3.276c.256.565.398 1.192.398 1.852Z" />',
+    tier: 'compact' as const,
+    description:
+      "Something specific to your workflow? Custom integrations, hybrid solutions, and consulting.",
+    features: ['Custom integrations', 'Workflow solutions', 'Consulting'],
+  },
+  {
+    slug: 'training-documentation',
+    title: 'Training & Documentation',
+    icon: '<path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18a8.967 8.967 0 0 0-6 2.292m0-14.25v14.25" />',
+    tier: 'compact' as const,
+    description:
+      'Learn your tools properly. Custom training and documentation for any service or platform.',
+    features: ['Tool training', 'Custom guides', 'Platform onboarding'],
+  },
+]
+
+const heroService = services.find(s => s.tier === 'hero')!
+const standardServices = services.filter(s => s.tier === 'standard')
+const compactServices = services.filter(s => s.tier === 'compact')
+
+const crossSellBundles = [
+  { href: '/for-businesses', label: 'For Businesses', accentRgb: '59, 130, 246', count: 10 },
+  { href: '/for-individuals', label: 'For Individuals', accentRgb: '34, 197, 94', count: 5 },
+]
+---
+
+<BundleLayout
+  title="Tech & Growth Tools for Content Creators | Nightious"
+  description="9 services tailored for content creators. Streaming setup, web presence, audience growth, privacy, and more."
+  audience="Creators"
+  accentColor={accentColor}
+  accentRgb={accentRgb}
+  ogImage="/images/og/og-for-creators.png"
+>
+  <BundleHero
+    slot="hero"
+    audience="Creators"
+    headline="Level up your content"
+    tagline="tailored to help creators grow and go professional."
+    accentRgb={accentRgb}
+    serviceCount={services.length}
+  />
+  <LivingGrid
+    slot="grid"
+    heroService={heroService}
+    standardServices={standardServices}
+    compactServices={compactServices}
+    accentRgb={accentRgb}
+    columnCount={3}
+  />
+  <CrossSell slot="crosssell" bundles={crossSellBundles} />
+</BundleLayout>

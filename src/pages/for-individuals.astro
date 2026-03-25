@@ -1,0 +1,98 @@
+---
+import BundleLayout from '@/layouts/BundleLayout.astro'
+import BundleHero from '@/components/sections/BundleHero.astro'
+import LivingGrid from '@/components/sections/LivingGrid.astro'
+import CrossSell from '@/components/sections/CrossSell.astro'
+
+const accentRgb = '34, 197, 94'
+const accentColor = '#22c55e'
+
+const services = [
+  {
+    slug: 'online-privacy',
+    title: 'Online Privacy',
+    icon: '<path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75m-3-7.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285Z" />',
+    tier: 'hero' as const,
+    description:
+      'Security audit, VPN, password manager, 2FA, breach monitoring, and data broker removal — personal security made practical.',
+    features: [
+      'Full security audit',
+      'VPN & password manager',
+      '2FA configuration',
+      'Data broker removal',
+    ],
+  },
+  {
+    slug: 'computer-services',
+    title: 'Computer Services',
+    icon: '<path stroke-linecap="round" stroke-linejoin="round" d="M9 17.25v1.007a3 3 0 0 1-.879 2.122L7.5 21h9l-.621-.621A3 3 0 0 1 15 18.257V17.25m6-12V15a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 15V5.25m18 0A2.25 2.25 0 0 0 18.75 3H5.25A2.25 2.25 0 0 0 3 5.25m18 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 7.409A2.25 2.25 0 0 1 2.25 5.493V5.25" />',
+    tier: 'standard' as const,
+    description:
+      'Virus removal, optimization, startup repair, driver updates — your personal devices running smooth and fast.',
+    features: ['Virus & malware removal', 'Performance optimization', 'Startup repair'],
+  },
+  {
+    slug: 'email-solutions',
+    title: 'Email Solutions',
+    icon: '<path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" />',
+    tier: 'standard' as const,
+    description:
+      'Professional email on your own domain. Clean inbox, synced calendars, works on every device.',
+    features: ['Custom domain email', 'Calendar sync', 'Multi-device access'],
+  },
+  {
+    slug: 'ai-integration',
+    title: 'AI Integration',
+    icon: '<path stroke-linecap="round" stroke-linejoin="round" d="M8.25 3v1.5M4.5 8.25H3m18 0h-1.5M4.5 12H3m18 0h-1.5m-15 3.75H3m18 0h-1.5M8.25 19.5V21M12 3v1.5m0 15V21m3.75-18v1.5m0 15V21m-9-1.5h10.5a2.25 2.25 0 0 0 2.25-2.25V6.75a2.25 2.25 0 0 0-2.25-2.25H6.75A2.25 2.25 0 0 0 4.5 6.75v10.5a2.25 2.25 0 0 0 2.25 2.25Zm.75-12h9v9h-9v-9Z" />',
+    tier: 'compact' as const,
+    description:
+      'Smart automation for personal use: AI assistants, task management, and tools configured for your workflow.',
+    features: ['AI assistant setup', 'Task automation', 'Tool configuration'],
+  },
+  {
+    slug: 'custom-services',
+    title: 'Custom Services',
+    icon: '<path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75a4.5 4.5 0 0 1-4.884 4.484c-1.076-.091-2.264.071-2.95.904l-7.152 8.684a2.548 2.548 0 1 1-3.586-3.586l8.684-7.152c.833-.686.995-1.874.904-2.95a4.5 4.5 0 0 1 6.336-4.486l-3.276 3.276a3.004 3.004 0 0 0 2.25 2.25l3.276-3.276c.256.565.398 1.192.398 1.852Z" />',
+    tier: 'compact' as const,
+    description:
+      "Something unique? Custom integrations and consulting for problems that don't fit a standard service.",
+    features: ['Custom integrations', 'Consulting', 'Unique solutions'],
+  },
+]
+
+const heroService = services.find(s => s.tier === 'hero')!
+const standardServices = services.filter(s => s.tier === 'standard')
+const compactServices = services.filter(s => s.tier === 'compact')
+
+const crossSellBundles = [
+  { href: '/for-businesses', label: 'For Businesses', accentRgb: '59, 130, 246', count: 10 },
+  { href: '/for-creators', label: 'For Creators', accentRgb: '236, 72, 153', count: 9 },
+]
+---
+
+<BundleLayout
+  title="Personal Tech Support & Privacy | Nightious"
+  description="5 services for personal tech: privacy protection, device support, professional email, AI automation, and custom solutions."
+  audience="Individuals"
+  accentColor={accentColor}
+  accentRgb={accentRgb}
+  ogImage="/images/og/og-for-individuals.png"
+>
+  <BundleHero
+    slot="hero"
+    audience="Individuals"
+    headline="Tech that just works"
+    tagline="tailored to keep your personal devices secure and running smooth."
+    accentRgb={accentRgb}
+    serviceCount={services.length}
+  />
+  <LivingGrid
+    slot="grid"
+    heroService={heroService}
+    standardServices={standardServices}
+    compactServices={compactServices}
+    accentRgb={accentRgb}
+    columnCount={2}
+  />
+  <CrossSell slot="crosssell" bundles={crossSellBundles} />
+</BundleLayout>
