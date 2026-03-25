@@ -1,5 +1,61 @@
 ---
+const promises = [
+  'Plain English, always',
+  'We pick up the phone',
+  'No hidden fees',
+  'Nationwide service',
+  'Real humans, not bots',
+  'We explain every step',
+]
 ---
-<section class="py-4 reveal-section section-alt" aria-hidden="true">
-  <p style="color: var(--color-purple-mid);">StatsTicker — coming soon</p>
+
+<section class="reveal-section section-alt overflow-hidden" aria-hidden="true">
+  <div class="glass-strong neon-top overflow-hidden">
+    <div id="ticker-track" class="flex whitespace-nowrap">
+      <!-- First copy -->
+      <div class="flex items-center flex-shrink-0" id="ticker-copy-1">
+        {promises.map(p => (
+          <span class="flex items-center gap-6 px-6 py-4">
+            <span class="font-display text-xs tracking-widest gradient-text">{p}</span>
+            <span style="color: var(--color-text-muted);" aria-hidden="true">·</span>
+          </span>
+        ))}
+      </div>
+      <!-- Second copy for seamless loop -->
+      <div class="flex items-center flex-shrink-0" aria-hidden="true" id="ticker-copy-2">
+        {promises.map(p => (
+          <span class="flex items-center gap-6 px-6 py-4">
+            <span class="font-display text-xs tracking-widest gradient-text">{p}</span>
+            <span style="color: var(--color-text-muted);">·</span>
+          </span>
+        ))}
+      </div>
+    </div>
+  </div>
 </section>
+
+<script>
+  import { gsap } from 'gsap'
+
+  let tickerTl: gsap.core.Timeline | null = null
+
+  function initTicker() {
+    const copy1 = document.getElementById('ticker-copy-1')
+    if (!copy1) return
+
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    if (reduced) return
+
+    const width = copy1.offsetWidth
+
+    tickerTl = gsap.timeline({ repeat: -1 })
+    tickerTl.fromTo(
+      '#ticker-track',
+      { x: 0 },
+      { x: -width, duration: 20, ease: 'none' }
+    )
+  }
+
+  document.addEventListener('astro:before-swap', () => { tickerTl?.kill(); tickerTl = null })
+  document.addEventListener('astro:page-load', initTicker)
+</script>
