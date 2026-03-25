@@ -1,5 +1,128 @@
 ---
+const pairs = [
+  {
+    jargon: 'Deploying containerised microservices to K8s cluster...',
+    plain: 'Setting up your website on fast, reliable servers.',
+  },
+  {
+    jargon: 'Configuring zero-trust network segmentation protocols...',
+    plain: "Making sure hackers can't get into your business.",
+  },
+  {
+    jargon: 'AI-driven GTM strategy across omnichannel touchpoints...',
+    plain: 'Helping more people find you online.',
+  },
+  {
+    jargon: 'Remediating CVE vulnerabilities in legacy endpoints...',
+    plain: 'Fixing security holes before they become problems.',
+  },
+]
 ---
-<section class="py-20 reveal-section" aria-label="Jargon-free zone">
-  <p style="color: var(--color-purple-mid);">JargonMorph — coming soon</p>
+
+<section class="py-24 reveal-section relative overflow-hidden" aria-label="Jargon-free zone">
+  <!-- Scanline overlay -->
+  <div
+    class="absolute inset-0 bg-grid pointer-events-none"
+    style="opacity: 0.4;"
+    aria-hidden="true"
+  ></div>
+
+  <div class="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+    <p class="font-display text-xs tracking-[0.25em] mb-4" style="color: var(--color-purple-mid);">
+      THE JARGON-FREE ZONE
+    </p>
+    <h2 class="font-display text-3xl md:text-4xl mb-16" style="color: var(--color-text-primary);">
+      We say what we mean.
+    </h2>
+
+    <!-- Animated morph display (hidden in reduced-motion) -->
+    <div class="morph-animated" style="min-height: 80px;">
+      <p
+        id="morph-text"
+        class="text-2xl md:text-3xl leading-relaxed opacity-0"
+        style="font-family: 'Exo 2', sans-serif;"
+      ></p>
+    </div>
+
+    <!-- Reduced-motion fallback: plain-English list (hidden by default) -->
+    <ul class="morph-fallback hidden flex-col gap-4 text-left max-w-2xl mx-auto list-none mt-8">
+      {pairs.map(p => (
+        <li class="glass p-5">
+          <p class="text-base leading-relaxed" style="color: var(--color-text-primary);">{p.plain}</p>
+        </li>
+      ))}
+    </ul>
+  </div>
 </section>
+
+<script>
+  import { gsap } from 'gsap'
+  import { ScrollTrigger } from 'gsap/ScrollTrigger'
+  gsap.registerPlugin(ScrollTrigger)
+
+  const pairs = [
+    { jargon: 'Deploying containerised microservices to K8s cluster...', plain: 'Setting up your website on fast, reliable servers.' },
+    { jargon: 'Configuring zero-trust network segmentation protocols...', plain: "Making sure hackers can't get into your business." },
+    { jargon: 'AI-driven GTM strategy across omnichannel touchpoints...', plain: 'Helping more people find you online.' },
+    { jargon: 'Remediating CVE vulnerabilities in legacy endpoints...', plain: 'Fixing security holes before they become problems.' },
+  ]
+
+  let morphTl: gsap.core.Timeline | null = null
+
+  function initMorph() {
+    const textEl = document.getElementById('morph-text') as HTMLElement | null
+    const animated = document.querySelector('.morph-animated') as HTMLElement | null
+    const fallback = document.querySelector('.morph-fallback') as HTMLElement | null
+    if (!textEl || !animated || !fallback) return
+
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
+    if (reduced) {
+      animated.style.display = 'none'
+      fallback.classList.remove('hidden')
+      fallback.style.display = 'flex'
+      return
+    }
+
+    morphTl = gsap.timeline({ repeat: -1, paused: true })
+
+    pairs.forEach(pair => {
+      // Jargon phase — intentional off-palette red (signals "bad/confusing")
+      morphTl!.call(() => {
+        textEl.textContent = pair.jargon
+        textEl.style.color = 'rgba(239, 68, 68, 0.5)'
+        textEl.style.fontFamily = 'monospace'
+        textEl.style.textShadow = 'none'
+      })
+      morphTl!.fromTo(textEl, { opacity: 0 }, { opacity: 1, duration: 0.4 })
+      morphTl!.to(textEl, { duration: 1.5 })
+
+      // Glitch frames
+      morphTl!.to(textEl, { skewX: 4,  opacity: 0.6, duration: 0.08 })
+      morphTl!.to(textEl, { skewX: -4, opacity: 0.9, duration: 0.08 })
+      morphTl!.to(textEl, { skewX: 2,  opacity: 0.5, duration: 0.08 })
+      morphTl!.to(textEl, { skewX: 0,  opacity: 0,   duration: 0.08 })
+
+      // Swap to plain English
+      morphTl!.call(() => {
+        textEl.textContent = pair.plain
+        textEl.style.color = 'var(--color-purple-light)'
+        textEl.style.fontFamily = "'Exo 2', sans-serif"
+        textEl.style.textShadow = '0 0 20px rgba(168, 85, 247, 0.4)'
+      })
+      morphTl!.fromTo(textEl, { opacity: 0 }, { opacity: 1, duration: 0.4 })
+      morphTl!.to(textEl, { duration: 2.5 })
+      morphTl!.to(textEl, { opacity: 0, duration: 0.4 })
+      morphTl!.call(() => { textEl.style.textShadow = 'none' })
+    })
+
+    ScrollTrigger.create({
+      trigger: textEl,
+      start: 'top 80%',
+      onEnter: () => morphTl?.play(),
+    })
+  }
+
+  document.addEventListener('astro:before-swap', () => { morphTl?.kill(); morphTl = null })
+  document.addEventListener('astro:page-load', initMorph)
+</script>
