@@ -10,7 +10,7 @@
   <div
     id="cta-glow"
     class="absolute inset-0 pointer-events-none"
-    style="background: radial-gradient(ellipse at center, rgba(124, 58, 237, 0.15) 0%, transparent 65%);"
+    style="opacity: 0.15; background: radial-gradient(ellipse at center, rgba(124, 58, 237, 0.15) 0%, transparent 65%);"
     aria-hidden="true"
   ></div>
 
@@ -36,6 +36,7 @@
       </a>
     </div>
   </div>
+  <!-- reveal-section fallback: no .glass children, so page-level reveal fades the whole section -->
 </section>
 
 <script>
@@ -52,13 +53,11 @@
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
     if (reduced) return
 
-    // Start at spec-defined base opacity, pulse subtly to 0.25
-    glow.style.opacity = '0.15'
-
+    // Start at spec-defined base opacity (set in HTML), pulse subtly to 0.25
     glowTl = gsap.timeline({
       repeat: -1,
       yoyo: true,
-      scrollTrigger: { trigger: glow, start: 'top 90%' },
+      scrollTrigger: { trigger: glow, start: 'top 90%', toggleActions: 'play pause resume pause' },
     })
 
     glowTl.to(glow, { opacity: 0.25, duration: 3, ease: 'sine.inOut' })
