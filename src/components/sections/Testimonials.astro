@@ -19,22 +19,20 @@ const testimonials = [
     stars: 5,
   },
 ]
+
+const rotations = ['-1deg', '0.5deg', '-0.5deg']
+const offsets   = ['0', '-16px', '0']
 ---
 
-<section class="py-20 reveal-section relative overflow-hidden" aria-label="Testimonials">
-  <!-- Background image -->
-  <div class="absolute inset-0 z-0" aria-hidden="true">
-    <img
-      src="/images/photos/home-testimonials.webp"
-      alt=""
-      class="w-full h-full object-cover object-center"
-      loading="lazy"
-      width="1920"
-      height="1080"
-    />
-    <div class="absolute inset-0" style="background: rgba(2, 0, 10, 0.85);"></div>
-  </div>
-  <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<section class="py-20 relative overflow-hidden" aria-label="Client testimonials">
+  <!-- Ambient glow behind cluster -->
+  <div
+    class="absolute inset-0 pointer-events-none"
+    style="background: radial-gradient(ellipse at center, rgba(124, 58, 237, 0.12) 0%, transparent 70%);"
+    aria-hidden="true"
+  ></div>
+
+  <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="text-center mb-14">
       <p class="font-display text-xs tracking-[0.25em] mb-3" style="color: var(--color-purple-mid);">CLIENT RESULTS</p>
       <h2 class="font-display text-3xl md:text-4xl" style="color: var(--color-text-primary);">
@@ -43,13 +41,18 @@ const testimonials = [
     </div>
 
     <ul class="grid grid-cols-1 md:grid-cols-3 gap-6 list-none">
-      {testimonials.map(t => (
-        <li>
+      {testimonials.map((t, i) => (
+        <li
+          class="testimonial-card opacity-0"
+          style={`
+            transform: rotate(${rotations[i]}) translateY(${offsets[i]});
+          `}
+        >
           <article class="glass p-7 flex flex-col gap-5 h-full">
             <div aria-label={`${t.stars} out of 5 stars`} class="text-base" style="color: var(--color-purple-mid);">
-              {'\u2605'.repeat(t.stars)}
+              {'★'.repeat(t.stars)}
             </div>
-            <blockquote class="text-sm leading-relaxed flex-1 italic" style="color: var(--color-text-muted);">
+            <blockquote class="text-sm leading-relaxed flex-1 italic" style="color: var(--color-text-primary);">
               &ldquo;{t.quote}&rdquo;
             </blockquote>
             <footer>
@@ -62,3 +65,44 @@ const testimonials = [
     </ul>
   </div>
 </section>
+
+<style>
+  /* Remove rotations on mobile — looks broken at narrow widths */
+  @media (max-width: 767px) {
+    .testimonial-card {
+      transform: none !important;
+    }
+  }
+</style>
+
+<script>
+  import { gsap } from 'gsap'
+  import { ScrollTrigger } from 'gsap/ScrollTrigger'
+  gsap.registerPlugin(ScrollTrigger)
+
+  let proofTl: gsap.core.Timeline | null = null
+
+  function initProof() {
+    const cards = document.querySelectorAll<HTMLElement>('.testimonial-card')
+    if (!cards.length) return
+
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    if (reduced) {
+      cards.forEach(c => { c.style.opacity = '1' })
+      return
+    }
+
+    proofTl = gsap.timeline({
+      scrollTrigger: { trigger: cards[0], start: 'top 85%', once: true },
+    })
+
+    proofTl.fromTo(
+      cards,
+      { opacity: 0, y: 40 },
+      { opacity: 1, y: 0, stagger: 0.12, duration: 0.6, ease: 'power2.out' }
+    )
+  }
+
+  document.addEventListener('astro:before-swap', () => { proofTl?.kill(); proofTl = null })
+  document.addEventListener('astro:page-load', initProof)
+</script>
