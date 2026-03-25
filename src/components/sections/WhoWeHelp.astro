@@ -43,7 +43,7 @@ const audiences = [
             style="background: rgba(124, 58, 237, 0.15); color: var(--color-purple-mid);"
             aria-hidden="true"
           >
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+            <svg width={i === 0 ? 28 : 24} height={i === 0 ? 28 : 24} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
               <Fragment set:html={audience.icon} />
             </svg>
           </div>
