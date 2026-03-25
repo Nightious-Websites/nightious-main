@@ -3,13 +3,15 @@ interface Props {
   title: string
   description: string
   slug: string
+  category?: string
 }
 
-const { title, description, slug } = Astro.props
+const { title, description, slug, category } = Astro.props
 
 const schema = {
   "@context": "https://schema.org",
   "@type": "Service",
+  "@id": `https://nightious.com/services/${slug}/#service`,
   "name": title,
   "description": description,
   "url": `https://nightious.com/services/${slug}`,
@@ -19,7 +21,7 @@ const schema = {
     "name": "Nightious",
   },
   "areaServed": "Worldwide",
-  "serviceType": title,
+  "serviceType": category ?? "Technology Services",
 }
 ---
 
