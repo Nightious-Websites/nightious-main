@@ -25,6 +25,8 @@ const { audience, headline, tagline, accentRgb, serviceCount } = Astro.props
     style={`background: radial-gradient(ellipse at center, rgba(${accentRgb}, 0.1) 0%, transparent 65%);`}
     aria-hidden="true"
   ></div>
+  <!-- Grid overlay -->
+  <div class="absolute inset-0 bg-grid pointer-events-none" aria-hidden="true"></div>
 
   <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
     <p class="font-display text-xs tracking-[0.25em] mb-4" style={`color: rgba(${accentRgb}, 0.8);`}>

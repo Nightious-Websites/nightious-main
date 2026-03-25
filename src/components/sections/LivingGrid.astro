@@ -25,26 +25,33 @@ const {
 } = Astro.props
 
 const mainGridClass = columnCount === 2
-  ? 'grid grid-cols-1 md:grid-cols-[1.5fr_1fr] gap-3'
-  : 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-[1.5fr_1fr_1fr] gap-3'
+  ? 'grid grid-cols-1 md:grid-cols-2 gap-4'
+  : 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'
 ---
 
 <section
-  class="py-16 overflow-hidden"
+  class="relative py-16 overflow-hidden"
   style={`background-color: var(--color-bg-deep);`}
   data-accent-rgb={accentRgb}
   aria-label="Services overview"
 >
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+  <!-- Ambient glow -->
+  <div
+    class="absolute inset-0 pointer-events-none"
+    style={`background: radial-gradient(ellipse at center, rgba(${accentRgb}, 0.06) 0%, transparent 60%);`}
+    aria-hidden="true"
+  ></div>
 
-    <!-- Main bento grid -->
+  <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+    <!-- Main grid -->
     <div class={mainGridClass}>
 
       <!-- Hero tile -->
       <button
         type="button"
-        class="grid-tile glass text-left p-6 md:row-span-2 rounded-2xl opacity-0 flex flex-col gap-4"
-        style={`border-color: rgba(${accentRgb}, 0.2);`}
+        class="grid-tile glass text-left p-6 rounded-2xl opacity-0 flex flex-col gap-4"
+        style={`border-color: rgba(${accentRgb}, 0.35);`}
         data-slug={heroService.slug}
         data-title={heroService.title}
         data-description={heroService.description}
@@ -491,9 +498,6 @@ const mainGridClass = columnCount === 2
       tile.setAttribute('aria-expanded', 'true')
       activeTile = tile
 
-      // Disable interaction with content behind the overlay
-      document.getElementById('main-content')?.setAttribute('inert', '')
-
       if (!instant) {
         gsap.fromTo(backdrop, { opacity: 0 }, { opacity: 1, duration: 0.25, ease: 'power2.out' })
         gsap.fromTo(panel,    { opacity: 0, scale: 0.9 }, { opacity: 1, scale: 1, duration: 0.3, ease: 'power2.out' })
@@ -509,8 +513,6 @@ const mainGridClass = columnCount === 2
       const done = () => {
         backdrop.classList.add('hidden')
         panel.classList.add('hidden')
-        // Re-enable interaction behind the overlay
-        document.getElementById('main-content')?.removeAttribute('inert')
         if (activeTile) {
           activeTile.setAttribute('aria-expanded', 'false')
           activeTile.focus()
@@ -551,8 +553,6 @@ const mainGridClass = columnCount === 2
     gridTl = null
     controller?.abort()
     controller = null
-    // Safety net: ensure inert is removed if overlay was open during navigation
-    document.getElementById('main-content')?.removeAttribute('inert')
   })
 
   document.addEventListener('astro:page-load', initLivingGrid)
