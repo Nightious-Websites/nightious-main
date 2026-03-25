@@ -43,7 +43,7 @@ const faqs = [
               <dt>
                 <button
                   type="button"
-                  class="w-full flex items-center justify-between gap-4 px-6 py-5 text-left"
+                  class="w-full flex items-center justify-between gap-4 px-6 py-5 text-left cursor-pointer"
                   aria-expanded="false"
                   aria-controls={`faq-answer-${i}`}
                   id={`faq-btn-${i}`}
@@ -63,7 +63,8 @@ const faqs = [
                 id={`faq-answer-${i}`}
                 role="region"
                 aria-labelledby={`faq-btn-${i}`}
-                class="faq-answer hidden px-6 pb-5"
+                class="faq-answer px-6 pb-5"
+                style="height: 0; overflow: hidden;"
               >
                 <p class="text-sm leading-relaxed" style="color: var(--color-text-muted);">{faq.a}</p>
               </dd>
@@ -77,6 +78,8 @@ const faqs = [
 </section>
 
 <script>
+  import { gsap } from 'gsap'
+
   function initFaq() {
     const buttons = document.querySelectorAll<HTMLButtonElement>('[id^="faq-btn-"]')
 
@@ -88,25 +91,38 @@ const faqs = [
         const indicator = btn.querySelector<HTMLElement>('.faq-indicator')
 
         btn.setAttribute('aria-expanded', String(!expanded))
-        answer?.classList.toggle('hidden')
+
+        const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
+        if (reduced) {
+          if (answer) answer.style.height = !expanded ? 'auto' : '0'
+          if (indicator) indicator.style.transform = !expanded ? 'scaleY(1)' : 'scaleY(0)'
+          return
+        }
+
+        if (answer) {
+          gsap.to(answer, {
+            height: !expanded ? 'auto' : 0,
+            duration: 0.3,
+            ease: !expanded ? 'power2.out' : 'power2.in',
+          })
+        }
 
         if (indicator) {
-          const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-          if (reduced) {
-            indicator.style.transform = !expanded ? 'scaleY(1)' : 'scaleY(0)'
-          } else {
-            import('gsap').then(({ gsap }) => {
-              gsap.to(indicator, {
-                scaleY: !expanded ? 1 : 0,
-                duration: 0.25,
-                ease: 'power2.out',
-              })
-            })
-          }
+          gsap.to(indicator, {
+            scaleY: !expanded ? 1 : 0,
+            duration: 0.25,
+            ease: 'power2.out',
+          })
         }
       })
     })
   }
 
+  document.addEventListener('astro:before-swap', () => {
+    document.querySelectorAll<HTMLElement>('.faq-indicator, .faq-answer').forEach(el => {
+      gsap.killTweensOf(el)
+    })
+  })
   document.addEventListener('astro:page-load', initFaq)
 </script>
