@@ -9,7 +9,7 @@ const promises = [
 ]
 ---
 
-<section class="reveal-section section-alt overflow-hidden" aria-hidden="true">
+<section class="section-alt overflow-hidden" aria-hidden="true">
   <div class="glass-strong neon-top overflow-hidden">
     <div id="ticker-track" class="flex whitespace-nowrap">
       <!-- First copy -->
@@ -46,11 +46,15 @@ const promises = [
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
     if (reduced) return
 
+    const track = copy1.parentElement as HTMLElement
+    if (!track) return
+
     const width = copy1.offsetWidth
+    if (!width) return
 
     tickerTl = gsap.timeline({ repeat: -1 })
     tickerTl.fromTo(
-      '#ticker-track',
+      track,
       { x: 0 },
       { x: -width, duration: 20, ease: 'none' }
     )
