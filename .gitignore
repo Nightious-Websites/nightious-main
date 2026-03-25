@@ -35,3 +35,4 @@ pnpm-debug.log*
 
 # Logo source files (design assets, not deployed web assets)
 Nightious_Logos/
+.vercel
