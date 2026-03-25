@@ -3,25 +3,22 @@ const testimonials = [
   {
     quote: "Nightious is the first IT company that didn't make me feel stupid. They explained everything in plain English, and I finally understand what I'm actually paying for.",
     name: 'Sarah Mitchell',
-    role: 'CEO, TechStart Inc.',
+    role: 'CEO, Mitchell & Co. Accounting',
     stars: 5,
   },
   {
     quote: "They reduced our tech overhead by 40% AND explained every decision. No surprises on the invoice, no jargon in the emails. That's rare.",
     name: 'James Rodriguez',
-    role: 'Operations Director, CloudNine Systems',
+    role: 'Owner, Riverside Auto Services',
     stars: 5,
   },
   {
     quote: "I used to Google every tech term my old IT company used. With Nightious, I never have to. They just explain it. Our team loves them.",
     name: 'Emily Chen',
-    role: 'Owner, DataFlow Analytics',
+    role: 'Owner, Chen\'s Catering Co.',
     stars: 5,
   },
 ]
-
-const rotations = ['-1deg', '0.5deg', '-0.5deg']
-const offsets   = ['0', '-16px', '0']
 ---
 
 <section class="py-20 relative overflow-hidden" aria-label="Client testimonials">
@@ -42,12 +39,7 @@ const offsets   = ['0', '-16px', '0']
 
     <ul class="grid grid-cols-1 md:grid-cols-3 gap-6 list-none">
       {testimonials.map((t, i) => (
-        <li
-          class="testimonial-card opacity-0"
-          style={`
-            transform: rotate(${rotations[i]}) translateY(${offsets[i]});
-          `}
-        >
+        <li class="testimonial-card opacity-0">
           <article class="glass p-7 flex flex-col gap-5 h-full">
             <div aria-label={`${t.stars} out of 5 stars`} class="text-base" style="color: var(--color-purple-mid);">
               {'★'.repeat(t.stars)}
@@ -66,15 +58,6 @@ const offsets   = ['0', '-16px', '0']
   </div>
 </section>
 
-<style>
-  /* Remove rotations on mobile — looks broken at narrow widths */
-  @media (max-width: 767px) {
-    .testimonial-card {
-      transform: none !important;
-    }
-  }
-</style>
-
 <script>
   import { gsap } from 'gsap'
   import { ScrollTrigger } from 'gsap/ScrollTrigger'
@@ -82,15 +65,36 @@ const offsets   = ['0', '-16px', '0']
 
   let proofTl: gsap.core.Timeline | null = null
 
+  // Card rotation and vertical offsets — desktop only
+  const CARD_ROTATIONS = [-1, 0.5, -0.5]  // degrees
+  const CARD_OFFSETS   = [0, -16, 0]       // px translateY
+
   function initProof() {
     const cards = document.querySelectorAll<HTMLElement>('.testimonial-card')
     if (!cards.length) return
 
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    const isMobile = window.matchMedia('(max-width: 767px)').matches
+
     if (reduced) {
-      cards.forEach(c => { c.style.opacity = '1' })
+      cards.forEach((c, i) => {
+        gsap.set(c, {
+          opacity: 1,
+          rotation: isMobile ? 0 : CARD_ROTATIONS[i],
+          y: isMobile ? 0 : CARD_OFFSETS[i],
+        })
+      })
       return
     }
+
+    // Register final rotation + offset in GSAP's transform cache BEFORE tweening
+    // so the rotation is preserved when the y tween runs
+    cards.forEach((c, i) => {
+      gsap.set(c, {
+        rotation: isMobile ? 0 : CARD_ROTATIONS[i],
+        y: isMobile ? 0 : CARD_OFFSETS[i],
+      })
+    })
 
     proofTl = gsap.timeline({
       scrollTrigger: { trigger: cards[0], start: 'top 85%', once: true },
@@ -98,8 +102,8 @@ const offsets   = ['0', '-16px', '0']
 
     proofTl.fromTo(
       cards,
-      { opacity: 0, y: 40 },
-      { opacity: 1, y: 0, stagger: 0.12, duration: 0.6, ease: 'power2.out' }
+      { opacity: 0, y: (idx) => (isMobile ? 0 : CARD_OFFSETS[idx]) + 40 },
+      { opacity: 1, y: (idx) => isMobile ? 0 : CARD_OFFSETS[idx], stagger: 0.12, duration: 0.6, ease: 'power2.out' }
     )
   }
 
