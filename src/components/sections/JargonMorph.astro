@@ -68,6 +68,7 @@ const pairs = [
   ]
 
   let morphTl: gsap.core.Timeline | null = null
+  let morphSt: ScrollTrigger | null = null
 
   function initMorph() {
     const textEl = document.getElementById('morph-text') as HTMLElement | null
@@ -116,13 +117,16 @@ const pairs = [
       morphTl!.call(() => { textEl.style.textShadow = 'none' })
     })
 
-    ScrollTrigger.create({
+    morphSt = ScrollTrigger.create({
       trigger: textEl,
       start: 'top 80%',
       onEnter: () => morphTl?.play(),
     })
   }
 
-  document.addEventListener('astro:before-swap', () => { morphTl?.kill(); morphTl = null })
+  document.addEventListener('astro:before-swap', () => {
+    morphTl?.kill(); morphTl = null
+    morphSt?.kill(); morphSt = null
+  })
   document.addEventListener('astro:page-load', initMorph)
 </script>
