@@ -15,6 +15,7 @@
     "@intercom/messenger-js-sdk": "^0.0.18",
     "@tailwindcss/vite": "^4.0.0",
     "@vercel/analytics": "^2.0.1",
+    "@vercel/speed-insights": "^2.0.0",
     "astro": "^5.6.0",
     "astro-robots-txt": "^1.0.0",
     "astro-seo": "^0.8.4",
