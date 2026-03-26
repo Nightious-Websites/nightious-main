@@ -140,6 +140,7 @@ const avatarGradients = [
   import { gsap } from 'gsap'
 
   let ticker: ((time: number, deltaTime: number) => void) | null = null
+  let resizeHandler: (() => void) | null = null
   let currentIndex = 0
   let isPaused = false
   let elapsed = 0
@@ -164,7 +165,7 @@ const avatarGradients = [
     total: number
   ) {
     const visible = getVisibleCards()
-    const maxIndex = total - visible
+    const maxIndex = Math.max(0, total - visible)
     currentIndex = ((index % total) + total) % total
     // Clamp so we never scroll past the last full page
     const clampedIndex = Math.min(currentIndex, maxIndex)
@@ -183,6 +184,7 @@ const avatarGradients = [
     const dots = document.querySelectorAll<HTMLButtonElement>('.dot-btn')
     const cards = track.querySelectorAll('.testimonial-card')
     const total = cards.length
+    if (total === 0) return
     currentIndex = 0
     elapsed = 0
     isPaused = false
@@ -209,12 +211,13 @@ const avatarGradients = [
     overflow?.addEventListener('focusout', () => { isPaused = false })
 
     // Reset on resize to avoid stale offsets
-    window.addEventListener('resize', () => {
+    resizeHandler = () => {
       currentIndex = 0
       elapsed = 0
       gsap.set(track, { x: 0 })
       dots.forEach((d, i) => d.setAttribute('aria-current', i === 0 ? 'true' : 'false'))
-    }, { passive: true })
+    }
+    window.addEventListener('resize', resizeHandler, { passive: true })
 
     // GSAP ticker — deltaTime is ms since last frame
     const tickFn = (_time: number, deltaTime: number) => {
@@ -233,6 +236,10 @@ const avatarGradients = [
     if (ticker) {
       gsap.ticker.remove(ticker)
       ticker = null
+    }
+    if (resizeHandler) {
+      window.removeEventListener('resize', resizeHandler)
+      resizeHandler = null
     }
   })
   document.addEventListener('astro:page-load', initCarousel)
