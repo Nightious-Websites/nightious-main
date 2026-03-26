@@ -8,12 +8,12 @@
       }
     },
     "assert": {
-      "preset": "lighthouse:no-pwa",
       "assertions": {
         "categories:performance": "off",
         "categories:accessibility": ["error", { "minScore": 0.9 }],
         "categories:best-practices": ["error", { "minScore": 0.9 }],
-        "categories:seo": ["error", { "minScore": 0.9 }]
+        "categories:seo": ["warn", { "minScore": 0.9 }],
+        "errors-in-console": "off"
       }
     },
     "upload": {

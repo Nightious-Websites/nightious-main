@@ -1,4 +1,9 @@
 ---
+import { Image } from 'astro:assets'
+import logoWhite from '@/assets/images/logos/logo-white.png'
+import iconWhite from '@/assets/images/logos/icon-white.png'
+import logoTextWhite from '@/assets/images/logos/logo-text-white.png'
+
 const pathname = Astro.url.pathname
 
 function isActive(href: string) {
@@ -35,11 +40,11 @@ const bundleLinks = [
   >
     <!-- Logo -->
     <a href="/" aria-label="Nightious — Home" class="flex-shrink-0">
-      <img
-        src={`${import.meta.env.BASE_URL}images/logos/logo-white.png`}
+      <Image
+        src={logoWhite}
         alt="Nightious"
-        width="160"
-        height="40"
+        width={160}
+        height={40}
         class="h-8 w-auto object-contain"
         loading="eager"
       />
@@ -176,8 +181,8 @@ const bundleLinks = [
   >
     <div class="flex items-center justify-between px-6 py-5 border-b" style="border-color: rgba(168, 85, 247, 0.15);">
       <div class="flex items-center gap-2">
-        <img src={`${import.meta.env.BASE_URL}images/logos/icon-white.png`} alt="" width="28" height="28" class="h-7 w-7 object-contain" aria-hidden="true" />
-        <img src={`${import.meta.env.BASE_URL}images/logos/logo-text-white.png`} alt="Nightious" width="110" height="26" class="h-6 w-auto object-contain" />
+        <Image src={iconWhite} alt="" width={28} height={28} class="h-7 w-7 object-contain" aria-hidden="true" />
+        <Image src={logoTextWhite} alt="Nightious" width={110} height={26} class="h-6 w-auto object-contain" />
       </div>
       <button
         id="drawer-close"

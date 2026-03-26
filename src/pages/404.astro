@@ -1,5 +1,8 @@
 ---
+import { Image } from 'astro:assets'
 import BaseLayout from '@/layouts/BaseLayout.astro'
+import cityNight from '@/assets/images/photos/city-night.jpg'
+import logoCompleteColor from '@/assets/images/logos/logo-complete-color.png'
 ---
 
 <BaseLayout
@@ -13,13 +16,13 @@ import BaseLayout from '@/layouts/BaseLayout.astro'
   >
     <!-- Background photo -->
     <div class="absolute inset-0 z-0" aria-hidden="true">
-      <img
-        src="/images/photos/city-night.jpg"
+      <Image
+        src={cityNight}
         alt=""
         class="w-full h-full object-cover object-center"
         loading="eager"
-        width="1920"
-        height="1080"
+        widths={[800, 1200, 1920]}
+        sizes="100vw"
       />
       <div
         class="absolute inset-0"
@@ -56,12 +59,12 @@ import BaseLayout from '@/layouts/BaseLayout.astro'
     <div class="relative z-20 max-w-lg mx-auto px-4 sm:px-6 text-center">
       <!-- Logo (color variant — stands out on dark photo) -->
       <div class="flex justify-center mb-8">
-        <img
-          src="/images/logos/logo-complete-color.png"
+        <Image
+          src={logoCompleteColor}
           alt="Nightious"
           class="h-10 w-auto object-contain"
-          width="300"
-          height="72"
+          width={300}
+          height={72}
         />
       </div>
 
