@@ -20,6 +20,18 @@ const faqs = [
     q: 'Do you work with businesses outside the US?',
     a: "Yes. We work with clients worldwide. All communication is async-friendly, so time zones are never a problem.",
   },
+  {
+    q: 'How much does it cost?',
+    a: "Depends on what you need. A one-off fix is a flat fee. Ongoing support is a retainer. We give you a clear quote upfront — no surprise invoices.",
+  },
+  {
+    q: 'What do you actually do?',
+    a: "Web design, IT support, AI automation, cybersecurity, and digital strategy. Most clients start with one problem and end up working with us across all of it.",
+  },
+  {
+    q: 'How do I get started?',
+    a: "Book a free call and tell us what's going on. We'll tell you what we can do and what it costs. No commitment required.",
+  },
 ]
 ---
 
@@ -88,7 +100,7 @@ const faqs = [
 
   /* Flip card shell */
   .flip-card {
-    height: 160px;
+    height: 128px;
     cursor: pointer;
     perspective: 1000px;
     outline: 2px solid transparent;
@@ -114,7 +126,7 @@ const faqs = [
     border-radius: 10px;
     backface-visibility: hidden;
     -webkit-backface-visibility: hidden;
-    padding: 16px 18px;
+    padding: 12px 14px;
     display: flex;
     flex-direction: column;
   }
@@ -148,7 +160,7 @@ const faqs = [
   /* Front face contents */
   .ghost-num {
     font-family: 'Orbitron', sans-serif;
-    font-size: 32px;
+    font-size: 24px;
     font-weight: 900;
     line-height: 1;
     color: rgba(168, 85, 247, 0.13);
@@ -184,7 +196,7 @@ const faqs = [
 
   /* CTA card */
   .cta-card {
-    height: 160px;
+    height: 128px;
     background: rgba(168, 85, 247, 0.07);
     border: 1px dashed rgba(168, 85, 247, 0.3);
     border-radius: 10px;
