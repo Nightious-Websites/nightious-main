@@ -238,4 +238,72 @@ const faqs = [
     .flip-card.flipped .flip-front { opacity: 0; pointer-events: none; }
     .flip-card.flipped .flip-back  { opacity: 1; pointer-events: auto; }
   }
+
+  /* ── Glitch effect ───────────────────────────────────────────────
+     .glitching class is toggled by JS at the flip midpoint (275ms).
+     Total glitch duration: 220ms.
+  ──────────────────────────────────────────────────────────────── */
+
+  @keyframes glitch-rgbsplit {
+    0%   { text-shadow: none; }
+    15%  { text-shadow: -2px 0 0 rgba(0,255,255,0.7), 2px 0 0 rgba(255,0,255,0.7); }
+    35%  { text-shadow:  2px 0 0 rgba(0,255,255,0.5), -2px 0 0 rgba(255,0,255,0.5); }
+    55%  { text-shadow: -1px 0 0 rgba(0,255,255,0.3),  1px 0 0 rgba(255,0,255,0.3); }
+    100% { text-shadow: none; }
+  }
+
+  @keyframes glitch-slice {
+    0%   { clip-path: inset(0 0 100% 0); transform: translate(0); }
+    15%  { clip-path: inset(20% 0 50% 0); transform: translate(-3px, 0); }
+    30%  { clip-path: inset(50% 0 20% 0); transform: translate(3px, 0); }
+    55%  { clip-path: inset(5% 0 70% 0);  transform: translate(-2px, 0); }
+    75%  { clip-path: inset(70% 0 5% 0);  transform: translate(2px, 0); }
+    100% { clip-path: inset(0 0 0 0);     transform: translate(0); }
+  }
+
+  .flip-card.glitching .flip-card-inner {
+    animation: glitch-rgbsplit 0.22s ease-out forwards;
+  }
+
+  /* Cyan + magenta pseudo-element slices */
+  .flip-card.glitching .flip-card-inner::before,
+  .flip-card.glitching .flip-card-inner::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 10px;
+    pointer-events: none;
+    z-index: 10;
+  }
+  .flip-card.glitching .flip-card-inner::before {
+    background: rgba(0, 255, 255, 0.05);
+    animation: glitch-slice 0.18s steps(1) forwards;
+    transform: translateX(-2px);
+  }
+  .flip-card.glitching .flip-card-inner::after {
+    background: rgba(255, 0, 255, 0.04);
+    animation: glitch-slice 0.18s steps(1) 0.04s forwards;
+    transform: translateX(2px);
+  }
+
+  /* Border flashes cyan during glitch */
+  .flip-card.glitching .flip-front,
+  .flip-card.glitching .flip-back {
+    border-color: rgba(0, 255, 255, 0.55) !important;
+    transition: none;
+  }
+
+  /* Disable glitch for reduced motion users */
+  @media (prefers-reduced-motion: reduce) {
+    .flip-card.glitching .flip-card-inner,
+    .flip-card.glitching .flip-card-inner::before,
+    .flip-card.glitching .flip-card-inner::after {
+      animation: none;
+    }
+    .flip-card.glitching .flip-front,
+    .flip-card.glitching .flip-back {
+      border-color: inherit !important;
+      transition: none;
+    }
+  }
 </style>
