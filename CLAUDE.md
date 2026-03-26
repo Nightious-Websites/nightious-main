@@ -15,6 +15,9 @@ IT & digital solutions company. Website: nightious.com
 ## Gotchas
 `entry.id` includes `.md` — use `entrySlug()` from `@/utils/services`. Never add `slug` to Zod schemas.
 
+## Serena MCP — Required at Session Start
+Activate before touching code: `activate_project` (nightious) → `check_onboarding_performed`. Query `serena-workflow` in QMD for the full tool substitution guide and token benchmark instructions.
+
 ## Workflow
 1. Check `.claude/queue.md`
 2. Search with `/qmd-mastery:qmd` skill
