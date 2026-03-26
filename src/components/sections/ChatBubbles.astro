@@ -13,7 +13,7 @@ const columns = [
 
 <section
   id="chat-bubbles-section"
-  class="relative py-20 overflow-hidden"
+  class="relative py-32 overflow-hidden"
   aria-label="How we help"
   data-icon-src={iconColor.src}
   style="background-color: var(--color-bg-deep);"
@@ -35,10 +35,10 @@ const columns = [
     </div>
 
     <!-- Three audience columns -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-0">
       {columns.map(({ id, title }) => (
         <div
-          class="chat-col glass card-hover rounded-2xl p-5 flex flex-col gap-3"
+          class="chat-col flex flex-col gap-4 px-8 first:pl-0 last:pr-0"
           data-col={id}
           style="opacity:0;"
         >
@@ -46,8 +46,8 @@ const columns = [
 
           <!-- Chat window — pairs injected here by JS -->
           <div
-            class="chat-window flex flex-col gap-3"
-            style="min-height: 240px; max-height: 320px; overflow: hidden;"
+            class="chat-window flex flex-col gap-4"
+            style="min-height: 420px;"
           ></div>
 
           <!-- Typing indicator (shared, sits below chat window) -->
@@ -79,6 +79,29 @@ const columns = [
 </section>
 
 <style>
+  /* Fading vertical divider between columns */
+  @media (min-width: 768px) {
+    .chat-col:not(:first-child) {
+      position: relative;
+    }
+    .chat-col:not(:first-child)::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 5%;
+      height: 90%;
+      width: 1px;
+      background: linear-gradient(
+        to bottom,
+        transparent 0%,
+        rgba(255, 255, 255, 0.07) 25%,
+        rgba(255, 255, 255, 0.07) 75%,
+        transparent 100%
+      );
+      pointer-events: none;
+    }
+  }
+
   @keyframes typing-bounce {
     0%, 60%, 100% { transform: translateY(0); }
     30% { transform: translateY(-4px); }
@@ -373,7 +396,7 @@ const columns = [
       // Issue 4: use '>' so fade-out starts AFTER the reader pause, not at the same time
       tl.to(
         oldest,
-        { opacity: 0, y: -10, duration: 0.35, ease: 'power2.in', onComplete: () => oldest.remove() },
+        { opacity: 0, duration: 0.35, ease: 'power2.in', onComplete: () => oldest.remove() },
         '>',
       )
     }
