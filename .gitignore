@@ -32,6 +32,13 @@ pnpm-debug.log*
 .omc/
 .claude/
 .mcp.json
+.serena/
+
+# Lighthouse CI reports (local audit artifacts)
+.lighthouseci/
+*.report.html
+*.report.json
+manifest.json
 
 # Logo source files (design assets, not deployed web assets)
 Nightious_Logos/

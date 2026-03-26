@@ -1,4 +1,7 @@
 ---
+import { Image } from 'astro:assets'
+import logoCompleteWhite from '@/assets/images/logos/logo-complete-white.png'
+
 const year = new Date().getFullYear()
 ---
 
@@ -32,8 +35,8 @@ const year = new Date().getFullYear()
           </svg>
         </div>
         <div>
-          <p class="text-sm font-semibold" style="color: var(--color-text-primary);">~2 Hour Response</p>
-          <p class="text-xs" style="color: var(--color-text-muted);">Average reply time</p>
+          <p class="text-sm font-semibold" style="color: var(--color-text-primary);">Remote Support</p>
+          <p class="text-xs" style="color: var(--color-text-muted);">All services delivered online</p>
         </div>
       </div>
       <div class="flex items-center gap-3">
@@ -58,17 +61,17 @@ const year = new Date().getFullYear()
       <!-- Brand + CTA -->
       <div class="md:col-span-4">
         <a href="/" aria-label="Nightious — Home" class="inline-block mb-4">
-          <img
-            src={`${import.meta.env.BASE_URL}images/logos/logo-complete-white.png`}
+          <Image
+            src={logoCompleteWhite}
             alt="Nightious"
-            width="180"
-            height="43"
+            width={180}
+            height={43}
             class="h-10 w-auto object-contain"
             loading="lazy"
           />
         </a>
         <p class="text-sm leading-relaxed mb-5" style="color: var(--color-text-muted);">
-          IT & digital solutions for small businesses and content creators. No jargon, ever.
+          IT & digital solutions for small businesses and content creators.
         </p>
         <a href="/contact" class="btn-primary text-sm">
           Get a Free Quote →
@@ -77,7 +80,7 @@ const year = new Date().getFullYear()
 
       <!-- Quick links -->
       <div class="md:col-span-2">
-        <h3 class="font-display text-xs tracking-widest mb-4" style="color: var(--color-purple-mid);">NAVIGATE</h3>
+        <p class="font-display text-xs tracking-widest mb-4" style="color: var(--color-purple-mid);">NAVIGATE</p>
         <ul class="flex flex-col gap-2.5 list-none">
           <li><a href="/" class="text-sm transition-colors hover:text-white" style="color: var(--color-text-muted);">Home</a></li>
           <li><a href="/services" class="text-sm transition-colors hover:text-white" style="color: var(--color-text-muted);">All Services</a></li>
@@ -87,7 +90,7 @@ const year = new Date().getFullYear()
 
       <!-- Services -->
       <div class="md:col-span-3">
-        <h3 class="font-display text-xs tracking-widest mb-4" style="color: var(--color-purple-mid);">SERVICES</h3>
+        <p class="font-display text-xs tracking-widest mb-4" style="color: var(--color-purple-mid);">SERVICES</p>
         <ul class="flex flex-col gap-2.5 list-none">
           <li><a href="/services/website-solutions" class="text-sm transition-colors hover:text-white" style="color: var(--color-text-muted);">Website Solutions</a></li>
           <li><a href="/services/ai-integration" class="text-sm transition-colors hover:text-white" style="color: var(--color-text-muted);">AI Integration</a></li>
@@ -100,7 +103,7 @@ const year = new Date().getFullYear()
 
       <!-- Hours + Contact -->
       <div class="md:col-span-3">
-        <h3 class="font-display text-xs tracking-widest mb-4" style="color: var(--color-purple-mid);">HOURS</h3>
+        <p class="font-display text-xs tracking-widest mb-4" style="color: var(--color-purple-mid);">HOURS</p>
         <ul class="flex flex-col gap-2 list-none text-sm mb-5" style="color: var(--color-text-muted);">
           <li class="flex justify-between gap-4">
             <span>Mon – Fri</span>

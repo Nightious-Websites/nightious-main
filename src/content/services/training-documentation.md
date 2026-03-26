@@ -15,7 +15,7 @@ relatedSlugs:
 
 - **Software training sessions** — Live or recorded walkthroughs of any tool your team uses (CRM, PM software, accounting, etc.).
 - **Standard Operating Procedures** — Written SOPs for your most common and critical business processes.
-- **User guides** — Plain-English documentation for custom software or complex workflows.
+- **User guides** — Clear documentation for custom software or complex workflows.
 - **Onboarding documentation** — New-hire tech guides so you're not spending 4 hours with every new employee.
 - **Video tutorials** — Loom-based or professionally recorded screencasts for self-service learning.
 - **Knowledge base setup** — Notion, Confluence, or GitBook wikis organized for maximum findability.

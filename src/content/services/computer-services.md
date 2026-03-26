@@ -1,7 +1,7 @@
 ---
 title: Computer Services
 tagline: Setup, repair, and maintenance for PCs, Macs, and small business networks.
-description: Computer setup, repair, virus removal, network configuration, and hardware upgrades for small businesses. Remote and on-site support available.
+description: Computer setup, repair, virus removal, network configuration, and hardware upgrades for small businesses. Remote support available.
 category: Computers
 color: blue
 icon: monitor
@@ -24,5 +24,5 @@ relatedSlugs:
 ## Why Nightious for Computer Services
 
 - We explain what went wrong and how to prevent it — not just fix-and-go.
-- Remote support available within hours; no need to haul equipment anywhere.
+- Remote support resolves most issues without you needing to haul equipment anywhere.
 - No upselling: we'll tell you honestly when a repair isn't worth the cost.

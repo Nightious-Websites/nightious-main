@@ -1,7 +1,10 @@
 ---
+import { Image } from 'astro:assets'
 import BaseLayout from '@/layouts/BaseLayout.astro'
 import SchemaBreadcrumb from '@/components/seo/SchemaBreadcrumb.astro'
 import GlassCard from '@/components/ui/GlassCard.astro'
+import contactSide from '@/assets/images/photos/contact-side.webp'
+import logoCompleteWhite from '@/assets/images/logos/logo-complete-white.png'
 
 const breadcrumbItems = [
   { name: 'Home', url: 'https://nightious.com' },
@@ -27,7 +30,7 @@ const serviceOptions = [
 
 <BaseLayout
   title="Get a Free Quote — Contact Nightious"
-  description="Send us a message and we'll typically reply within 2 hours. No jargon, no obligation. Start with a free quote from Nightious today."
+  description="Send us a message and we'll get back to you as soon as possible. No obligation. Start with a free quote from Nightious today."
   ogImage="/images/og/og-contact.png"
 >
   <SchemaBreadcrumb items={breadcrumbItems} />
@@ -46,7 +49,7 @@ const serviceOptions = [
       <p class="font-display text-xs tracking-[0.25em] mb-3" style="color: var(--color-purple-mid);">FREE CONSULTATION</p>
       <h1 class="font-display text-4xl md:text-5xl mb-4 text-glow" style="color: var(--color-text-primary);">Let's Talk</h1>
       <p class="text-base max-w-lg mx-auto" style="color: var(--color-text-muted);">
-        Describe your situation. We typically reply within 2 hours with a plain-English plan — no jargon, no obligation.
+        Describe your situation and we'll get back to you as soon as possible with a clear plan — no obligation.
       </p>
     </div>
   </section>
@@ -72,7 +75,7 @@ const serviceOptions = [
               </div>
               <h2 class="font-display text-xl" style="color: var(--color-text-primary);">Message received!</h2>
               <p class="text-sm" style="color: var(--color-text-muted);">
-                We've got your message — expect a reply within 4 business hours.
+                We've got your message — we'll be in touch as soon as possible.
               </p>
               <a href="/" class="btn-ghost text-sm">Back to Home</a>
             </div>
@@ -188,7 +191,7 @@ const serviceOptions = [
               </li>
               <li class="flex items-start gap-3">
                 <span class="text-lg" aria-hidden="true">⚡</span>
-                <span class="text-sm" style="color: var(--color-text-muted);">Typically replies within 2 hours</span>
+                <span class="text-sm" style="color: var(--color-text-muted);">We'll be in touch as soon as possible</span>
               </li>
               <li class="flex items-start gap-3">
                 <span class="text-lg" aria-hidden="true">🔒</span>
@@ -212,14 +215,14 @@ const serviceOptions = [
                   class="w-7 h-7 rounded-full flex items-center justify-center font-display text-xs flex-shrink-0 mt-0.5"
                   style="background: rgba(124, 58, 237, 0.2); color: var(--color-purple-light); border: 1px solid rgba(168, 85, 247, 0.3);"
                 >1</span>
-                <span class="text-sm" style="color: var(--color-text-muted);">We review your message — typically within 2 hours</span>
+                <span class="text-sm" style="color: var(--color-text-muted);">We review your message and respond as soon as possible</span>
               </li>
               <li class="flex items-start gap-3">
                 <span
                   class="w-7 h-7 rounded-full flex items-center justify-center font-display text-xs flex-shrink-0 mt-0.5"
                   style="background: rgba(124, 58, 237, 0.2); color: var(--color-purple-light); border: 1px solid rgba(168, 85, 247, 0.3);"
                 >2</span>
-                <span class="text-sm" style="color: var(--color-text-muted);">You receive a plain-English breakdown of your options</span>
+                <span class="text-sm" style="color: var(--color-text-muted);">You receive a clear breakdown of your options</span>
               </li>
               <li class="flex items-start gap-3">
                 <span
@@ -234,13 +237,13 @@ const serviceOptions = [
 
         <!-- Image panel — desktop only -->
         <div class="hidden xl:block xl:col-span-2 relative rounded-2xl overflow-hidden" style="min-height: 600px;">
-          <img
-            src="/images/photos/contact-side.webp"
+          <Image
+            src={contactSide}
             alt=""
             class="absolute inset-0 w-full h-full object-cover"
             loading="lazy"
-            width="1200"
-            height="900"
+            widths={[600, 900, 1200]}
+            sizes="(max-width: 1280px) 0px, 300px"
             aria-hidden="true"
           />
           <div
@@ -250,12 +253,12 @@ const serviceOptions = [
           ></div>
           <!-- Logo overlay at bottom -->
           <div class="absolute bottom-8 left-0 right-0 flex flex-col items-center gap-3">
-            <img
-              src="/images/logos/logo-complete-white.png"
+            <Image
+              src={logoCompleteWhite}
               alt="Nightious"
               class="h-10 w-auto object-contain"
-              width="300"
-              height="72"
+              width={300}
+              height={72}
             />
             <p class="text-xs text-center px-4" style="color: rgba(233,213,255,0.6);">
               St. Petersburg, FL · Serving clients nationwide
