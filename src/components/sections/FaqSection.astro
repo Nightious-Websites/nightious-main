@@ -316,6 +316,7 @@ const faqs = [
   // destroyed flag: prevents glitch setTimeout callbacks from acting on a
   // swapped-out DOM after Astro View Transitions navigation
   let destroyed = false
+  let cardAc: AbortController | null = null
 
   function initFaq() {
     destroyed = false
@@ -340,6 +341,7 @@ const faqs = [
           stagger: 0.08,
           ease: 'power2.out',
           scrollTrigger: {
+            id: 'faq-entrance',
             trigger: section,
             start: 'top 85%',
             once: true,
@@ -349,6 +351,10 @@ const faqs = [
     }
 
     // ── Click + keyboard handlers ────────────────────────────────────
+    cardAc?.abort()
+    cardAc = new AbortController()
+    const sig = { signal: cardAc.signal }
+
     flipCards.forEach(card => {
       function handleFlip() {
         const isFlipped = card.classList.contains('flipped')
@@ -374,19 +380,21 @@ const faqs = [
         }
       }
 
-      card.addEventListener('click', handleFlip)
+      card.addEventListener('click', handleFlip, sig)
       card.addEventListener('keydown', (e: KeyboardEvent) => {
         if (e.key === 'Enter' || e.key === ' ') {
           e.preventDefault()
           handleFlip()
         }
-      })
+      }, sig)
     })
   }
 
   document.addEventListener('astro:before-swap', () => {
     destroyed = true
-    ScrollTrigger.getAll().forEach(t => t.kill())
+    ScrollTrigger.getById('faq-entrance')?.kill()
+    cardAc?.abort()
+    cardAc = null
   })
   document.addEventListener('astro:page-load', initFaq)
 </script>

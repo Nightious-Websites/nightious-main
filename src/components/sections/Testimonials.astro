@@ -72,7 +72,7 @@ const avatarGradients = [
       style="background: linear-gradient(to left, var(--color-bg-deep), transparent);" aria-hidden="true"></div>
   </div>
 
-  <!-- Dot navigation (placeholder — wired up in Task 3) -->
+  <!-- Dot navigation -->
   <div class="flex justify-center gap-2 mt-6" role="tablist" aria-label="Testimonial navigation">
     {testimonials.map((_, i) => (
       <button
@@ -141,6 +141,7 @@ const avatarGradients = [
 
   let ticker: ((time: number, deltaTime: number) => void) | null = null
   let resizeHandler: (() => void) | null = null
+  let listenerAc: AbortController | null = null
   let currentIndex = 0
   let isPaused = false
   let elapsed = 0
@@ -175,6 +176,10 @@ const avatarGradients = [
   }
 
   function initCarousel() {
+    listenerAc?.abort()
+    listenerAc = new AbortController()
+    const sig = { signal: listenerAc.signal }
+
     const track = document.getElementById('testimonial-track') as HTMLElement | null
     if (!track) return
 
@@ -197,18 +202,18 @@ const avatarGradients = [
       dot.addEventListener('click', () => {
         elapsed = 0
         goTo(i, track, dots, total)
-      })
+      }, sig)
     })
 
     // Pause on hover / touch
     const overflow = track.closest('.carousel-overflow') as HTMLElement | null
-    overflow?.addEventListener('mouseenter', () => { isPaused = true })
-    overflow?.addEventListener('mouseleave', () => { isPaused = false })
-    overflow?.addEventListener('touchstart', () => { isPaused = true }, { passive: true })
-    overflow?.addEventListener('touchend', () => { isPaused = false }, { passive: true })
+    overflow?.addEventListener('mouseenter', () => { isPaused = true }, sig)
+    overflow?.addEventListener('mouseleave', () => { isPaused = false }, sig)
+    overflow?.addEventListener('touchstart', () => { isPaused = true }, { passive: true, signal: listenerAc.signal })
+    overflow?.addEventListener('touchend', () => { isPaused = false }, { passive: true, signal: listenerAc.signal })
     // Pause on keyboard focus within carousel
-    overflow?.addEventListener('focusin', () => { isPaused = true })
-    overflow?.addEventListener('focusout', () => { isPaused = false })
+    overflow?.addEventListener('focusin', () => { isPaused = true }, sig)
+    overflow?.addEventListener('focusout', () => { isPaused = false }, sig)
 
     // Reset on resize to avoid stale offsets
     resizeHandler = () => {
@@ -241,6 +246,8 @@ const avatarGradients = [
       window.removeEventListener('resize', resizeHandler)
       resizeHandler = null
     }
+    listenerAc?.abort()
+    listenerAc = null
   })
   document.addEventListener('astro:page-load', initCarousel)
 </script>
