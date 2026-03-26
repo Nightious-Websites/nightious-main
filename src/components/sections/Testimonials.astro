@@ -87,16 +87,32 @@ const avatarGradients = [
 </section>
 
 <style>
-  /* Temporary: show all cards in a wrapping row until carousel JS is added */
+  /* Responsive card widths — gap is gap-4 = 16px */
   .testimonial-card {
-    width: 280px;
-    transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+    /* Mobile: 1 card fills the track */
+    width: 100%;
+    flex-shrink: 0;
+    /* NOTE: No transform on hover — GSAP carousel controls translateX on the track.
+       Adding transform: scale here would conflict with that. Use box-shadow only. */
+    transition: box-shadow 0.2s, border-color 0.2s;
   }
+
+  @media (min-width: 640px) {
+    /* Tablet: 2 cards. width = (100% - 1×16px) / 2 */
+    .testimonial-card { width: calc(50% - 8px); }
+  }
+
+  @media (min-width: 1024px) {
+    /* Desktop: 4 cards. width = (100% - 3×16px) / 4 */
+    .testimonial-card { width: calc(25% - 12px); }
+  }
+
   .testimonial-card:hover {
-    transform: scale(1.02);
     box-shadow: 0 0 24px rgba(168,85,247,0.15);
     border-color: rgba(168,85,247,0.3) !important;
   }
+
+  /* Dot buttons — transition required so width change animates when JS updates aria-current */
   .dot-btn {
     height: 4px;
     width: 6px;
@@ -105,9 +121,17 @@ const avatarGradients = [
     background: rgba(168,85,247,0.25);
     cursor: pointer;
     padding: 0;
+    transition: width 0.3s ease, background 0.3s ease;
   }
   .dot-btn[aria-current="true"] {
     width: 20px;
     background: var(--color-purple-mid);
+  }
+
+  /* Reduced motion: static 2-col wrap, hide dots */
+  @media (prefers-reduced-motion: reduce) {
+    .carousel-track { flex-wrap: wrap; }
+    .testimonial-card { width: calc(50% - 8px); }
+    .dot-btn { display: none; }
   }
 </style>
