@@ -1,21 +1,24 @@
 ---
-const row1 = [
-  { quote: "They redesigned our site in two weeks. Traffic doubled the next month.", name: "Sarah M.", role: "Mitchell & Co. Accounting" },
-  { quote: "Set up our entire AI pipeline in a week. We've saved 20+ hours a month since.", name: "James R.", role: "Riverside Auto Services" },
-  { quote: "Finally, an IT company that picks up the phone. Fixed our email issues same day.", name: "Emily C.", role: "Chen's Catering Co." },
-  { quote: "They built custom automation for our booking system. No one else even understood what we needed.", name: "Marcus T.", role: "Clearview Dental" },
+const testimonials = [
+  { quote: "They redesigned our site in two weeks. Traffic doubled the next month.", name: "Sarah M.", company: "Mitchell & Co. Accounting", initials: "SM" },
+  { quote: "Set up our entire AI pipeline in a week. We've saved 20+ hours a month since.", name: "James R.", company: "Riverside Auto Services", initials: "JR" },
+  { quote: "Finally, an IT company that picks up the phone. Fixed our email issues same day.", name: "Emily C.", company: "Chen's Catering Co.", initials: "EC" },
+  { quote: "They built custom automation for our booking system. No one else even understood what we needed.", name: "Marcus T.", company: "Clearview Dental", initials: "MT" },
+  { quote: "My stream setup went from amateur to professional in one session. Worth every penny.", name: "Alex K.", company: "Content Creator", initials: "AK" },
+  { quote: "Got us off GoDaddy, set up Cloudflare, migrated our email — zero downtime.", name: "Priya N.", company: "Northside Legal Group", initials: "PN" },
+  { quote: "The privacy audit found three accounts that had been breached. They locked everything down that afternoon.", name: "David L.", company: "Freelance Photographer", initials: "DL" },
+  { quote: "We needed a site, email, and marketing plan. They handled all of it and came in under budget.", name: "Rachel W.", company: "Bloom Beauty Studio", initials: "RW" },
 ]
 
-const row2 = [
-  { quote: "My stream setup went from amateur to professional in one session. Worth every penny.", name: "Alex K.", role: "Content Creator" },
-  { quote: "Got us off GoDaddy, set up Cloudflare, migrated our email — zero downtime.", name: "Priya N.", role: "Northside Legal Group" },
-  { quote: "The privacy audit found three accounts that had been breached. They locked everything down that afternoon.", name: "David L.", role: "Freelance Photographer" },
-  { quote: "We needed a site, email, and marketing plan. They handled all of it and came in under budget.", name: "Rachel W.", role: "Bloom Beauty Studio" },
+const avatarGradients = [
+  'linear-gradient(135deg, #a855f7, #ec4899)',
+  'linear-gradient(135deg, #6366f1, #a855f7)',
+  'linear-gradient(135deg, #ec4899, #a855f7)',
+  'linear-gradient(135deg, #7c3aed, #06b6d4)',
 ]
 ---
 
 <section class="py-20 relative overflow-hidden" aria-label="Client testimonials" style="background-color: var(--color-bg-deep);">
-  <!-- Ambient glow -->
   <div
     class="absolute inset-0 pointer-events-none"
     style="background: radial-gradient(ellipse at center, rgba(168,85,247,0.06) 0%, transparent 60%);"
@@ -31,94 +34,220 @@ const row2 = [
     </div>
   </div>
 
-  <!-- Row 1: scrolls left -->
-  <div class="marquee-row marquee-row--left mb-4 overflow-hidden">
-    <div class="marquee-track flex gap-4">
-      {[...row1, ...row1].map(t => (
-        <article class="testimonial-card glass flex-shrink-0 w-72 p-6 flex flex-col gap-3" style="border-color: rgba(168,85,247,0.1);">
-          <div class="text-sm" style="color: var(--color-purple-mid);" aria-label="5 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-          <blockquote class="text-sm leading-relaxed flex-1" style="color: var(--color-text-primary);">
-            &ldquo;{t.quote}&rdquo;
-          </blockquote>
-          <footer>
-            <p class="text-sm font-semibold" style="color: var(--color-text-primary);">{t.name}</p>
-            <p class="text-xs" style="color: var(--color-text-muted);">{t.role}</p>
-          </footer>
-        </article>
-      ))}
+  <!-- Carousel -->
+  <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="carousel-overflow overflow-hidden">
+      <div class="carousel-track flex gap-4" id="testimonial-track">
+        {testimonials.map((t, i) => (
+          <article
+            class="testimonial-card glass flex-shrink-0 flex flex-col gap-3 p-6"
+            style="border-color: rgba(168,85,247,0.15);"
+          >
+            <div class="text-sm" style="color: var(--color-purple-mid);" aria-label="5 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+            <blockquote class="text-sm leading-relaxed flex-1" style="color: var(--color-text-primary);">
+              &ldquo;{t.quote}&rdquo;
+            </blockquote>
+            <footer class="flex items-center gap-3">
+              <div
+                class="flex-shrink-0 flex items-center justify-center rounded-full text-xs font-bold text-white"
+                style={`width: 34px; height: 34px; background: ${avatarGradients[i % 4]};`}
+                aria-hidden="true"
+              >
+                {t.initials}
+              </div>
+              <div>
+                <p class="text-sm font-semibold" style="color: var(--color-text-primary);">{t.name}</p>
+                <p class="text-xs" style="color: var(--color-text-muted);">{t.company}</p>
+              </div>
+            </footer>
+          </article>
+        ))}
+      </div>
     </div>
+
+    <!-- Edge fades -->
+    <div class="absolute top-0 left-4 sm:left-6 lg:left-8 bottom-0 w-8 sm:w-16 pointer-events-none z-10"
+      style="background: linear-gradient(to right, var(--color-bg-deep), transparent);" aria-hidden="true"></div>
+    <div class="absolute top-0 right-4 sm:right-6 lg:right-8 bottom-0 w-8 sm:w-16 pointer-events-none z-10"
+      style="background: linear-gradient(to left, var(--color-bg-deep), transparent);" aria-hidden="true"></div>
   </div>
 
-  <!-- Row 2: scrolls right -->
-  <div class="marquee-row marquee-row--right overflow-hidden">
-    <div class="marquee-track flex gap-4">
-      {[...row2, ...row2].map(t => (
-        <article class="testimonial-card glass flex-shrink-0 w-72 p-6 flex flex-col gap-3" style="border-color: rgba(168,85,247,0.1);">
-          <div class="text-sm" style="color: var(--color-purple-mid);" aria-label="5 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-          <blockquote class="text-sm leading-relaxed flex-1" style="color: var(--color-text-primary);">
-            &ldquo;{t.quote}&rdquo;
-          </blockquote>
-          <footer>
-            <p class="text-sm font-semibold" style="color: var(--color-text-primary);">{t.name}</p>
-            <p class="text-xs" style="color: var(--color-text-muted);">{t.role}</p>
-          </footer>
-        </article>
-      ))}
-    </div>
+  <!-- Dot navigation -->
+  <div class="flex justify-center gap-2 mt-6" role="tablist" aria-label="Testimonial navigation">
+    {testimonials.map((_, i) => (
+      <button
+        class="dot-btn"
+        role="tab"
+        aria-label={`Go to testimonial ${i + 1}`}
+        aria-current={i === 0 ? 'true' : 'false'}
+        data-index={String(i)}
+      ></button>
+    ))}
   </div>
-
-  <!-- Gradient edge masks -->
-  <div class="absolute top-0 left-0 bottom-0 w-16 sm:w-24 pointer-events-none z-10" style="background: linear-gradient(to right, var(--color-bg-deep), transparent);" aria-hidden="true"></div>
-  <div class="absolute top-0 right-0 bottom-0 w-16 sm:w-24 pointer-events-none z-10" style="background: linear-gradient(to left, var(--color-bg-deep), transparent);" aria-hidden="true"></div>
 </section>
 
 <style>
-  @keyframes marquee-left {
-    from { transform: translateX(0); }
-    to { transform: translateX(-50%); }
-  }
-  @keyframes marquee-right {
-    from { transform: translateX(-50%); }
-    to { transform: translateX(0); }
-  }
-
-  .marquee-row--left .marquee-track {
-    animation: marquee-left 35s linear infinite;
-  }
-  .marquee-row--right .marquee-track {
-    animation: marquee-right 40s linear infinite;
-  }
-
-  /* Pause on hover */
-  .marquee-row:hover .marquee-track {
-    animation-play-state: paused;
-  }
-
-  /* Hovered card gets subtle lift + glow */
+  /* Responsive card widths — gap is gap-4 = 16px */
   .testimonial-card {
-    transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+    /* Mobile: 1 card fills the track */
+    width: 100%;
+    flex-shrink: 0;
+    /* NOTE: No transform on hover — GSAP carousel controls translateX on the track.
+       Adding transform: scale here would conflict with that. Use box-shadow only. */
+    transition: box-shadow 0.2s, border-color 0.2s;
   }
+
+  @media (min-width: 640px) {
+    /* Tablet: 2 cards. width = (100% - 1×16px) / 2 */
+    .testimonial-card { width: calc(50% - 8px); }
+  }
+
+  @media (min-width: 1024px) {
+    /* Desktop: 4 cards. width = (100% - 3×16px) / 4 */
+    .testimonial-card { width: calc(25% - 12px); }
+  }
+
   .testimonial-card:hover {
-    transform: scale(1.03);
-    box-shadow: 0 0 30px rgba(168,85,247,0.15);
+    box-shadow: 0 0 24px rgba(168,85,247,0.15);
     border-color: rgba(168,85,247,0.3) !important;
   }
 
+  /* Dot buttons — transition required so width change animates when JS updates aria-current */
+  .dot-btn {
+    height: 4px;
+    width: 6px;
+    border-radius: 2px;
+    border: none;
+    background: rgba(168,85,247,0.25);
+    cursor: pointer;
+    padding: 0;
+    transition: width 0.3s ease, background 0.3s ease;
+  }
+  .dot-btn[aria-current="true"] {
+    width: 20px;
+    background: var(--color-purple-mid);
+  }
+
+  /* Reduced motion: static 2-col wrap, hide dots */
   @media (prefers-reduced-motion: reduce) {
-    .marquee-row--left .marquee-track,
-    .marquee-row--right .marquee-track {
-      animation: none;
-    }
-    /* Show cards in a static wrap layout */
-    .marquee-track {
-      flex-wrap: wrap;
-      justify-content: center;
-    }
-    .marquee-row {
-      max-width: 1280px;
-      margin-left: auto;
-      margin-right: auto;
-      padding: 0 1rem;
-    }
+    .carousel-track { flex-wrap: wrap; }
+    .testimonial-card { width: calc(50% - 8px); }
+    .dot-btn { display: none; }
   }
 </style>
+
+<script>
+  import { gsap } from 'gsap'
+
+  let ticker: ((time: number, deltaTime: number) => void) | null = null
+  let resizeHandler: (() => void) | null = null
+  let listenerAc: AbortController | null = null
+  let currentIndex = 0
+  let isPaused = false
+  let elapsed = 0
+  const INTERVAL = 4 // seconds between auto-advances
+
+  function getVisibleCards(): number {
+    if (window.innerWidth >= 1024) return 4
+    if (window.innerWidth >= 640) return 2
+    return 1
+  }
+
+  function getCardStep(track: HTMLElement): number {
+    const card = track.querySelector<HTMLElement>('.testimonial-card')
+    if (!card) return 0
+    return card.offsetWidth + 16 // 16px = gap-4
+  }
+
+  function goTo(
+    index: number,
+    track: HTMLElement,
+    dots: NodeListOf<HTMLButtonElement>,
+    total: number
+  ) {
+    const visible = getVisibleCards()
+    const maxIndex = Math.max(0, total - visible)
+    currentIndex = ((index % total) + total) % total
+    // Clamp so we never scroll past the last full page
+    const clampedIndex = Math.min(currentIndex, maxIndex)
+    const targetX = clampedIndex * getCardStep(track)
+    gsap.to(track, { x: -targetX, duration: 0.6, ease: 'power2.inOut' })
+    dots.forEach((d, i) => d.setAttribute('aria-current', i === currentIndex ? 'true' : 'false'))
+  }
+
+  function initCarousel() {
+    listenerAc?.abort()
+    listenerAc = new AbortController()
+    const sig = { signal: listenerAc.signal }
+
+    const track = document.getElementById('testimonial-track') as HTMLElement | null
+    if (!track) return
+
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    if (reduced) return
+
+    const dots = document.querySelectorAll<HTMLButtonElement>('.dot-btn')
+    const cards = track.querySelectorAll('.testimonial-card')
+    const total = cards.length
+    if (total === 0) return
+    currentIndex = 0
+    elapsed = 0
+    isPaused = false
+
+    // Reset position on init
+    gsap.set(track, { x: 0 })
+
+    // Dot click handlers
+    dots.forEach((dot, i) => {
+      dot.addEventListener('click', () => {
+        elapsed = 0
+        goTo(i, track, dots, total)
+      }, sig)
+    })
+
+    // Pause on hover / touch
+    const overflow = track.closest('.carousel-overflow') as HTMLElement | null
+    overflow?.addEventListener('mouseenter', () => { isPaused = true }, sig)
+    overflow?.addEventListener('mouseleave', () => { isPaused = false }, sig)
+    overflow?.addEventListener('touchstart', () => { isPaused = true }, { passive: true, signal: listenerAc.signal })
+    overflow?.addEventListener('touchend', () => { isPaused = false }, { passive: true, signal: listenerAc.signal })
+    // Pause on keyboard focus within carousel
+    overflow?.addEventListener('focusin', () => { isPaused = true }, sig)
+    overflow?.addEventListener('focusout', () => { isPaused = false }, sig)
+
+    // Reset on resize to avoid stale offsets
+    resizeHandler = () => {
+      currentIndex = 0
+      elapsed = 0
+      gsap.set(track, { x: 0 })
+      dots.forEach((d, i) => d.setAttribute('aria-current', i === 0 ? 'true' : 'false'))
+    }
+    window.addEventListener('resize', resizeHandler, { passive: true })
+
+    // GSAP ticker — deltaTime is ms since last frame
+    const tickFn = (_time: number, deltaTime: number) => {
+      if (isPaused) return
+      elapsed += deltaTime / 1000
+      if (elapsed >= INTERVAL) {
+        elapsed = 0
+        goTo(currentIndex + 1, track, dots, total)
+      }
+    }
+    gsap.ticker.add(tickFn)
+    ticker = tickFn
+  }
+
+  document.addEventListener('astro:before-swap', () => {
+    if (ticker) {
+      gsap.ticker.remove(ticker)
+      ticker = null
+    }
+    if (resizeHandler) {
+      window.removeEventListener('resize', resizeHandler)
+      resizeHandler = null
+    }
+    listenerAc?.abort()
+    listenerAc = null
+  })
+  document.addEventListener('astro:page-load', initCarousel)
+</script>

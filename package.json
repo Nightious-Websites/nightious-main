@@ -12,7 +12,6 @@
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.2.0",
-    "@intercom/messenger-js-sdk": "^0.0.18",
     "@tailwindcss/vite": "^4.0.0",
     "@vercel/analytics": "^2.0.1",
     "@vercel/speed-insights": "^2.0.0",
