@@ -2,48 +2,23 @@
 import { Image } from 'astro:assets'
 import iconColor from '@/assets/images/logos/icon-color.png'
 
-const conversations = [
-  {
-    question: "My website looks outdated and nobody can find us on Google",
-    answer: "We rebuild it from scratch — fast, mobile-first, SEO baked in from day one. Most clients see ranking improvements within weeks.",
-    service: "Website Solutions",
-    href: "/services/website-solutions",
-  },
-  {
-    question: "We're spending hours every week on stuff that should be automated",
-    answer: "We build AI workflows that handle the repetitive work — routing, reporting, data entry. Your team gets back to the stuff that actually moves the needle.",
-    service: "AI Integration",
-    href: "/services/ai-integration",
-  },
-  {
-    question: "I keep getting hacked and I don't know how to lock things down",
-    answer: "Full security audit, VPN, password manager, 2FA on every account. We find the gaps and close them. Most setups take a day.",
-    service: "Online Privacy",
-    href: "/services/online-privacy",
-  },
-  {
-    question: "My stream looks amateur compared to everyone else on Twitch",
-    answer: "OBS setup, overlays, audio, multi-platform — we get your production quality where it needs to be in one session.",
-    service: "Streaming Consultation",
-    href: "/services/streaming-consultation",
-  },
-  {
-    question: "We need a website, email, domain, and marketing but don't know where to start",
-    answer: "That's what the free consultation is for. We figure out what you actually need, build a plan, and quote it — no surprises.",
-    service: "Get Started",
-    href: "/contact",
-  },
-]
+const columns = [
+  { id: 'businesses', title: 'For Businesses' },
+  { id: 'creators',   title: 'For Creators'   },
+  { id: 'individuals', title: 'For Individuals' },
+] as const
 ---
 
-<noscript><style>.chat-pair, .typing-indicator { opacity: 1 !important; }</style></noscript>
+<noscript><style>.chat-col { opacity: 1 !important; }</style></noscript>
 
 <section
+  id="chat-bubbles-section"
   class="relative py-20 overflow-hidden"
   aria-label="How we help"
+  data-icon-src={iconColor.src}
   style="background-color: var(--color-bg-deep);"
 >
-  <!-- Particle field bg (subtle) -->
+  <!-- Radial glow bg -->
   <div
     class="absolute inset-0 pointer-events-none"
     style="background: radial-gradient(ellipse at 50% 50%, rgba(168,85,247,0.05) 0%, transparent 70%);"
@@ -59,70 +34,46 @@ const conversations = [
       </h2>
     </div>
 
-    <!-- Chat container -->
-    <div class="max-w-2xl mx-auto flex flex-col gap-5">
-      {conversations.map((conv, i) => (
-        <div class="chat-pair opacity-0" data-index={i}>
-          <!-- Customer question (right-aligned) -->
-          <div class="flex justify-end mb-3">
-            <div
-              class="max-w-[75%] px-4 py-3 rounded-2xl rounded-br-sm"
-              style="background: rgba(168,85,247,0.1); border: 1px solid rgba(168,85,247,0.2);"
-            >
-              <p class="text-sm" style="color: var(--color-purple-light);">{conv.question}</p>
-            </div>
-          </div>
+    <!-- Three audience columns -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      {columns.map(({ id, title }) => (
+        <div
+          class="chat-col glass card-hover rounded-2xl p-5 flex flex-col gap-3"
+          data-col={id}
+          style="opacity:0;"
+        >
+          <p class="font-display text-xs tracking-[0.2em] uppercase" style="color: var(--color-purple-mid);">{title}</p>
 
-          <!-- Nightious response (left-aligned) -->
-          <div class="flex items-start gap-3">
+          <!-- Chat window — pairs injected here by JS -->
+          <div
+            class="chat-window flex flex-col gap-3"
+            style="min-height: 240px; max-height: 320px; overflow: hidden;"
+          ></div>
+
+          <!-- Typing indicator (shared, sits below chat window) -->
+          <div class="typing-indicator-col flex items-start gap-2.5 opacity-0">
             <Image
               src={iconColor}
               alt=""
-              width={32}
-              height={32}
-              class="w-8 h-8 rounded-full object-contain flex-shrink-0 mt-1"
-              style="background: rgba(168,85,247,0.15); padding: 4px;"
+              width={28}
+              height={28}
+              class="w-7 h-7 rounded-full object-contain flex-shrink-0"
+              style="background: rgba(168,85,247,0.15); padding: 3px;"
               aria-hidden="true"
             />
             <div
-              class="max-w-[75%] px-4 py-3 rounded-2xl rounded-tl-sm"
-              style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);"
+              class="px-3 py-2 rounded-xl rounded-tl-sm"
+              style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06);"
             >
-              <p class="text-sm leading-relaxed" style="color: var(--color-text-muted);">{conv.answer}</p>
-              <a
-                href={conv.href}
-                class="text-xs font-display mt-2 inline-block"
-                style="color: rgba(168,85,247,0.8);"
-              >
-                {conv.service} &rarr;
-              </a>
+              <div class="flex gap-1.5">
+                <span class="typing-dot w-1.5 h-1.5 rounded-full" style="background: rgba(168,85,247,0.5);"></span>
+                <span class="typing-dot w-1.5 h-1.5 rounded-full" style="background: rgba(168,85,247,0.35);"></span>
+                <span class="typing-dot w-1.5 h-1.5 rounded-full" style="background: rgba(168,85,247,0.2);"></span>
+              </div>
             </div>
           </div>
         </div>
       ))}
-
-      <!-- Typing indicator (always visible at bottom after last pair reveals) -->
-      <div class="typing-indicator flex items-start gap-3 opacity-0">
-        <Image
-          src={iconColor}
-          alt=""
-          width={32}
-          height={32}
-          class="w-8 h-8 rounded-full object-contain flex-shrink-0"
-          style="background: rgba(168,85,247,0.15); padding: 4px;"
-          aria-hidden="true"
-        />
-        <div
-          class="px-4 py-3 rounded-2xl rounded-tl-sm"
-          style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06);"
-        >
-          <div class="flex gap-1.5">
-            <span class="typing-dot w-2 h-2 rounded-full" style="background: rgba(168,85,247,0.5);"></span>
-            <span class="typing-dot w-2 h-2 rounded-full" style="background: rgba(168,85,247,0.35);"></span>
-            <span class="typing-dot w-2 h-2 rounded-full" style="background: rgba(168,85,247,0.2);"></span>
-          </div>
-        </div>
-      </div>
     </div>
   </div>
 </section>
@@ -139,6 +90,20 @@ const conversations = [
   @media (prefers-reduced-motion: reduce) {
     .typing-dot { animation: none; }
   }
+
+  /* Issue 7: accessible link styles in answer bubbles */
+  .chat-answer-link {
+    font-size: 0.75rem;
+    color: rgba(168, 85, 247, 0.8);
+    display: inline-block;
+    margin-top: 0.375rem;
+    text-decoration: underline;
+    text-decoration-color: rgba(168, 85, 247, 0.4);
+    outline-offset: 2px;
+  }
+  .chat-answer-link:hover {
+    text-decoration-color: rgba(168, 85, 247, 0.8);
+  }
 </style>
 
 <script>
@@ -146,58 +111,410 @@ const conversations = [
   import { ScrollTrigger } from 'gsap/ScrollTrigger'
   gsap.registerPlugin(ScrollTrigger)
 
-  let chatTl: gsap.core.Timeline | null = null
+  interface Convo {
+    question: string
+    answer: string
+    service: string
+    href: string
+  }
 
-  function initChatBubbles() {
-    const pairs = document.querySelectorAll<HTMLElement>('.chat-pair')
-    const typingIndicator = document.querySelector<HTMLElement>('.typing-indicator')
-    if (!pairs.length) return
+  interface ColState {
+    index: number
+    pairEls: HTMLElement[]
+    windowEl: HTMLElement
+    typingEl: HTMLElement
+    convos: Convo[]
+    iconSrc: string
+    activeTl: gsap.core.Timeline | null
+    pendingDc: gsap.core.Tween | null
+    paused: boolean
+    started: boolean  // Issue 5: guard mouseleave before ScrollTrigger fires
+  }
 
-    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    if (reduced) {
-      pairs.forEach(p => { p.style.opacity = '1' })
-      if (typingIndicator) typingIndicator.style.opacity = '1'
-      return
-    }
+  // ── Conversation data ──────────────────────────────────────
 
-    chatTl = gsap.timeline({
-      scrollTrigger: { trigger: pairs[0], start: 'top 75%', once: true },
+  const businessConvos: Convo[] = [
+    {
+      question: "My website looks outdated and nobody can find us on Google",
+      answer: "We rebuild it from scratch — fast, mobile-first, SEO baked in from day one. Most clients see ranking improvements within weeks.",
+      service: "Website Solutions",
+      href: "/services/website-solutions",
+    },
+    {
+      question: "We're spending hours every week on stuff that should be automated",
+      answer: "We build AI workflows that handle the repetitive work — routing, reporting, data entry. Your team gets back to what actually moves the needle.",
+      service: "AI Integration",
+      href: "/services/ai-integration",
+    },
+    {
+      question: "Our tools don't talk to each other and nothing integrates",
+      answer: "We map your stack and connect it — APIs, automations, or a full switch if that's what it takes. One system, not ten.",
+      service: "AI Integration",
+      href: "/services/ai-integration",
+    },
+    {
+      question: "I don't know if our customer data is actually secure",
+      answer: "We audit your setup, lock down access, and put monitoring in place. Most gaps can be closed in a day.",
+      service: "Online Privacy",
+      href: "/services/online-privacy",
+    },
+    {
+      question: "We need a website, email, domain, and marketing but don't know where to start",
+      answer: "That's what the free consultation is for. We figure out what you actually need, build a plan, and quote it — no surprises.",
+      service: "Get Started",
+      href: "/contact",
+    },
+    {
+      question: "We're losing customers and can't figure out why",
+      answer: "Usually it's visibility, trust signals, or a broken funnel. We dig into the data and show you exactly where people drop off.",
+      service: "Get Started",
+      href: "/contact",
+    },
+  ]
+
+  const creatorConvos: Convo[] = [
+    {
+      question: "My stream looks amateur compared to everyone else on Twitch",
+      answer: "OBS setup, overlays, audio, multi-platform — we get your production quality where it needs to be in one session.",
+      service: "Streaming Consultation",
+      href: "/services/streaming-consultation",
+    },
+    {
+      question: "My audio quality is terrible on calls and streams",
+      answer: "Bad audio loses viewers faster than anything else. We sort your mic, interface, and routing so it sounds professional from the first minute.",
+      service: "Streaming Consultation",
+      href: "/services/streaming-consultation",
+    },
+    {
+      question: "I want to grow my audience but don't know what's holding me back",
+      answer: "We look at your setup, consistency, and discoverability. Usually it's one or two fixable things, not everything at once.",
+      service: "Get Started",
+      href: "/contact",
+    },
+    {
+      question: "My brand looks different on every platform",
+      answer: "We build a simple brand kit — logo, colours, templates — that works everywhere. Consistent look, less time spent making things match.",
+      service: "Website Solutions",
+      href: "/services/website-solutions",
+    },
+    {
+      question: "I spend more time fixing tech problems than making content",
+      answer: "That's a setup problem, not a skill problem. We get your rig stable so you can focus on the content, not the crashes.",
+      service: "Get Started",
+      href: "/contact",
+    },
+    {
+      question: "I want to go multi-platform but don't know how to manage it",
+      answer: "We set up simultaneous streaming and a reposting workflow. One stream, everywhere — with the right tools it's barely extra work.",
+      service: "Streaming Consultation",
+      href: "/services/streaming-consultation",
+    },
+  ]
+
+  const individualConvos: Convo[] = [
+    {
+      question: "I keep getting hacked and don't know how to lock things down",
+      answer: "Full security audit, VPN, password manager, 2FA on every account. We find the gaps and close them. Most setups take a day.",
+      service: "Online Privacy",
+      href: "/services/online-privacy",
+    },
+    {
+      question: "My phone and laptop are running slower every month",
+      answer: "Usually bloatware, storage, or outdated settings. We clean it up remotely — no data loss, no reinstalling everything.",
+      service: "Get Started",
+      href: "/contact",
+    },
+    {
+      question: "I have no idea what companies know about me online",
+      answer: "We run a data exposure check, opt you out of the major brokers, and show you how to keep it that way going forward.",
+      service: "Online Privacy",
+      href: "/services/online-privacy",
+    },
+    {
+      question: "I need proper backups before I lose everything",
+      answer: "3-2-1 strategy — local, cloud, offsite. We set it up so it runs automatically and you never have to think about it again.",
+      service: "Get Started",
+      href: "/contact",
+    },
+    {
+      question: "My Wi-Fi drops constantly and I don't know why",
+      answer: "Could be your router, interference, or your ISP. We diagnose it remotely or on-site and fix it — usually under an hour.",
+      service: "Get Started",
+      href: "/contact",
+    },
+    {
+      question: "Someone in my family got scammed and I need to help them",
+      answer: "We assess the damage, secure what's left, and put safeguards in place. Quick response matters here — let's talk today.",
+      service: "Online Privacy",
+      href: "/services/online-privacy",
+    },
+  ]
+
+  const colConvosMap: Record<string, Convo[]> = {
+    businesses: businessConvos,
+    creators: creatorConvos,
+    individuals: individualConvos,
+  }
+
+  // ── State ──────────────────────────────────────────────────
+
+  const states: ColState[] = []
+  let st: ScrollTrigger | null = null
+  // Issue 1: track stagger delayedCalls so they can be killed on cleanup
+  let staggerDcs: gsap.core.Tween[] = []
+  // Issue 2: AbortController for mouse/touch listeners
+  let listenerAbort: AbortController | null = null
+
+  // ── DOM helpers ────────────────────────────────────────────
+
+  function createPairEl(convo: Convo, iconSrc: string): HTMLElement {
+    const wrapper = document.createElement('div')
+    wrapper.style.cssText = 'display:flex;flex-direction:column;gap:0.5rem;'
+
+    // Question bubble (right-aligned, starts invisible)
+    const qOuter = document.createElement('div')
+    // Issue 6: data-role attribute for reliable selection
+    qOuter.dataset.role = 'q'
+    qOuter.style.cssText = 'display:flex;justify-content:flex-end;opacity:0;'
+    const qBubble = document.createElement('div')
+    qBubble.style.cssText = [
+      'max-width:85%',
+      'padding:0.6rem 0.875rem',
+      'border-radius:1rem',
+      'border-bottom-right-radius:3px',
+      'background:rgba(168,85,247,0.1)',
+      'border:1px solid rgba(168,85,247,0.2)',
+    ].join(';')
+    const qText = document.createElement('p')
+    qText.style.cssText = 'font-size:0.8125rem;color:var(--color-purple-light);line-height:1.45;margin:0;'
+    qText.textContent = convo.question
+    qBubble.appendChild(qText)
+    qOuter.appendChild(qBubble)
+
+    // Answer bubble (left-aligned, starts invisible)
+    const aOuter = document.createElement('div')
+    // Issue 6: data-role attribute for reliable selection
+    aOuter.dataset.role = 'a'
+    aOuter.style.cssText = 'display:flex;align-items:flex-start;gap:0.625rem;opacity:0;'
+    const icon = document.createElement('img')
+    icon.src = iconSrc
+    icon.alt = ''
+    icon.setAttribute('aria-hidden', 'true')
+    icon.style.cssText = 'width:1.75rem;height:1.75rem;border-radius:9999px;object-fit:contain;flex-shrink:0;background:rgba(168,85,247,0.15);padding:3px;'
+    const aBubble = document.createElement('div')
+    aBubble.style.cssText = [
+      'max-width:85%',
+      'padding:0.6rem 0.875rem',
+      'border-radius:1rem',
+      'border-top-left-radius:3px',
+      'background:rgba(255,255,255,0.04)',
+      'border:1px solid rgba(255,255,255,0.08)',
+    ].join(';')
+    const aText = document.createElement('p')
+    aText.style.cssText = 'font-size:0.8125rem;line-height:1.5;color:var(--color-text-muted);margin:0;'
+    aText.textContent = convo.answer
+    const aLink = document.createElement('a')
+    aLink.href = convo.href
+    // Issue 7: use CSS class for underline + outline-offset instead of inline text-decoration:none
+    aLink.className = 'chat-answer-link'
+    aLink.textContent = `${convo.service} →`
+    aBubble.appendChild(aText)
+    aBubble.appendChild(aLink)
+    aOuter.appendChild(icon)
+    aOuter.appendChild(aBubble)
+
+    wrapper.appendChild(qOuter)
+    wrapper.appendChild(aOuter)
+    return wrapper
+  }
+
+  // ── Loop engine ────────────────────────────────────────────
+
+  function runPair(state: ColState): void {
+    if (state.paused) return
+
+    const convo = state.convos[state.index % state.convos.length]
+    state.index++
+
+    const pairEl = createPairEl(convo, state.iconSrc)
+    state.windowEl.appendChild(pairEl)
+
+    // Issue 6: select by data-role instead of :first-child / :last-child
+    const qEl = pairEl.querySelector<HTMLElement>('[data-role="q"]')!
+    const aEl = pairEl.querySelector<HTMLElement>('[data-role="a"]')!
+
+    const tl = gsap.timeline({
+      onComplete: () => {
+        state.activeTl = null
+        if (!state.paused) {
+          state.pendingDc = gsap.delayedCall(0.4, () => runPair(state))
+        }
+        // If paused, mouseleave handler will call runPair
+      },
     })
+    state.activeTl = tl
 
-    pairs.forEach((pair, i) => {
-      const question = pair.querySelector<HTMLElement>('.justify-end')
-      const response = pair.querySelector<HTMLElement>('.items-start')
+    // 1. Question slides in from right
+    tl.fromTo(qEl, { opacity: 0, x: 18 }, { opacity: 1, x: 0, duration: 0.4, ease: 'power2.out' })
+    // 2. Typing indicator appears
+    tl.to(state.typingEl, { opacity: 1, duration: 0.2 }, '>+0.1')
+    // 3. Wait (simulate typing)
+    tl.to({}, { duration: 1.2 })
+    // 4. Typing hides, answer slides in from left
+    tl.to(state.typingEl, { opacity: 0, duration: 0.15 })
+    tl.fromTo(aEl, { opacity: 0, x: -18 }, { opacity: 1, x: 0, duration: 0.4, ease: 'power2.out' }, '<+0.05')
+    // 5. Reader pause
+    tl.to({}, { duration: 3 })
 
-      // Reveal pair container
-      chatTl!.to(pair, { opacity: 1, duration: 0.01 }, i === 0 ? 0 : '>+0.3')
-
-      // Question slides in from right
-      if (question) {
-        chatTl!.fromTo(
-          question,
-          { opacity: 0, x: 30 },
-          { opacity: 1, x: 0, duration: 0.4, ease: 'power2.out' },
-          '<'
-        )
-      }
-
-      // Response slides in from left (after short delay)
-      if (response) {
-        chatTl!.fromTo(
-          response,
-          { opacity: 0, x: -30 },
-          { opacity: 1, x: 0, duration: 0.4, ease: 'power2.out' },
-          '>+0.4'
-        )
-      }
-    })
-
-    // Show typing indicator at the end
-    if (typingIndicator) {
-      chatTl.to(typingIndicator, { opacity: 1, duration: 0.3 }, '>+0.3')
+    // Track visible pairs; fade out the oldest when over the limit
+    state.pairEls.push(pairEl)
+    if (state.pairEls.length > 3) {
+      const oldest = state.pairEls.shift()!
+      // Issue 4: use '>' so fade-out starts AFTER the reader pause, not at the same time
+      tl.to(
+        oldest,
+        { opacity: 0, y: -10, duration: 0.35, ease: 'power2.in', onComplete: () => oldest.remove() },
+        '>',
+      )
     }
   }
 
-  document.addEventListener('astro:before-swap', () => { chatTl?.kill(); chatTl = null })
+  // ── Init / cleanup ─────────────────────────────────────────
+
+  function initChatBubbles(): void {
+    const section = document.getElementById('chat-bubbles-section')
+    if (!section) return
+
+    const iconSrc = section.dataset.iconSrc ?? ''
+    const cols = section.querySelectorAll<HTMLElement>('.chat-col')
+    if (!cols.length) return
+
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
+    // Issue 2: fresh AbortController for this init cycle
+    listenerAbort = new AbortController()
+    const { signal } = listenerAbort
+
+    cols.forEach((col, i) => {
+      const id = col.dataset.col!
+      const windowEl = col.querySelector<HTMLElement>('.chat-window')!
+      const typingEl = col.querySelector<HTMLElement>('.typing-indicator-col')!
+      const convos = colConvosMap[id]
+
+      // Issue 3: reveal the column (hidden by inline style="opacity:0" on the element)
+      gsap.set(col, { opacity: 1 })
+
+      // Reduced-motion: show first pair statically, no typing indicator
+      if (reduced) {
+        const pairEl = createPairEl(convos[0], iconSrc)
+        windowEl.appendChild(pairEl)
+        // Issue 6: use data-role selectors
+        pairEl.querySelector<HTMLElement>('[data-role="q"]')!.style.opacity = '1'
+        pairEl.querySelector<HTMLElement>('[data-role="a"]')!.style.opacity = '1'
+        // Issue 9: do NOT show typing indicator in reduced-motion path
+        return
+      }
+
+      const state: ColState = {
+        index: i * 2, // stagger starting question per column
+        pairEls: [],
+        windowEl,
+        typingEl,
+        convos,
+        iconSrc,
+        activeTl: null,
+        pendingDc: null,
+        paused: false,
+        started: false,  // Issue 5: not yet started by ScrollTrigger
+      }
+      states.push(state)
+
+      // Issue 2 + Issue 11: use AbortController signal for all listeners
+      col.addEventListener('mouseenter', () => {
+        state.paused = true
+        state.activeTl?.pause()
+        state.pendingDc?.kill()
+        state.pendingDc = null
+      }, { signal })
+
+      col.addEventListener('mouseleave', () => {
+        state.paused = false
+        if (state.activeTl?.paused()) {
+          state.activeTl.resume()
+        } else if (state.started) {
+          // Issue 5: only fire runPair if ScrollTrigger has already started the loop
+          state.pendingDc = gsap.delayedCall(0.15, () => runPair(state))
+        }
+      }, { signal })
+
+      // Issue 11: touch equivalents using same signal
+      col.addEventListener('touchstart', () => {
+        state.paused = true
+        state.activeTl?.pause()
+        state.pendingDc?.kill()
+        state.pendingDc = null
+      }, { signal, passive: true })
+
+      col.addEventListener('touchend', () => {
+        state.paused = false
+        if (state.activeTl?.paused()) {
+          state.activeTl.resume()
+        } else if (state.started) {
+          state.pendingDc = gsap.delayedCall(0.15, () => runPair(state))
+        }
+      }, { signal })
+
+      col.addEventListener('touchcancel', () => {
+        state.paused = false
+        if (state.activeTl?.paused()) {
+          state.activeTl.resume()
+        } else if (state.started) {
+          state.pendingDc = gsap.delayedCall(0.15, () => runPair(state))
+        }
+      }, { signal })
+    })
+
+    if (reduced) return
+
+    // Kick off each column on scroll, staggered by 2 s
+    st = ScrollTrigger.create({
+      trigger: section,
+      start: 'top 70%',
+      once: true,
+      onEnter: () => {
+        states.forEach((state, i) => {
+          // Issue 1: store each stagger delayedCall so it can be killed on cleanup
+          const dc = gsap.delayedCall(i * 2, () => {
+            state.started = true  // Issue 5: mark as started before running
+            runPair(state)
+          })
+          staggerDcs.push(dc)
+        })
+      },
+    })
+  }
+
+  function cleanupChatBubbles(): void {
+    // Issue 1: kill all pending stagger delayedCalls
+    staggerDcs.forEach(dc => dc.kill())
+    staggerDcs = []
+
+    states.forEach(s => {
+      s.activeTl?.kill()
+      s.activeTl = null
+      s.pendingDc?.kill()
+      s.pendingDc = null
+    })
+    states.length = 0
+
+    // Issue 2: abort all mouse/touch listeners
+    listenerAbort?.abort()
+    listenerAbort = null
+
+    st?.kill()
+    st = null
+  }
+
+  document.addEventListener('astro:before-swap', cleanupChatBubbles)
   document.addEventListener('astro:page-load', initChatBubbles)
 </script>
