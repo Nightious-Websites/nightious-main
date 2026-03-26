@@ -1,8 +1,8 @@
 # Nightious
 
-> IT and digital solutions for small businesses, content creators, and startups. Based in St. Petersburg, Florida — serving clients remotely and on-site.
+> IT and digital solutions for small businesses, content creators, and startups. Based in St. Petersburg, Florida — serving clients remotely.
 
-Nightious (nightious.com) is a technology services company providing practical IT support, web design, AI integration, digital marketing, and more. Known for direct, plain-English service with a 4.9/5 rating from 50+ clients and an average 2-hour response time. Located at 7901 4th St N, Suite 300, St. Petersburg, FL 33702. Hours: Mon–Fri 2pm–11pm EST · Sat 9pm–11pm EST · Sun 12pm–11pm EST.
+Nightious (nightious.com) is a technology services company providing practical IT support, web design, AI integration, digital marketing, and more. 4.9/5 rating from 50+ clients. Located at 7901 4th St N, Suite 300, St. Petersburg, FL 33702. Hours: Mon–Fri 2pm–11pm EST · Sat 9am–11pm EST · Sun 12pm–11pm EST.
 
 ## Pages
 
@@ -19,7 +19,7 @@ Nightious (nightious.com) is a technology services company providing practical I
 ## Services
 
 - [AI Integration](https://nightious.com/services/ai-integration): Chatbots, automation pipelines, and AI-powered tools that save time and reduce repetitive work for small businesses
-- [Computer Services](https://nightious.com/services/computer-services): Computer setup, repair, virus removal, network configuration, and hardware upgrades — remote and on-site support
+- [Computer Services](https://nightious.com/services/computer-services): Computer setup, repair, virus removal, network configuration, and hardware upgrades — remote support
 - [Custom Services](https://nightious.com/services/custom-services): Bespoke IT and digital solutions for unique business problems not covered by standard service categories
 - [Digital Marketing](https://nightious.com/services/digital-marketing): SEO audits, content strategy, email marketing, and social media management delivering measurable results
 - [Domain Solutions](https://nightious.com/services/domain-solutions): Domain registration, transfer, DNS configuration, and renewal strategy to protect your brand online
