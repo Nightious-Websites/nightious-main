@@ -135,3 +135,105 @@ const avatarGradients = [
     .dot-btn { display: none; }
   }
 </style>
+
+<script>
+  import { gsap } from 'gsap'
+
+  let ticker: ((time: number, deltaTime: number) => void) | null = null
+  let currentIndex = 0
+  let isPaused = false
+  let elapsed = 0
+  const INTERVAL = 4 // seconds between auto-advances
+
+  function getVisibleCards(): number {
+    if (window.innerWidth >= 1024) return 4
+    if (window.innerWidth >= 640) return 2
+    return 1
+  }
+
+  function getCardStep(track: HTMLElement): number {
+    const card = track.querySelector<HTMLElement>('.testimonial-card')
+    if (!card) return 0
+    return card.offsetWidth + 16 // 16px = gap-4
+  }
+
+  function goTo(
+    index: number,
+    track: HTMLElement,
+    dots: NodeListOf<HTMLButtonElement>,
+    total: number
+  ) {
+    const visible = getVisibleCards()
+    const maxIndex = total - visible
+    currentIndex = ((index % total) + total) % total
+    // Clamp so we never scroll past the last full page
+    const clampedIndex = Math.min(currentIndex, maxIndex)
+    const targetX = clampedIndex * getCardStep(track)
+    gsap.to(track, { x: -targetX, duration: 0.6, ease: 'power2.inOut' })
+    dots.forEach((d, i) => d.setAttribute('aria-current', i === currentIndex ? 'true' : 'false'))
+  }
+
+  function initCarousel() {
+    const track = document.getElementById('testimonial-track') as HTMLElement | null
+    if (!track) return
+
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    if (reduced) return
+
+    const dots = document.querySelectorAll<HTMLButtonElement>('.dot-btn')
+    const cards = track.querySelectorAll('.testimonial-card')
+    const total = cards.length
+    currentIndex = 0
+    elapsed = 0
+    isPaused = false
+
+    // Reset position on init
+    gsap.set(track, { x: 0 })
+
+    // Dot click handlers
+    dots.forEach((dot, i) => {
+      dot.addEventListener('click', () => {
+        elapsed = 0
+        goTo(i, track, dots, total)
+      })
+    })
+
+    // Pause on hover / touch
+    const overflow = track.closest('.carousel-overflow') as HTMLElement | null
+    overflow?.addEventListener('mouseenter', () => { isPaused = true })
+    overflow?.addEventListener('mouseleave', () => { isPaused = false })
+    overflow?.addEventListener('touchstart', () => { isPaused = true }, { passive: true })
+    overflow?.addEventListener('touchend', () => { isPaused = false }, { passive: true })
+    // Pause on keyboard focus within carousel
+    overflow?.addEventListener('focusin', () => { isPaused = true })
+    overflow?.addEventListener('focusout', () => { isPaused = false })
+
+    // Reset on resize to avoid stale offsets
+    window.addEventListener('resize', () => {
+      currentIndex = 0
+      elapsed = 0
+      gsap.set(track, { x: 0 })
+      dots.forEach((d, i) => d.setAttribute('aria-current', i === 0 ? 'true' : 'false'))
+    }, { passive: true })
+
+    // GSAP ticker — deltaTime is ms since last frame
+    const tickFn = (_time: number, deltaTime: number) => {
+      if (isPaused) return
+      elapsed += deltaTime / 1000
+      if (elapsed >= INTERVAL) {
+        elapsed = 0
+        goTo(currentIndex + 1, track, dots, total)
+      }
+    }
+    gsap.ticker.add(tickFn)
+    ticker = tickFn
+  }
+
+  document.addEventListener('astro:before-swap', () => {
+    if (ticker) {
+      gsap.ticker.remove(ticker)
+      ticker = null
+    }
+  })
+  document.addEventListener('astro:page-load', initCarousel)
+</script>
