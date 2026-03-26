@@ -72,18 +72,6 @@ const avatarGradients = [
       style="background: linear-gradient(to left, var(--color-bg-deep), transparent);" aria-hidden="true"></div>
   </div>
 
-  <!-- Dot navigation -->
-  <div class="flex justify-center gap-2 mt-6" role="tablist" aria-label="Testimonial navigation">
-    {testimonials.map((_, i) => (
-      <button
-        class="dot-btn"
-        role="tab"
-        aria-label={`Go to testimonial ${i + 1}`}
-        aria-current={i === 0 ? 'true' : 'false'}
-        data-index={String(i)}
-      ></button>
-    ))}
-  </div>
 </section>
 
 <style>
@@ -112,70 +100,28 @@ const avatarGradients = [
     border-color: rgba(168,85,247,0.3) !important;
   }
 
-  /* Dot buttons — transition required so width change animates when JS updates aria-current */
-  .dot-btn {
-    height: 4px;
-    width: 6px;
-    border-radius: 2px;
-    border: none;
-    background: rgba(168,85,247,0.25);
-    cursor: pointer;
-    padding: 0;
-    transition: width 0.3s ease, background 0.3s ease;
-  }
-  .dot-btn[aria-current="true"] {
-    width: 20px;
-    background: var(--color-purple-mid);
-  }
-
-  /* Reduced motion: static 2-col wrap, hide dots */
+  /* Reduced motion: static 2-col wrap */
   @media (prefers-reduced-motion: reduce) {
     .carousel-track { flex-wrap: wrap; }
     .testimonial-card { width: calc(50% - 8px); }
-    .dot-btn { display: none; }
   }
 </style>
 
 <script>
   import { gsap } from 'gsap'
 
-  let ticker: ((time: number, deltaTime: number) => void) | null = null
+  let scrollTween: gsap.core.Tween | null = null
   let resizeHandler: (() => void) | null = null
   let listenerAc: AbortController | null = null
-  let currentIndex = 0
-  let isPaused = false
-  let elapsed = 0
-  const INTERVAL = 4 // seconds between auto-advances
-
-  function getVisibleCards(): number {
-    if (window.innerWidth >= 1024) return 4
-    if (window.innerWidth >= 640) return 2
-    return 1
-  }
-
-  function getCardStep(track: HTMLElement): number {
-    const card = track.querySelector<HTMLElement>('.testimonial-card')
-    if (!card) return 0
-    return card.offsetWidth + 16 // 16px = gap-4
-  }
-
-  function goTo(
-    index: number,
-    track: HTMLElement,
-    dots: NodeListOf<HTMLButtonElement>,
-    total: number
-  ) {
-    const visible = getVisibleCards()
-    const maxIndex = Math.max(0, total - visible)
-    currentIndex = ((index % total) + total) % total
-    // Clamp so we never scroll past the last full page
-    const clampedIndex = Math.min(currentIndex, maxIndex)
-    const targetX = clampedIndex * getCardStep(track)
-    gsap.to(track, { x: -targetX, duration: 0.6, ease: 'power2.inOut' })
-    dots.forEach((d, i) => d.setAttribute('aria-current', i === currentIndex ? 'true' : 'false'))
-  }
 
   function initCarousel() {
+    // Clean up any previous state
+    scrollTween?.kill()
+    scrollTween = null
+    if (resizeHandler) {
+      window.removeEventListener('resize', resizeHandler)
+      resizeHandler = null
+    }
     listenerAc?.abort()
     listenerAc = new AbortController()
     const sig = { signal: listenerAc.signal }
@@ -186,62 +132,51 @@ const avatarGradients = [
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
     if (reduced) return
 
-    const dots = document.querySelectorAll<HTMLButtonElement>('.dot-btn')
-    const cards = track.querySelectorAll('.testimonial-card')
-    const total = cards.length
-    if (total === 0) return
-    currentIndex = 0
-    elapsed = 0
-    isPaused = false
+    // Remove clones from any previous init
+    track.querySelectorAll('[data-cloned]').forEach(el => el.remove())
 
-    // Reset position on init
-    gsap.set(track, { x: 0 })
+    const originals = Array.from(track.querySelectorAll<HTMLElement>('.testimonial-card'))
+    if (originals.length === 0) return
 
-    // Dot click handlers
-    dots.forEach((dot, i) => {
-      dot.addEventListener('click', () => {
-        elapsed = 0
-        goTo(i, track, dots, total)
-      }, sig)
+    // Append clones — makes the loop seamless by having identical content after the originals
+    originals.forEach(card => {
+      const clone = card.cloneNode(true) as HTMLElement
+      clone.setAttribute('data-cloned', 'true')
+      clone.setAttribute('aria-hidden', 'true')
+      track.appendChild(clone)
     })
 
-    // Pause on hover / touch
+    gsap.set(track, { x: 0 })
+
+    // Scroll distance = one full pass of original cards (clones pick up seamlessly)
+    const cardWidth = originals[0].offsetWidth
+    const gap = 16 // gap-4 = 16px
+    const loopDistance = originals.length * (cardWidth + gap)
+
+    scrollTween = gsap.to(track, {
+      x: -loopDistance,
+      duration: originals.length * 5, // 5s per card
+      ease: 'none',
+      repeat: -1,
+    })
+
+    // Pause on hover / touch / focus
     const overflow = track.closest('.carousel-overflow') as HTMLElement | null
-    overflow?.addEventListener('mouseenter', () => { isPaused = true }, sig)
-    overflow?.addEventListener('mouseleave', () => { isPaused = false }, sig)
-    overflow?.addEventListener('touchstart', () => { isPaused = true }, { passive: true, signal: listenerAc.signal })
-    overflow?.addEventListener('touchend', () => { isPaused = false }, { passive: true, signal: listenerAc.signal })
-    // Pause on keyboard focus within carousel
-    overflow?.addEventListener('focusin', () => { isPaused = true }, sig)
-    overflow?.addEventListener('focusout', () => { isPaused = false }, sig)
+    overflow?.addEventListener('mouseenter', () => scrollTween?.pause(), sig)
+    overflow?.addEventListener('mouseleave', () => scrollTween?.resume(), sig)
+    overflow?.addEventListener('touchstart', () => scrollTween?.pause(), { passive: true, signal: listenerAc.signal })
+    overflow?.addEventListener('touchend', () => scrollTween?.resume(), { passive: true, signal: listenerAc.signal })
+    overflow?.addEventListener('focusin', () => scrollTween?.pause(), sig)
+    overflow?.addEventListener('focusout', () => scrollTween?.resume(), sig)
 
-    // Reset on resize to avoid stale offsets
-    resizeHandler = () => {
-      currentIndex = 0
-      elapsed = 0
-      gsap.set(track, { x: 0 })
-      dots.forEach((d, i) => d.setAttribute('aria-current', i === 0 ? 'true' : 'false'))
-    }
+    // Reinitialise on resize — card widths change at breakpoints
+    resizeHandler = () => initCarousel()
     window.addEventListener('resize', resizeHandler, { passive: true })
-
-    // GSAP ticker — deltaTime is ms since last frame
-    const tickFn = (_time: number, deltaTime: number) => {
-      if (isPaused) return
-      elapsed += deltaTime / 1000
-      if (elapsed >= INTERVAL) {
-        elapsed = 0
-        goTo(currentIndex + 1, track, dots, total)
-      }
-    }
-    gsap.ticker.add(tickFn)
-    ticker = tickFn
   }
 
   document.addEventListener('astro:before-swap', () => {
-    if (ticker) {
-      gsap.ticker.remove(ticker)
-      ticker = null
-    }
+    scrollTween?.kill()
+    scrollTween = null
     if (resizeHandler) {
       window.removeEventListener('resize', resizeHandler)
       resizeHandler = null
