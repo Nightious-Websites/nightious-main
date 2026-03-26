@@ -60,7 +60,7 @@
       scrollTrigger: { trigger: glow, start: 'top 90%', toggleActions: 'play pause resume pause' },
     })
 
-    glowTl.to(glow, { opacity: 0.25, duration: 3, ease: 'sine.inOut' })
+    glowTl.to(glow, { opacity: 0.19, duration: 5, ease: 'sine.inOut' })
   }
 
   document.addEventListener('astro:before-swap', () => { glowTl?.kill(); glowTl = null })

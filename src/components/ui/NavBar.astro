@@ -12,34 +12,37 @@ function isActive(href: string) {
 }
 
 const services = [
-  { slug: 'website-solutions',          title: 'Website Solutions',           icon: '🌐' },
-  { slug: 'email-solutions',            title: 'Email Solutions',             icon: '✉️' },
-  { slug: 'domain-solutions',           title: 'Domain Solutions',            icon: '🔗' },
-  { slug: 'ai-integration',             title: 'AI Integration',              icon: '🤖' },
-  { slug: 'digital-marketing',          title: 'Digital Marketing',           icon: '📈' },
-  { slug: 'computer-services',          title: 'Computer Services',           icon: '💻' },
-  { slug: 'streaming-consultation',     title: 'Streaming Consultation',      icon: '🎙️' },
-  { slug: 'online-privacy',             title: 'Online Privacy',              icon: '🔒' },
+  { slug: 'website-solutions',            title: 'Website Solutions',            icon: '🌐' },
+  { slug: 'email-solutions',              title: 'Email Solutions',              icon: '✉️' },
+  { slug: 'domain-solutions',             title: 'Domain Solutions',             icon: '🔗' },
+  { slug: 'ai-integration',               title: 'AI Integration',               icon: '🤖' },
+  { slug: 'digital-marketing',            title: 'Digital Marketing',            icon: '📈' },
+  { slug: 'computer-services',            title: 'Computer Services',            icon: '💻' },
+  { slug: 'streaming-consultation',       title: 'Streaming Consultation',       icon: '🎙️' },
+  { slug: 'online-privacy',               title: 'Online Privacy',               icon: '🔒' },
   { slug: 'organizational-effectiveness', title: 'Organizational Effectiveness', icon: '⚙️' },
-  { slug: 'software-services',          title: 'Software Services',           icon: '🖥️' },
-  { slug: 'custom-services',            title: 'Custom Services',             icon: '✨' },
-  { slug: 'training-documentation',     title: 'Training & Documentation',    icon: '📚' },
+  { slug: 'software-services',            title: 'Software Services',            icon: '🖥️' },
+  { slug: 'custom-services',              title: 'Custom Services',              icon: '✨' },
+  { slug: 'training-documentation',       title: 'Training & Documentation',     icon: '📚' },
 ]
 
-const bundleLinks = [
-  { href: '/for-businesses', label: 'Businesses', rgb: '59, 130, 246', color: '#93c5fd' },
-  { href: '/for-creators', label: 'Creators', rgb: '236, 72, 153', color: '#f9a8d4' },
-  { href: '/for-individuals', label: 'Individuals', rgb: '34, 197, 94', color: '#86efac' },
+const navLinks = [
+  { href: '/',               label: 'Home' },
+  { href: '/for-businesses', label: 'Businesses' },
+  { href: '/for-individuals', label: 'Individuals' },
+  { href: '/for-creators',   label: 'Creators' },
 ]
 ---
 
+<!-- ─── Header bar ─────────────────────────────────────────────────────────── -->
 <header id="navbar" class="fixed top-0 left-0 right-0 z-50">
   <nav
-    class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between"
+    class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 grid grid-cols-3 items-center"
     aria-label="Main"
   >
-    <!-- Logo -->
-    <a href="/" aria-label="Nightious — Home" class="flex-shrink-0">
+
+    <!-- ① Logo (left) -->
+    <a href="/" aria-label="Nightious — Home" class="justify-self-start flex-shrink-0">
       <Image
         src={logoWhite}
         alt="Nightious"
@@ -50,81 +53,68 @@ const bundleLinks = [
       />
     </a>
 
-    <!-- Desktop nav -->
-    <div class="hidden md:flex items-center gap-8">
-      <a
-        href="/"
-        aria-current={isActive('/') ? 'page' : undefined}
-        class="nav-link text-sm font-semibold tracking-wide transition-colors"
-        style="color: var(--color-text-muted); font-family: 'Exo 2', sans-serif;"
-      >
-        Home
-      </a>
-
-      {bundleLinks.map(b => (
+    <!-- ② Center nav links (desktop only) -->
+    <div class="hidden md:flex items-center justify-center gap-6">
+      {navLinks.map(link => (
         <a
-          href={b.href}
-          aria-current={isActive(b.href) ? 'page' : undefined}
-          class="nav-link text-xs font-semibold tracking-wide transition-colors px-3 py-1.5 rounded-md"
-          style={isActive(b.href)
-            ? `background: rgba(${b.rgb}, 0.2); border: 1px solid rgba(${b.rgb}, 0.3); color: ${b.color}; font-family: 'Exo 2', sans-serif;`
-            : `background: rgba(${b.rgb}, 0.1); color: ${b.color}; font-family: 'Exo 2', sans-serif;`
-          }
+          href={link.href}
+          aria-current={isActive(link.href) ? 'page' : undefined}
+          class="nav-link text-sm font-semibold tracking-wide transition-colors"
+          style="color: var(--color-text-muted);"
         >
-          {b.label}
+          {link.label}
         </a>
       ))}
+    </div>
 
-      <!-- Services with dropdown -->
-      <div class="services-nav relative" id="services-nav">
-        <a
-          href="/services"
-          aria-current={isActive('/services') ? 'page' : undefined}
-          aria-haspopup="menu"
-          aria-expanded="false"
+    <!-- ③ Right actions (desktop: Services + Contact | mobile: hamburger) -->
+    <div class="justify-self-end flex items-center gap-3">
+
+      <!-- Services dropdown trigger — desktop only -->
+      <div class="hidden md:block relative" id="services-nav">
+        <button
+          type="button"
           id="services-nav-btn"
-          class="nav-link text-sm font-semibold tracking-wide transition-colors flex items-center gap-1"
-          style="color: var(--color-text-muted); font-family: 'Exo 2', sans-serif;"
+          aria-haspopup="true"
+          aria-expanded="false"
+          aria-controls="services-dropdown"
+          class="nav-link text-sm font-semibold tracking-wide transition-colors flex items-center gap-1 cursor-pointer"
+          style="color: var(--color-text-muted);"
         >
           Services
-          <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true" class="services-chevron transition-transform duration-200">
+          <svg
+            width="12" height="12" viewBox="0 0 12 12" fill="none"
+            aria-hidden="true"
+            class="services-chevron transition-transform duration-200"
+          >
             <path d="M2.5 4.5L6 8L9.5 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
-        </a>
+        </button>
 
-        <!-- Mega dropdown -->
+        <!-- Compact 2-column dropdown, anchored to right edge of trigger -->
         <div
           id="services-dropdown"
-          role="region"
-          aria-label="Services menu"
-          class="services-dropdown absolute top-full left-1/2 -translate-x-1/2 mt-3 w-[680px] glass p-5 opacity-0 pointer-events-none transition-all duration-200 translate-y-1"
-          style="border-radius: 16px;"
+          aria-label="Services"
+          class="services-dropdown absolute top-full right-0 mt-3 w-[380px] glass p-4"
+          style="border-radius: 14px;"
         >
-          <!-- Arrow -->
-          <div
-            class="absolute -top-1.5 left-1/2 -translate-x-1/2 w-3 h-3 rotate-45"
-            style="background: rgba(255,255,255,0.05); border-top: 1px solid rgba(255,255,255,0.10); border-left: 1px solid rgba(255,255,255,0.10);"
-            aria-hidden="true"
-          ></div>
-
-          <div class="grid grid-cols-3 gap-1">
+          <div class="grid grid-cols-2 gap-0.5">
             {services.map(s => (
               <a
                 href={`/services/${s.slug}`}
-                class="dropdown-item flex items-center gap-2.5 px-3 py-2.5 rounded-lg transition-colors text-sm"
-                style="color: var(--color-text-muted); font-family: 'Exo 2', sans-serif;"
+                class="dropdown-item flex items-center gap-2 px-3 py-2 rounded-lg transition-colors text-xs"
+                style="color: var(--color-text-muted);"
               >
-                <span class="text-base flex-shrink-0" aria-hidden="true">{s.icon}</span>
-                <span class="font-medium">{s.title}</span>
+                <span class="text-sm flex-shrink-0" aria-hidden="true">{s.icon}</span>
+                <span class="font-medium leading-tight">{s.title}</span>
               </a>
             ))}
           </div>
-
-          <div class="mt-3 pt-3 border-t" style="border-color: rgba(168, 85, 247, 0.15);">
+          <div class="mt-3 pt-2.5 border-t" style="border-color: rgba(168, 85, 247, 0.15);">
             <a
               href="/services"
-              class="flex items-center justify-center gap-2 py-2 text-xs font-semibold tracking-wide transition-colors"
-              style="color: var(--color-purple-mid); font-family: 'Exo 2', sans-serif;"
+              class="flex items-center justify-center gap-1.5 py-1.5 text-xs font-semibold tracking-wide transition-colors"
+              style="color: var(--color-purple-mid);"
             >
               View all 12 services →
             </a>
@@ -132,292 +122,363 @@ const bundleLinks = [
         </div>
       </div>
 
+      <!-- Contact CTA — glow-breathe animation, desktop only -->
       <a
         href="/contact"
         aria-current={isActive('/contact') ? 'page' : undefined}
-        class="nav-link text-sm font-semibold tracking-wide transition-colors"
-        style="color: var(--color-text-muted); font-family: 'Exo 2', sans-serif;"
+        class="btn-contact hidden md:inline-flex items-center gap-1.5 text-sm font-semibold tracking-wide px-4 py-2 rounded-lg"
       >
-        Contact
+        Contact Us →
       </a>
-      <a href="/contact" class="btn-primary text-sm">
-        Get a Free Quote →
-      </a>
-    </div>
 
-    <!-- Mobile hamburger -->
-    <button
-      id="nav-hamburger"
-      aria-label="Open navigation menu"
-      aria-expanded="false"
-      aria-controls="mobile-drawer"
-      class="md:hidden flex flex-col justify-center items-center w-11 h-11 gap-1.5 rounded-md"
-    >
-      <span class="hamburger-line block w-6 h-0.5 rounded-full transition-all duration-300" style="background: var(--color-purple-light);"></span>
-      <span class="hamburger-line block w-6 h-0.5 rounded-full transition-all duration-300" style="background: var(--color-purple-light);"></span>
-      <span class="hamburger-line block w-6 h-0.5 rounded-full transition-all duration-300" style="background: var(--color-purple-light);"></span>
-    </button>
-  </nav>
-</header>
-
-<!-- Mobile drawer -->
-<div
-  id="mobile-drawer"
-  role="dialog"
-  aria-label="Navigation menu"
-  aria-modal="true"
-  class="fixed inset-0 z-40 md:hidden pointer-events-none"
->
-  <div
-    id="drawer-overlay"
-    class="absolute inset-0 opacity-0 transition-opacity duration-300"
-    style="background: rgba(2, 0, 10, 0.7);"
-  ></div>
-
-  <div
-    id="drawer-panel"
-    class="absolute top-0 right-0 bottom-0 w-80 glass flex flex-col overflow-y-auto translate-x-full transition-transform duration-300"
-    style="border-radius: 0; border-right: none;"
-  >
-    <div class="flex items-center justify-between px-6 py-5 border-b" style="border-color: rgba(168, 85, 247, 0.15);">
-      <div class="flex items-center gap-2">
-        <Image src={iconWhite} alt="" width={28} height={28} class="h-7 w-7 object-contain" aria-hidden="true" />
-        <Image src={logoTextWhite} alt="Nightious" width={110} height={26} class="h-6 w-auto object-contain" />
-      </div>
+      <!-- Mobile hamburger -->
       <button
-        id="drawer-close"
-        aria-label="Close navigation menu"
-        class="flex items-center justify-center w-11 h-11 rounded-md"
-        style="color: var(--color-text-muted);"
+        id="nav-hamburger"
+        aria-label="Open navigation menu"
+        aria-expanded="false"
+        aria-controls="mobile-overlay"
+        class="md:hidden flex flex-col justify-center items-center w-11 h-11 gap-1.5 rounded-md"
       >
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M18 6L6 18M6 6l12 12"/>
-        </svg>
+        <span class="hamburger-line block w-6 h-0.5 rounded-full transition-all duration-300" style="background: var(--color-purple-light);"></span>
+        <span class="hamburger-line block w-6 h-0.5 rounded-full transition-all duration-300" style="background: var(--color-purple-light);"></span>
+        <span class="hamburger-line block w-6 h-0.5 rounded-full transition-all duration-300" style="background: var(--color-purple-light);"></span>
       </button>
     </div>
 
-    <nav class="flex flex-col px-4 py-4 gap-1 flex-1">
-      <a
-        href="/"
-        aria-current={isActive('/') ? 'page' : undefined}
-        class="drawer-link py-3 px-3 rounded-lg text-sm font-semibold transition-colors"
-        style="color: var(--color-text-primary); font-family: 'Exo 2', sans-serif;"
-      >
-        Home
-      </a>
+  </nav>
+</header>
 
-      <!-- Bundle links (mobile) -->
-      <div class="flex flex-col gap-1 py-2">
-        {bundleLinks.map(b => (
+<!-- ─── Mobile full-screen overlay ───────────────────────────────────────────── -->
+<div
+  id="mobile-overlay"
+  role="dialog"
+  aria-label="Navigation menu"
+  aria-modal="true"
+  aria-hidden="true"
+  class="fixed inset-0 z-[60] md:hidden flex flex-col"
+  style="background: rgba(2, 0, 10, 0.97); backdrop-filter: blur(32px); -webkit-backdrop-filter: blur(32px);"
+>
+  <!-- Top bar with logo + close -->
+  <div class="flex items-center justify-between px-6 py-5 flex-shrink-0 border-b" style="border-color: rgba(168, 85, 247, 0.12);">
+    <div class="flex items-center gap-2">
+      <Image src={iconWhite} alt="" width={28} height={28} class="h-7 w-7 object-contain" aria-hidden="true" />
+      <Image src={logoTextWhite} alt="Nightious" width={110} height={26} class="h-6 w-auto object-contain" />
+    </div>
+    <button
+      id="overlay-close"
+      aria-label="Close navigation menu"
+      class="flex items-center justify-center w-11 h-11 rounded-md"
+      style="color: var(--color-text-muted);"
+    >
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <path d="M18 6L6 18M6 6l12 12"/>
+      </svg>
+    </button>
+  </div>
+
+  <!-- Centred nav items — GSAP animates these on open -->
+  <nav
+    id="mobile-nav-links"
+    class="flex flex-col items-center justify-center flex-1 gap-1 overflow-y-auto py-6"
+    aria-label="Mobile navigation"
+  >
+    <!-- Primary links -->
+    {navLinks.map(link => (
+      <a
+        href={link.href}
+        aria-current={isActive(link.href) ? 'page' : undefined}
+        class="mobile-link py-3 px-8 text-2xl font-semibold tracking-wide transition-colors text-center"
+        style="color: var(--color-text-primary);"
+      >
+        {link.label}
+      </a>
+    ))}
+
+    <!-- Services accordion -->
+    <div class="flex flex-col items-center w-full">
+      <button
+        id="mobile-services-toggle"
+        type="button"
+        aria-expanded="false"
+        class="mobile-link flex items-center gap-2 py-3 px-8 text-2xl font-semibold tracking-wide transition-colors"
+        style="color: var(--color-text-primary);"
+      >
+        Services
+        <svg width="14" height="14" viewBox="0 0 12 12" fill="none" aria-hidden="true" class="mobile-services-chevron transition-transform duration-200" style="color: var(--color-purple-mid);">
+          <path d="M2.5 4.5L6 8L9.5 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+
+      <div id="mobile-services-list" class="hidden w-full items-center gap-0.5 pb-2 px-4">
+        {services.map(s => (
           <a
-            href={b.href}
-            aria-current={isActive(b.href) ? 'page' : undefined}
-            class="drawer-link py-2.5 px-3 rounded-lg text-sm font-semibold transition-colors"
-            style={`color: ${b.color}; font-family: 'Exo 2', sans-serif; border-left: 2px solid rgba(${b.rgb}, 0.5); padding-left: 12px;`}
+            href={`/services/${s.slug}`}
+            class="mobile-link flex items-center gap-2 py-2 px-4 text-sm rounded-lg transition-colors w-full max-w-xs justify-center"
+            style="color: var(--color-text-muted);"
           >
-            For {b.label}
+            <span aria-hidden="true">{s.icon}</span>
+            {s.title}
           </a>
         ))}
-      </div>
-
-      <!-- Services accordion in mobile -->
-      <div>
-        <button
-          id="mobile-services-toggle"
-          type="button"
-          aria-expanded="false"
-          class="w-full flex items-center justify-between py-3 px-3 rounded-lg text-sm font-semibold transition-colors"
-          style="color: var(--color-text-primary); font-family: 'Exo 2', sans-serif;"
+        <a
+          href="/services"
+          class="mobile-link py-2 px-4 text-xs font-semibold"
+          style="color: var(--color-purple-mid);"
         >
-          <span>Services</span>
-          <svg width="14" height="14" viewBox="0 0 12 12" fill="none" aria-hidden="true" class="mobile-chevron transition-transform duration-200" style="color: var(--color-purple-mid);">
-            <path d="M2.5 4.5L6 8L9.5 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </button>
-        <div id="mobile-services-list" class="hidden pl-4 pt-1 pb-2 flex flex-col gap-0.5">
-          {services.map(s => (
-            <a
-              href={`/services/${s.slug}`}
-              class="drawer-link flex items-center gap-2 py-2 px-3 rounded-lg text-sm transition-colors"
-              style="color: var(--color-text-muted); font-family: 'Exo 2', sans-serif;"
-            >
-              <span class="text-sm" aria-hidden="true">{s.icon}</span>
-              {s.title}
-            </a>
-          ))}
-          <a
-            href="/services"
-            class="py-2 px-3 text-xs font-semibold"
-            style="color: var(--color-purple-mid); font-family: 'Exo 2', sans-serif;"
-          >
-            View all services →
-          </a>
-        </div>
+          View all services →
+        </a>
       </div>
-
-      <a
-        href="/contact"
-        aria-current={isActive('/contact') ? 'page' : undefined}
-        class="drawer-link py-3 px-3 rounded-lg text-sm font-semibold transition-colors"
-        style="color: var(--color-text-primary); font-family: 'Exo 2', sans-serif;"
-      >
-        Contact
-      </a>
-    </nav>
-
-    <div class="px-6 py-5 border-t" style="border-color: rgba(168, 85, 247, 0.15);">
-      <a href="/contact" class="btn-primary text-sm w-full justify-center">
-        Get a Free Quote →
-      </a>
     </div>
-  </div>
+
+    <!-- Contact CTA -->
+    <a
+      href="/contact"
+      class="mobile-link mt-6 btn-contact inline-flex items-center gap-1.5 text-base font-semibold tracking-wide px-8 py-3 rounded-xl"
+    >
+      Contact Us →
+    </a>
+  </nav>
 </div>
 
 <style>
-  .nav-link[aria-current="page"],
-  .drawer-link[aria-current="page"] {
+  /* ── Scroll behaviour: transparent → glass ─────────────────────────── */
+  #navbar {
+    background: transparent;
+    border-bottom: 1px solid transparent;
+    transition: background 0.3s ease, border-color 0.3s ease, backdrop-filter 0.3s ease, box-shadow 0.3s ease;
+  }
+  #navbar.scrolled {
+    background: rgba(255, 255, 255, 0.05);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.10);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    box-shadow: 0 4px 30px rgba(168, 85, 247, 0.08);
+  }
+
+  /* ── Desktop nav links ──────────────────────────────────────────────── */
+  .nav-link[aria-current="page"] {
     color: var(--color-purple-light) !important;
     text-decoration: underline;
     text-decoration-color: var(--color-purple-mid);
     text-underline-offset: 4px;
   }
-
-  .nav-link:hover,
-  .drawer-link:hover {
+  .nav-link:hover {
     color: var(--color-purple-light) !important;
   }
 
+  /* ── Services dropdown ──────────────────────────────────────────────── */
+  /* Override .glass background: darker base keeps it readable at any
+     scroll position — the navbar blur would otherwise "eat" the dropdown. */
+  #services-dropdown {
+    background: rgba(8, 0, 22, 0.95);
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(6px);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+  }
+  .services-dropdown.is-open {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+  }
   .dropdown-item:hover {
     background: rgba(168, 85, 247, 0.1);
     color: var(--color-purple-light) !important;
   }
-
-  /* Desktop dropdown — shown via JS-managed .is-open class */
-  .services-dropdown.is-open {
-    opacity: 1;
-    pointer-events: auto;
-    transform: translateX(-50%) translateY(0);
-  }
-
-  #services-nav-btn.chevron-open .services-chevron {
+  /* Chevron rotates when dropdown is open */
+  #services-nav-btn.is-open .services-chevron {
     transform: rotate(180deg);
   }
 
-  /* Override .glass background with an opaque dark base so the dropdown
-     remains readable whether the navbar is transparent (top of page) or
-     has its own backdrop-filter applied (scrolled state). Without this,
-     the dropdown's blur samples the navbar's already-dark composited
-     surface and visually disappears. */
-  #services-dropdown {
-    background: rgba(8, 0, 22, 0.92);
+  /* ── Contact CTA — glow-breathe animation ───────────────────────────── */
+  @keyframes glow-breathe {
+    0%, 100% {
+      box-shadow: 0 0 4px 0px rgba(168, 85, 247, 0.15),
+                  0 0 6px 1px rgba(236, 72, 153, 0.08);
+    }
+    50% {
+      box-shadow: 0 0 7px 1px rgba(168, 85, 247, 0.28),
+                  0 0 10px 2px rgba(236, 72, 153, 0.14);
+    }
+  }
+  .btn-contact {
+    background: linear-gradient(135deg, #a855f7, #ec4899);
+    color: #ffffff;
+    animation: glow-breathe 4s ease-in-out infinite;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+  }
+  .btn-contact:hover {
+    opacity: 0.88;
+    transform: translateY(-1px);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .btn-contact {
+      animation: none;
+    }
   }
 
-  #mobile-drawer.is-open {
+  /* ── Mobile overlay ─────────────────────────────────────────────────── */
+  #mobile-overlay {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+  }
+  #mobile-overlay.is-open {
+    opacity: 1;
     pointer-events: auto;
   }
 
-  #mobile-drawer.is-open #drawer-overlay {
-    opacity: 1;
+  /* ── Mobile nav links ───────────────────────────────────────────────── */
+  .mobile-link[aria-current="page"] {
+    color: var(--color-purple-light) !important;
   }
-
-  #mobile-drawer.is-open #drawer-panel {
-    transform: translateX(0);
+  .mobile-link:hover {
+    color: var(--color-purple-light) !important;
   }
-
-  .mobile-chevron.open {
+  .mobile-services-chevron.open {
     transform: rotate(180deg);
   }
 </style>
 
 <script>
-  function initNav() {
-    const navbar = document.getElementById('navbar')
-    const hamburger = document.getElementById('nav-hamburger')
-    const drawer = document.getElementById('mobile-drawer')
-    const drawerClose = document.getElementById('drawer-close')
-    const overlay = document.getElementById('drawer-overlay')
-    const drawerLinks = document.querySelectorAll<HTMLAnchorElement>('.drawer-link')
-    const mobileServicesToggle = document.getElementById('mobile-services-toggle')
-    const mobileServicesList = document.getElementById('mobile-services-list')
+  import gsap from 'gsap'
 
-    // Scroll behaviour
-    function onScroll() {
-      if (!navbar) return
-      navbar.classList.toggle('scrolled', window.scrollY > 80)
-    }
-    window.addEventListener('scroll', onScroll, { passive: true })
+  let navController: AbortController | null = null
+
+  function cleanupNav(): void {
+    gsap.killTweensOf('#mobile-nav-links > *')
+    document.body.style.overflow = ''
+  }
+
+  function initNav(): void {
+    navController?.abort()
+    navController = new AbortController()
+    const { signal } = navController
+
+    const navbar           = document.getElementById('navbar')
+    const hamburger        = document.getElementById('nav-hamburger')
+    const overlay          = document.getElementById('mobile-overlay')
+    const overlayClose     = document.getElementById('overlay-close')
+    const navLinks         = document.querySelectorAll<HTMLElement>('#mobile-nav-links > *')
+    const servicesTgl      = document.getElementById('mobile-services-toggle')
+    const servicesList     = document.getElementById('mobile-services-list')
+    const servicesNav      = document.getElementById('services-nav')
+    const servicesDropdown = document.getElementById('services-dropdown')
+    const servicesBtn      = document.getElementById('services-nav-btn')
+
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
+    // ── Scroll: transparent → glass ─────────────────────────────────────
+    const onScroll = () => navbar?.classList.toggle('scrolled', window.scrollY > 80)
+    window.addEventListener('scroll', onScroll, { passive: true, signal })
     onScroll()
 
-    // Mobile drawer
-    function openDrawer() {
-      if (!drawer || !hamburger) return
-      drawer.classList.add('is-open')
+    // ── Mobile overlay ───────────────────────────────────────────────────
+    function openOverlay(): void {
+      if (!overlay || !hamburger) return
+      overlay.classList.add('is-open')
+      overlay.removeAttribute('aria-hidden')
       hamburger.setAttribute('aria-expanded', 'true')
       document.body.style.overflow = 'hidden'
-      drawerClose?.focus()
+
+      if (!reducedMotion) {
+        gsap.fromTo(
+          navLinks,
+          { opacity: 0, y: 28 },
+          { opacity: 1, y: 0, stagger: 0.06, duration: 0.45, ease: 'power2.out', clearProps: 'all' }
+        )
+      }
+
+      overlayClose?.focus()
     }
 
-    function closeDrawer() {
-      if (!drawer || !hamburger) return
-      drawer.classList.remove('is-open')
+    function closeOverlay(): void {
+      if (!overlay || !hamburger) return
+      overlay.classList.remove('is-open')
+      overlay.setAttribute('aria-hidden', 'true')
       hamburger.setAttribute('aria-expanded', 'false')
       document.body.style.overflow = ''
       hamburger.focus()
     }
 
-    hamburger?.addEventListener('click', openDrawer)
-    drawerClose?.addEventListener('click', closeDrawer)
-    overlay?.addEventListener('click', closeDrawer)
-    drawerLinks.forEach(link => link.addEventListener('click', closeDrawer))
+    hamburger?.addEventListener('click', openOverlay, { signal })
+    overlayClose?.addEventListener('click', closeOverlay, { signal })
 
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && drawer?.classList.contains('is-open')) closeDrawer()
-    })
+    // Close when any link inside the overlay is clicked
+    overlay?.querySelectorAll<HTMLAnchorElement>('a').forEach(a =>
+      a.addEventListener('click', closeOverlay, { signal })
+    )
 
-    // Desktop dropdown with hover-gap-safe close delay
-    const servicesNav = document.getElementById('services-nav')
-    const servicesDropdown = document.getElementById('services-dropdown')
-    const servicesNavBtn = document.getElementById('services-nav-btn')
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && overlay?.classList.contains('is-open')) closeOverlay()
+    }, { signal })
+
+    // ── Desktop services dropdown (hover + click + gap-safe close delay) ─
     let closeTimer: ReturnType<typeof setTimeout> | null = null
 
-    function openDropdown() {
+    const openDropdown = () => {
       if (closeTimer) { clearTimeout(closeTimer); closeTimer = null }
       servicesDropdown?.classList.add('is-open')
-      servicesNavBtn?.classList.add('chevron-open')
-      servicesNavBtn?.setAttribute('aria-expanded', 'true')
+      servicesBtn?.classList.add('is-open')
+      servicesBtn?.setAttribute('aria-expanded', 'true')
     }
 
-    function scheduleClose() {
+    const scheduleClose = () => {
       closeTimer = setTimeout(() => {
         servicesDropdown?.classList.remove('is-open')
-        servicesNavBtn?.classList.remove('chevron-open')
-        servicesNavBtn?.setAttribute('aria-expanded', 'false')
+        servicesBtn?.classList.remove('is-open')
+        servicesBtn?.setAttribute('aria-expanded', 'false')
       }, 150)
     }
 
-    servicesNav?.addEventListener('mouseenter', openDropdown)
-    servicesNav?.addEventListener('mouseleave', scheduleClose)
-    servicesDropdown?.addEventListener('mouseenter', openDropdown)
-    servicesDropdown?.addEventListener('mouseleave', scheduleClose)
+    servicesNav?.addEventListener('mouseenter', openDropdown, { signal })
+    servicesNav?.addEventListener('mouseleave', scheduleClose, { signal })
+    servicesDropdown?.addEventListener('mouseenter', openDropdown, { signal })
+    servicesDropdown?.addEventListener('mouseleave', scheduleClose, { signal })
 
-    // Close on Escape
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') {
+    // Click to toggle — enables keyboard users to open/close the dropdown
+    servicesBtn?.addEventListener('click', (e) => {
+      e.stopPropagation()
+      const isOpen = servicesDropdown?.classList.contains('is-open')
+      if (isOpen) scheduleClose()
+      else openDropdown()
+    }, { signal })
+
+    // Close when clicking outside the services nav
+    document.addEventListener('click', (e) => {
+      if (!servicesNav?.contains(e.target as Node)) {
         servicesDropdown?.classList.remove('is-open')
-        servicesNavBtn?.classList.remove('chevron-open')
-        servicesNavBtn?.setAttribute('aria-expanded', 'false')
-        servicesNavBtn?.focus()
+        servicesBtn?.classList.remove('is-open')
+        servicesBtn?.setAttribute('aria-expanded', 'false')
       }
-    })
+    }, { signal })
 
-    // Mobile services accordion
-    mobileServicesToggle?.addEventListener('click', () => {
-      const expanded = mobileServicesToggle.getAttribute('aria-expanded') === 'true'
-      mobileServicesToggle.setAttribute('aria-expanded', String(!expanded))
-      mobileServicesList?.classList.toggle('hidden')
-      mobileServicesToggle.querySelector('.mobile-chevron')?.classList.toggle('open')
-    })
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && servicesDropdown?.classList.contains('is-open')) {
+        servicesDropdown.classList.remove('is-open')
+        servicesBtn?.classList.remove('is-open')
+        servicesBtn?.setAttribute('aria-expanded', 'false')
+        servicesBtn?.focus()
+      }
+    }, { signal })
+
+    // ── Mobile services accordion ────────────────────────────────────────
+    servicesTgl?.addEventListener('click', () => {
+      const expanded = servicesTgl.getAttribute('aria-expanded') === 'true'
+      servicesTgl.setAttribute('aria-expanded', String(!expanded))
+      if (servicesList) {
+        if (expanded) {
+          servicesList.classList.add('hidden')
+          servicesList.classList.remove('flex')
+        } else {
+          servicesList.classList.remove('hidden')
+          servicesList.classList.add('flex', 'flex-col')
+        }
+      }
+      servicesTgl.querySelector('.mobile-services-chevron')?.classList.toggle('open')
+    }, { signal })
   }
 
+  document.addEventListener('astro:before-swap', cleanupNav)
   document.addEventListener('astro:page-load', initNav)
 </script>
