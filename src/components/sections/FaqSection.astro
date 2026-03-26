@@ -307,3 +307,86 @@ const faqs = [
     }
   }
 </style>
+
+<script>
+  import { gsap } from 'gsap'
+  import { ScrollTrigger } from 'gsap/ScrollTrigger'
+  gsap.registerPlugin(ScrollTrigger)
+
+  // destroyed flag: prevents glitch setTimeout callbacks from acting on a
+  // swapped-out DOM after Astro View Transitions navigation
+  let destroyed = false
+
+  function initFaq() {
+    destroyed = false
+
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    const flipCards = document.querySelectorAll<HTMLElement>('.flip-card')
+    const section = document.querySelector<HTMLElement>('section[aria-label="Frequently asked questions"]')
+
+    // ── ScrollTrigger stagger entrance ──────────────────────────────
+    // FAQ must NOT use .reveal-section (index.astro's selector targets
+    // article/li/dt/.glass — flip-card divs won't match, causing conflicts).
+    // Instead we register our own ScrollTrigger here.
+    if (!reduced && section && flipCards.length) {
+      const allCards = section.querySelectorAll<HTMLElement>('.flip-card, .cta-card')
+      gsap.fromTo(
+        allCards,
+        { opacity: 0, y: 40 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.6,
+          stagger: 0.08,
+          ease: 'power2.out',
+          scrollTrigger: {
+            trigger: section,
+            start: 'top 85%',
+            once: true,
+          },
+        }
+      )
+    }
+
+    // ── Click + keyboard handlers ────────────────────────────────────
+    flipCards.forEach(card => {
+      function handleFlip() {
+        const isFlipped = card.classList.contains('flipped')
+        card.classList.toggle('flipped')
+        card.setAttribute('aria-expanded', String(!isFlipped))
+
+        // aria-hidden management: only the visible face is exposed to AT
+        const front = card.querySelector<HTMLElement>('.flip-front')
+        const back  = card.querySelector<HTMLElement>('.flip-back')
+        if (front) front.setAttribute('aria-hidden', String(!isFlipped))
+        if (back)  back.setAttribute('aria-hidden',  String(isFlipped))
+
+        // Glitch fires at flip midpoint (275ms into 550ms transition)
+        if (!reduced) {
+          setTimeout(() => {
+            if (destroyed) return
+            card.classList.add('glitching')
+            setTimeout(() => {
+              if (destroyed) return
+              card.classList.remove('glitching')
+            }, 220)
+          }, 275)
+        }
+      }
+
+      card.addEventListener('click', handleFlip)
+      card.addEventListener('keydown', (e: KeyboardEvent) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault()
+          handleFlip()
+        }
+      })
+    })
+  }
+
+  document.addEventListener('astro:before-swap', () => {
+    destroyed = true
+    ScrollTrigger.getAll().forEach(t => t.kill())
+  })
+  document.addEventListener('astro:page-load', initFaq)
+</script>
