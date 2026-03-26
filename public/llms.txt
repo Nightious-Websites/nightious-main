@@ -1,0 +1,33 @@
+# Nightious
+
+> IT and digital solutions for small businesses, content creators, and startups. Based in St. Petersburg, Florida — serving clients remotely and on-site.
+
+Nightious (nightious.com) is a technology services company providing practical IT support, web design, AI integration, digital marketing, and more. Known for direct, plain-English service with a 4.9/5 rating from 50+ clients and an average 2-hour response time. Located at 7901 4th St N, Suite 300, St. Petersburg, FL 33702. Hours: Mon–Fri 2pm–11pm EST · Sat 9pm–11pm EST · Sun 12pm–11pm EST.
+
+## Pages
+
+- [Homepage](https://nightious.com): Overview of services, client stats, how-it-works process, testimonials, and primary CTA
+- [Services](https://nightious.com/services): Full catalog of all 12 service categories with audience filtering
+- [Contact](https://nightious.com/contact): Inquiry form and business details
+
+## Audience Pages
+
+- [For Businesses](https://nightious.com/for-businesses): Service bundles curated for small businesses
+- [For Creators](https://nightious.com/for-creators): Service bundles curated for content creators
+- [For Individuals](https://nightious.com/for-individuals): Service bundles curated for individuals
+
+## Services
+
+- [AI Integration](https://nightious.com/services/ai-integration): Chatbots, automation pipelines, and AI-powered tools that save time and reduce repetitive work for small businesses
+- [Computer Services](https://nightious.com/services/computer-services): Computer setup, repair, virus removal, network configuration, and hardware upgrades — remote and on-site support
+- [Custom Services](https://nightious.com/services/custom-services): Bespoke IT and digital solutions for unique business problems not covered by standard service categories
+- [Digital Marketing](https://nightious.com/services/digital-marketing): SEO audits, content strategy, email marketing, and social media management delivering measurable results
+- [Domain Solutions](https://nightious.com/services/domain-solutions): Domain registration, transfer, DNS configuration, and renewal strategy to protect your brand online
+- [Email Solutions](https://nightious.com/services/email-solutions): Business email setup, migration, and spam/deliverability fixes with a professional address at your own domain
+- [Online Privacy](https://nightious.com/services/online-privacy): VPN setup, password management, data breach monitoring, and security threat assessment for businesses and individuals
+- [Organizational Effectiveness](https://nightious.com/services/organizational-effectiveness): Operations consulting — tool selection, workflow design, project management setup, and process automation
+- [Software Services](https://nightious.com/services/software-services): Custom scripts, API integrations, internal tools, and workflow automation for specific business problems
+- [Streaming Consultation](https://nightious.com/services/streaming-consultation): OBS configuration, hardware recommendations, multi-platform streaming setup, and production quality improvements for content creators
+- [Training & Documentation](https://nightious.com/services/training-documentation): User guides, SOPs, video walkthroughs, and team training sessions for any software stack
+- [Website Solutions](https://nightious.com/services/website-solutions): Mobile-first, SEO-optimized web design and development that converts visitors into customers
+

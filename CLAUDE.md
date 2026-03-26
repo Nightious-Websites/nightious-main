@@ -31,6 +31,16 @@ IT & digital solutions company. Website: nightious.com
 | Queue | `.claude/queue.md` |
 | Brainstorms | `.claude/brainstorms/` |
 
+## SEO Files — Maintenance Rules
+
+| File | How generated | When to update |
+|------|--------------|----------------|
+| `sitemap-index.xml` | Auto at `astro build` | Edit `astro.config.mjs` `sitemap()` options |
+| `robots.txt` | Auto at `astro build` | Edit `astro.config.mjs` `robotsTxt()` options |
+| `public/llms.txt` | **Static — manual** | Update whenever a page is added, removed, or renamed |
+
+**Rule:** Any time you add or remove a page in `src/pages/`, open `public/llms.txt` and add/remove the corresponding entry. Match the section: core pages → `## Pages`, audience bundle pages → `## Audience Pages`, service pages → `## Services`. Query `seo rules` in QMD for the full maintenance spec.
+
 ## QMD Lookup (query for details)
 
 | Topic | Query |
