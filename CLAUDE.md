@@ -6,21 +6,16 @@ status: pre-launch
 ---
 
 # Nightious — Project Reference
-
 IT & digital solutions company. Website: nightious.com
-
 > Workspace conventions: `Websites/CLAUDE.md`. Paths below are relative to project root.
 
 ## Commands
-
 `npm run dev` · `npm run build` · `npm run preview` — no test runner, `astro build` is the correctness check.
 
 ## Gotchas
-
 `entry.id` includes `.md` — use `entrySlug()` from `@/utils/services`. Never add `slug` to Zod schemas.
 
 ## Workflow
-
 1. Check `.claude/queue.md`
 2. Search with `/qmd-mastery:qmd` skill
 3. Write back — update queue + write findings to `docs/`
