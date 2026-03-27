@@ -2,67 +2,259 @@
 ---
 
 <section
-  class="py-20 reveal-section relative overflow-hidden"
+  class="cta-section py-24 relative overflow-hidden"
   aria-label="Final call to action"
   style="background-color: var(--color-bg-deep);"
 >
-  <!-- Ambient radial glow -->
-  <div
-    id="cta-glow"
-    class="absolute inset-0 pointer-events-none"
-    style="opacity: 0.15; background: radial-gradient(ellipse at center, rgba(124, 58, 237, 0.15) 0%, transparent 65%);"
-    aria-hidden="true"
-  ></div>
+  <!-- Aurora blob -->
+  <div class="cta-aurora" aria-hidden="true"></div>
 
-  <!-- Grid overlay -->
-  <div class="absolute inset-0 bg-grid pointer-events-none" aria-hidden="true"></div>
+  <!-- Secondary emerald aurora -->
+  <div class="cta-aurora-emerald" aria-hidden="true"></div>
 
-  <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="relative glass-strong neon-top p-8 md:p-12 flex flex-col md:flex-row items-center justify-between gap-8 max-w-5xl mx-auto">
-      <!-- HUD corner accents -->
-      <div class="absolute top-4 left-4 w-5 h-5 pointer-events-none" style="border-top: 1px solid rgba(168,85,247,0.4); border-left: 1px solid rgba(168,85,247,0.4);" aria-hidden="true"></div>
-      <div class="absolute bottom-4 right-4 w-5 h-5 pointer-events-none" style="border-bottom: 1px solid rgba(168,85,247,0.4); border-right: 1px solid rgba(168,85,247,0.4);" aria-hidden="true"></div>
+  <div class="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center" style="z-index: 2;">
 
-      <div>
-        <h2 class="font-display text-2xl md:text-3xl mb-2" style="color: var(--color-text-primary);">
-          Done dealing with tech problems on your own?
-        </h2>
-        <p class="text-sm" style="color: var(--color-text-muted);">
-          Free quote, no contracts, no runaround.
-        </p>
-      </div>
-      <a href="/contact" class="btn-primary text-base flex-shrink-0 cursor-pointer">
-        Talk to a Real Human &rarr;
+    <!-- Eyebrow -->
+    <div class="cta-eyebrow" aria-hidden="true">Ready when you are</div>
+
+    <!-- Headline -->
+    <h2 class="cta-headline" id="cta-content">
+      Done dealing with tech<br class="hidden sm:block" />
+      <span class="cta-grad">problems on your own?</span>
+    </h2>
+
+    <!-- Subtext -->
+    <p class="cta-sub">
+      Free quote, no contracts, no runaround.
+    </p>
+
+    <!-- CTAs -->
+    <div class="cta-buttons">
+      <a href="/contact" class="cta-btn-primary">
+        Talk to a Real Human
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+          <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+      <a href="/services" class="cta-btn-ghost">
+        View Services
       </a>
     </div>
+
+    <!-- Social proof -->
+    <p class="cta-proof">
+      <span aria-label="5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+      &nbsp;Trusted by businesses &amp; creators nationwide
+    </p>
+
   </div>
-  <!-- reveal-section fallback: no .glass children, so page-level reveal fades the whole section -->
 </section>
+
+<style>
+  .cta-section { position: relative; }
+
+  /* Aurora blobs */
+  .cta-aurora {
+    position: absolute;
+    width: 600px;
+    height: 500px;
+    background: radial-gradient(ellipse, rgba(168, 85, 247, 0.14) 0%, transparent 65%);
+    top: -150px;
+    right: -100px;
+    filter: blur(70px);
+    pointer-events: none;
+    animation: cta-pulse 8s ease-in-out infinite;
+    z-index: 0;
+  }
+  .cta-aurora-emerald {
+    position: absolute;
+    width: 400px;
+    height: 300px;
+    background: radial-gradient(ellipse, rgba(34, 197, 94, 0.08) 0%, transparent 65%);
+    bottom: -80px;
+    left: -60px;
+    filter: blur(60px);
+    pointer-events: none;
+    animation: cta-pulse 10s ease-in-out 2s infinite;
+    z-index: 0;
+  }
+  @keyframes cta-pulse {
+    0%, 100% { opacity: 0.6; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.1); }
+  }
+
+  /* Eyebrow */
+  .cta-eyebrow {
+    font-family: 'Orbitron', monospace;
+    font-size: 9px;
+    font-weight: 400;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: rgba(168, 85, 247, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    opacity: 0;
+  }
+  .cta-eyebrow::before,
+  .cta-eyebrow::after {
+    content: '';
+    display: block;
+    width: 20px;
+    height: 1px;
+    background: rgba(168, 85, 247, 0.4);
+  }
+
+  /* Headline */
+  .cta-headline {
+    font-family: 'Exo 2', sans-serif;
+    font-weight: 900;
+    font-size: clamp(36px, 5.5vw, 64px);
+    line-height: 1.0;
+    letter-spacing: -0.04em;
+    color: var(--text-primary-aurora);
+    margin-bottom: 20px;
+    opacity: 0;
+  }
+  .cta-grad {
+    background: linear-gradient(120deg, #c084fc 0%, #86efac 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 0 20px rgba(168, 85, 247, 0.45));
+  }
+
+  /* Subtext */
+  .cta-sub {
+    font-family: 'Exo 2', sans-serif;
+    font-weight: 200;
+    font-size: 18px;
+    line-height: 1.6;
+    color: rgba(233, 213, 255, 0.45);
+    margin-bottom: 40px;
+    opacity: 0;
+  }
+
+  /* Buttons */
+  .cta-buttons {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-bottom: 24px;
+    opacity: 0;
+  }
+
+  .cta-btn-primary {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 16px 34px;
+    border-radius: 12px;
+    background: rgba(168, 85, 247, 0.12);
+    color: var(--text-primary-aurora);
+    font-family: 'Exo 2', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    text-decoration: none;
+    transition: background 0.25s, box-shadow 0.25s, gap 0.2s;
+  }
+  .cta-btn-primary::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 12px;
+    padding: 1px;
+    background: linear-gradient(135deg, rgba(168, 85, 247, 0.9), rgba(34, 197, 94, 0.5));
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+  .cta-btn-primary:hover {
+    background: rgba(168, 85, 247, 0.22);
+    box-shadow: 0 0 40px rgba(168, 85, 247, 0.35);
+    gap: 14px;
+  }
+
+  .cta-btn-ghost {
+    display: inline-flex;
+    align-items: center;
+    padding: 16px 34px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: rgba(233, 213, 255, 0.5);
+    font-family: 'Exo 2', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: color 0.2s, border-color 0.2s, background 0.2s;
+  }
+  .cta-btn-ghost:hover {
+    color: var(--text-primary-aurora);
+    border-color: rgba(168, 85, 247, 0.35);
+    background: rgba(168, 85, 247, 0.06);
+  }
+
+  /* Proof */
+  .cta-proof {
+    font-family: 'Exo 2', sans-serif;
+    font-size: 13px;
+    font-weight: 300;
+    color: rgba(233, 213, 255, 0.28);
+    opacity: 0;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cta-aurora, .cta-aurora-emerald { animation: none; }
+  }
+</style>
 
 <script>
   import { gsap } from 'gsap'
   import { ScrollTrigger } from 'gsap/ScrollTrigger'
   gsap.registerPlugin(ScrollTrigger)
 
-  let glowTl: gsap.core.Timeline | null = null
+  let ctaTl: gsap.core.Timeline | null = null
 
-  function initGlow() {
-    const glow = document.getElementById('cta-glow')
-    if (!glow) return
+  function initCta() {
+    const section = document.querySelector<HTMLElement>('section[aria-label="Final call to action"]')
+    if (!section) return
 
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    if (reduced) return
 
-    // Start at spec-defined base opacity (set in HTML), pulse subtly to 0.25
-    glowTl = gsap.timeline({
-      repeat: -1,
-      yoyo: true,
-      scrollTrigger: { trigger: glow, start: 'top 90%', toggleActions: 'play pause resume pause' },
+    const eyebrow = section.querySelector<HTMLElement>('.cta-eyebrow')
+    const headline = section.querySelector<HTMLElement>('.cta-headline')
+    const sub      = section.querySelector<HTMLElement>('.cta-sub')
+    const buttons  = section.querySelector<HTMLElement>('.cta-buttons')
+    const proof    = section.querySelector<HTMLElement>('.cta-proof')
+
+    const els = [eyebrow, headline, sub, buttons, proof]
+
+    if (reduced) {
+      els.forEach(el => { if (el) el.style.opacity = '1' })
+      return
+    }
+
+    ctaTl = gsap.timeline({
+      scrollTrigger: { trigger: section, start: 'top 80%', once: true },
     })
 
-    glowTl.to(glow, { opacity: 0.19, duration: 5, ease: 'sine.inOut' })
+    ctaTl
+      .fromTo(eyebrow,  { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' })
+      .fromTo(headline, { opacity: 0, y: 28 }, { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out' }, '-=0.2')
+      .fromTo(sub,      { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 0.55, ease: 'power2.out' }, '-=0.3')
+      .fromTo(buttons,  { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' }, '-=0.25')
+      .fromTo(proof,    { opacity: 0 }, { opacity: 1, duration: 0.4 }, '-=0.1')
   }
 
-  document.addEventListener('astro:before-swap', () => { glowTl?.kill(); glowTl = null })
-  document.addEventListener('astro:page-load', initGlow)
+  document.addEventListener('astro:before-swap', () => {
+    ctaTl?.kill()
+    ctaTl = null
+  })
+  document.addEventListener('astro:page-load', initCta)
 </script>

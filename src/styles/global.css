@@ -25,6 +25,14 @@
   font-display: swap;
 }
 
+@font-face {
+  font-family: 'Exo 2';
+  src: url('/fonts/Exo2-Variable.woff2') format('woff2');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
 /* ─── Design tokens ─────────────────────────────────────────────────────────── */
 :root {
   --color-bg-deep:      #02000a;
@@ -51,6 +59,15 @@
   --color-accent-business:   59, 130, 246;
   --color-accent-creator:    236, 72, 153;
   --color-accent-individual: 34, 197, 94;
+
+  /* Direction B — Liquid Glass Aurora */
+  --color-emerald:           #22c55e;
+  --color-purple-aurora:     rgba(168, 85, 247, 0.1);
+  --color-emerald-aurora:    rgba(34, 197, 94, 0.07);
+  --glass-aurora-bg:         rgba(255, 255, 255, 0.03);
+  --text-primary-aurora:     rgba(233, 213, 255, 0.93);
+  --text-muted-aurora:       rgba(233, 213, 255, 0.42);
+  --text-dim-aurora:         rgba(233, 213, 255, 0.22);
 }
 
 /* ─── Base ───────────────────────────────────────────────────────────────────── */

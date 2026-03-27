@@ -31,17 +31,19 @@ const faqs = [
 ]
 ---
 
-<section class="section-alt py-20" aria-label="Frequently asked questions">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<section class="faq-section py-20" aria-label="Frequently asked questions">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="flex flex-col lg:flex-row gap-12 lg:gap-20">
 
-      <!-- Left label column (preserved from original design) -->
-      <div class="flex-shrink-0 lg:w-48">
-        <p class="font-display text-xs tracking-[0.25em] mb-2" style="color: var(--color-purple-mid);">FAQ</p>
-        <h2 class="font-display text-3xl" style="color: var(--color-text-primary);">Common questions</h2>
+      <!-- Left sticky label -->
+      <div class="flex-shrink-0 lg:w-52">
+        <div class="faq-eyebrow">FAQ</div>
+        <h2 class="faq-headline">
+          Common <span class="faq-grad">questions.</span>
+        </h2>
       </div>
 
-      <!-- Right: 2×3 flip card grid -->
+      <!-- Right: flip card grid -->
       <div class="flex-1">
         <div class="faq-grid">
 
@@ -55,13 +57,13 @@ const faqs = [
               data-index={String(i)}
             >
               <div class="flip-card-inner">
-                <!-- Front face: question -->
+                <!-- Front face -->
                 <div class="flip-front">
                   <div class="ghost-num" aria-hidden="true">{String(i + 1).padStart(2, '0')}</div>
                   <p class="question">{faq.q}</p>
                   <span class="flip-hint" aria-hidden="true">FLIP ↻</span>
                 </div>
-                <!-- Back face: answer -->
+                <!-- Back face -->
                 <div class="flip-back" aria-hidden="true">
                   <p class="answer">{faq.a}</p>
                   <span class="flip-back-hint" aria-hidden="true">↩ FLIP BACK</span>
@@ -70,7 +72,7 @@ const faqs = [
             </div>
           ))}
 
-          <!-- 6th slot: CTA card -->
+          <!-- CTA card -->
           <a href="/contact" class="cta-card" aria-label="Book a free consultation call">
             <p class="cta-label">STILL CURIOUS?</p>
             <p class="cta-action">Book a free call →</p>
@@ -84,11 +86,53 @@ const faqs = [
 </section>
 
 <style>
+  .faq-section {
+    background-color: var(--color-bg-section);
+    position: relative;
+  }
+
+  /* Eyebrow */
+  .faq-eyebrow {
+    font-family: 'Orbitron', monospace;
+    font-size: 9px;
+    font-weight: 400;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: rgba(168, 85, 247, 0.6);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+  .faq-eyebrow::before {
+    content: '';
+    display: block;
+    width: 20px;
+    height: 1px;
+    background: rgba(168, 85, 247, 0.4);
+  }
+
+  /* Headline */
+  .faq-headline {
+    font-family: 'Exo 2', sans-serif;
+    font-weight: 900;
+    font-size: clamp(28px, 4vw, 44px);
+    line-height: 1.0;
+    letter-spacing: -0.035em;
+    color: var(--text-primary-aurora);
+  }
+  .faq-grad {
+    background: linear-gradient(120deg, #c084fc 0%, #86efac 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 0 12px rgba(168, 85, 247, 0.4));
+  }
+
   /* Grid */
   .faq-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 12px;
+    gap: 10px;
   }
   @media (max-width: 639px) {
     .faq-grid { grid-template-columns: 1fr; }
@@ -102,89 +146,107 @@ const faqs = [
     outline: 2px solid transparent;
     outline-offset: 2px;
   }
-
   .flip-card-inner {
     position: relative;
     width: 100%;
     height: 100%;
     transform-style: preserve-3d;
     transition: transform 0.55s cubic-bezier(0.4, 0.2, 0.2, 1);
-    border-radius: 10px;
+    border-radius: 12px;
   }
-
   .flip-card.flipped .flip-card-inner { transform: rotateY(180deg); }
 
-  /* Shared face styles */
+  /* Shared face */
   .flip-front,
   .flip-back {
     position: absolute;
     inset: 0;
-    border-radius: 10px;
+    border-radius: 12px;
     backface-visibility: hidden;
     -webkit-backface-visibility: hidden;
-    padding: 12px 14px;
+    padding: 14px 16px;
     display: flex;
     flex-direction: column;
   }
 
-  /* Front */
+  /* Front face */
   .flip-front {
-    background: rgba(10, 5, 32, 0.85);
-    border: 1px solid rgba(168, 85, 247, 0.18);
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(168, 85, 247, 0.14);
     gap: 8px;
     transition: border-color 0.2s;
+    position: relative;
+  }
+  .flip-front::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 12px;
+    padding: 1px;
+    background: linear-gradient(160deg, rgba(168,85,247,0.2) 0%, transparent 60%);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.2s;
   }
   .flip-card:hover .flip-front,
-  .flip-card:focus-visible .flip-front {
-    border-color: rgba(168, 85, 247, 0.38);
-  }
-  .flip-card:focus-visible {
-    outline-color: rgba(168, 85, 247, 0.7);
-  }
+  .flip-card:focus-visible .flip-front { border-color: rgba(168, 85, 247, 0.32); }
+  .flip-card:hover .flip-front::before,
+  .flip-card:focus-visible .flip-front::before { opacity: 1; }
+  .flip-card:focus-visible { outline-color: rgba(168, 85, 247, 0.7); }
 
-  /* Back */
+  /* Back face */
   .flip-back {
-    background: rgba(168, 85, 247, 0.14);
-    border: 1px solid rgba(168, 85, 247, 0.5);
-    box-shadow: inset 0 0 30px rgba(168, 85, 247, 0.08), 0 0 16px rgba(168, 85, 247, 0.1);
+    background: rgba(168, 85, 247, 0.1);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(168, 85, 247, 0.45);
+    box-shadow: inset 0 0 30px rgba(168, 85, 247, 0.07), 0 0 18px rgba(168, 85, 247, 0.12);
     transform: rotateY(180deg);
     justify-content: space-between;
     gap: 8px;
     overflow: hidden;
   }
 
-  /* Front face contents */
+  /* Front contents */
   .ghost-num {
     font-family: 'Orbitron', sans-serif;
-    font-size: 24px;
-    font-weight: 900;
+    font-size: 22px;
+    font-weight: 400;
     line-height: 1;
-    color: rgba(168, 85, 247, 0.13);
+    color: rgba(168, 85, 247, 0.12);
     flex-shrink: 0;
   }
   .question {
+    font-family: 'Exo 2', sans-serif;
     font-size: 13px;
     font-weight: 600;
-    color: var(--color-text-primary);
+    color: var(--text-primary-aurora);
     line-height: 1.4;
     flex: 1;
-    font-family: 'Exo 2', sans-serif;
+    letter-spacing: -0.01em;
   }
   .flip-hint {
-    font-size: 9px;
+    font-family: 'Orbitron', monospace;
+    font-size: 8px;
     letter-spacing: 0.15em;
-    color: rgba(168, 85, 247, 0.45);
+    color: rgba(168, 85, 247, 0.4);
   }
 
-  /* Back face contents */
+  /* Back contents */
   .answer {
+    font-family: 'Exo 2', sans-serif;
     font-size: 12px;
-    line-height: 1.55;
-    color: var(--color-text-muted);
+    font-weight: 300;
+    line-height: 1.6;
+    color: rgba(233, 213, 255, 0.65);
     flex: 1;
   }
   .flip-back-hint {
-    font-size: 9px;
+    font-family: 'Orbitron', monospace;
+    font-size: 8px;
     letter-spacing: 0.12em;
     color: rgba(168, 85, 247, 0.5);
     align-self: flex-end;
@@ -193,9 +255,9 @@ const faqs = [
   /* CTA card */
   .cta-card {
     height: 128px;
-    background: rgba(168, 85, 247, 0.07);
-    border: 1px dashed rgba(168, 85, 247, 0.3);
-    border-radius: 10px;
+    background: rgba(168, 85, 247, 0.06);
+    border: 1px dashed rgba(168, 85, 247, 0.28);
+    border-radius: 12px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -217,41 +279,31 @@ const faqs = [
     outline-offset: 2px;
   }
   .cta-label {
-    font-size: 10px;
-    letter-spacing: 0.15em;
-    color: rgba(168, 85, 247, 0.6);
+    font-family: 'Orbitron', monospace;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    color: rgba(168, 85, 247, 0.55);
   }
   .cta-action {
+    font-family: 'Exo 2', sans-serif;
     font-size: 13px;
     font-weight: 600;
-    color: var(--color-purple-mid);
+    color: rgba(192, 132, 252, 0.9);
     text-decoration: underline;
     text-underline-offset: 3px;
   }
 
-  /* Reduced motion: skip 3D, use instant opacity swap */
+  /* Reduced motion */
   @media (prefers-reduced-motion: reduce) {
-    .flip-card-inner {
-      transform-style: flat;
-      transition: none;
-    }
+    .flip-card-inner { transform-style: flat; transition: none; }
     .flip-card.flipped .flip-card-inner { transform: none; }
     .flip-front { backface-visibility: visible; transition: none; }
-    .flip-back {
-      backface-visibility: visible;
-      transform: none;
-      opacity: 0;
-      transition: opacity 0s;
-    }
+    .flip-back { backface-visibility: visible; transform: none; opacity: 0; transition: opacity 0s; }
     .flip-card.flipped .flip-front { opacity: 0; pointer-events: none; }
     .flip-card.flipped .flip-back  { opacity: 1; pointer-events: auto; }
   }
 
-  /* ── Glitch effect ───────────────────────────────────────────────
-     .glitching class is toggled by JS at the flip midpoint (275ms).
-     Total glitch duration: 220ms.
-  ──────────────────────────────────────────────────────────────── */
-
+  /* ── Glitch ── */
   @keyframes glitch-rgbsplit {
     0%   { text-shadow: none; }
     15%  { text-shadow: -2px 0 0 rgba(0,255,255,0.7), 2px 0 0 rgba(255,0,255,0.7); }
@@ -259,7 +311,6 @@ const faqs = [
     55%  { text-shadow: -1px 0 0 rgba(0,255,255,0.3),  1px 0 0 rgba(255,0,255,0.3); }
     100% { text-shadow: none; }
   }
-
   @keyframes glitch-slice {
     0%   { clip-path: inset(0 0 100% 0); transform: translate(0); }
     15%  { clip-path: inset(20% 0 50% 0); transform: translate(-3px, 0); }
@@ -268,18 +319,15 @@ const faqs = [
     75%  { clip-path: inset(70% 0 5% 0);  transform: translate(2px, 0); }
     100% { clip-path: inset(0 0 0 0);     transform: translate(0); }
   }
-
   .flip-card.glitching .flip-card-inner {
     animation: glitch-rgbsplit 0.22s ease-out forwards;
   }
-
-  /* Cyan + magenta pseudo-element slices */
   .flip-card.glitching .flip-card-inner::before,
   .flip-card.glitching .flip-card-inner::after {
     content: '';
     position: absolute;
     inset: 0;
-    border-radius: 10px;
+    border-radius: 12px;
     pointer-events: none;
     z-index: 10;
   }
@@ -293,26 +341,17 @@ const faqs = [
     animation: glitch-slice 0.18s steps(1) 0.04s forwards;
     transform: translateX(2px);
   }
-
-  /* Border flashes cyan during glitch */
   .flip-card.glitching .flip-front,
   .flip-card.glitching .flip-back {
     border-color: rgba(0, 255, 255, 0.55) !important;
     transition: none;
   }
-
-  /* Disable glitch for reduced motion users */
   @media (prefers-reduced-motion: reduce) {
     .flip-card.glitching .flip-card-inner,
     .flip-card.glitching .flip-card-inner::before,
-    .flip-card.glitching .flip-card-inner::after {
-      animation: none;
-    }
+    .flip-card.glitching .flip-card-inner::after { animation: none; }
     .flip-card.glitching .flip-front,
-    .flip-card.glitching .flip-back {
-      border-color: inherit !important;
-      transition: none;
-    }
+    .flip-card.glitching .flip-back { border-color: inherit !important; transition: none; }
   }
 </style>
 
@@ -321,8 +360,6 @@ const faqs = [
   import { ScrollTrigger } from 'gsap/ScrollTrigger'
   gsap.registerPlugin(ScrollTrigger)
 
-  // destroyed flag: prevents glitch setTimeout callbacks from acting on a
-  // swapped-out DOM after Astro View Transitions navigation
   let destroyed = false
   let cardAc: AbortController | null = null
 
@@ -333,10 +370,6 @@ const faqs = [
     const flipCards = document.querySelectorAll<HTMLElement>('.flip-card')
     const section = document.querySelector<HTMLElement>('section[aria-label="Frequently asked questions"]')
 
-    // ── ScrollTrigger stagger entrance ──────────────────────────────
-    // FAQ must NOT use .reveal-section (index.astro's selector targets
-    // article/li/dt/.glass — flip-card divs won't match, causing conflicts).
-    // Instead we register our own ScrollTrigger here.
     if (!reduced && section && flipCards.length) {
       const allCards = section.querySelectorAll<HTMLElement>('.flip-card, .cta-card')
       gsap.fromTo(
@@ -358,7 +391,6 @@ const faqs = [
       )
     }
 
-    // ── Click + keyboard handlers ────────────────────────────────────
     cardAc?.abort()
     cardAc = new AbortController()
     const sig = { signal: cardAc.signal }
@@ -369,13 +401,11 @@ const faqs = [
         card.classList.toggle('flipped')
         card.setAttribute('aria-expanded', String(!isFlipped))
 
-        // aria-hidden management: only the visible face is exposed to AT
         const front = card.querySelector<HTMLElement>('.flip-front')
         const back  = card.querySelector<HTMLElement>('.flip-back')
         if (front) front.setAttribute('aria-hidden', String(!isFlipped))
         if (back)  back.setAttribute('aria-hidden',  String(isFlipped))
 
-        // Glitch fires at flip midpoint (275ms into 550ms transition)
         if (!reduced) {
           setTimeout(() => {
             if (destroyed) return

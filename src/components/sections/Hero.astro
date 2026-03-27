@@ -1,104 +1,89 @@
 ---
-import { Image } from 'astro:assets'
-import GradientBlobs from '@/components/ui/GradientBlobs.astro'
-import iconColor from '@/assets/images/logos/icon-color.png'
 ---
 
 <section
   class="relative min-h-dvh flex flex-col items-center justify-center overflow-hidden pt-16"
   aria-label="Hero"
+  id="hero-section"
 >
-  <!-- Particle field background -->
+  <!-- Video background -->
+  <video
+    class="hero-video"
+    autoplay
+    muted
+    loop
+    playsinline
+    aria-hidden="true"
+    tabindex="-1"
+  >
+    <source src="https://assets.mixkit.co/videos/18059/18059-720.mp4" type="video/mp4" />
+  </video>
+
+  <!-- Deep overlay — brings video into our dark palette -->
   <div
-    class="absolute inset-0 z-0 pointer-events-none"
-    style="background-color: var(--color-bg-deep);"
+    class="absolute inset-0 pointer-events-none"
+    style="background: rgba(2,0,10,0.62); z-index: 1;"
     aria-hidden="true"
   ></div>
-  <div
-    class="absolute inset-0 z-0 pointer-events-none"
-    style="background-image: radial-gradient(circle, rgba(168, 85, 247, 0.4) 1px, transparent 1px); background-size: 28px 28px; opacity: 0.15;"
-    aria-hidden="true"
-  ></div>
 
-  <!-- Futuristic grid overlay -->
-  <div class="absolute inset-0 bg-grid pointer-events-none" style="z-index: 3;" aria-hidden="true"></div>
-
-  <!-- Scan line -->
-  <div class="scan-line" aria-hidden="true"></div>
-
-  <!-- Gradient blobs -->
-  <div class="absolute inset-0 z-10" aria-hidden="true">
-    <GradientBlobs />
+  <!-- Aurora blobs -->
+  <div class="hero-aurora" aria-hidden="true">
+    <div class="aurora-blob aurora-purple"></div>
+    <div class="aurora-blob aurora-emerald"></div>
   </div>
 
-  <!-- Large icon watermark -->
-  <div class="absolute inset-0 z-10 flex items-center justify-end pointer-events-none" aria-hidden="true">
-    <Image
-      src={iconColor}
-      alt=""
-      width={520}
-      height={520}
-      class="opacity-5 w-[520px] h-auto select-none"
-      aria-hidden="true"
-    />
-  </div>
+  <!-- Constellation particles (JS-populated) -->
+  <div class="hero-particles" id="hero-particles" aria-hidden="true"></div>
 
   <!-- HUD corner brackets -->
-  <div class="absolute inset-0 z-20 pointer-events-none" aria-hidden="true">
-    <div class="absolute top-8 left-8 w-10 h-10" style="border-top: 1px solid rgba(168,85,247,0.5); border-left: 1px solid rgba(168,85,247,0.5);"></div>
-    <div class="absolute top-8 right-8 w-10 h-10" style="border-top: 1px solid rgba(168,85,247,0.5); border-right: 1px solid rgba(168,85,247,0.5);"></div>
-    <div class="absolute bottom-8 left-8 w-10 h-10" style="border-bottom: 1px solid rgba(168,85,247,0.5); border-left: 1px solid rgba(168,85,247,0.5);"></div>
-    <div class="absolute bottom-8 right-8 w-10 h-10" style="border-bottom: 1px solid rgba(168,85,247,0.5); border-right: 1px solid rgba(168,85,247,0.5);"></div>
+  <div class="absolute inset-0 pointer-events-none" style="z-index: 20;" aria-hidden="true">
+    <div class="hud-bracket hud-tl"></div>
+    <div class="hud-bracket hud-tr"></div>
+    <div class="hud-bracket hud-bl"></div>
+    <div class="hud-bracket hud-br"></div>
   </div>
 
-  <div class="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+  <!-- Main content -->
+  <div class="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center" style="z-index: 20;">
 
-    <!-- System status indicator -->
-    <div id="hero-status" class="inline-flex items-center gap-2 mb-5 opacity-0">
-      <span class="pulse-dot" aria-hidden="true"></span>
-      <span class="font-display text-xs tracking-[0.25em]" style="color: rgba(34, 197, 94, 0.8);">SYSTEM OPERATIONAL</span>
+    <!-- Status pill -->
+    <div id="hero-status" class="hero-status-pill">
+      <span class="hero-live-dot" aria-hidden="true"></span>
+      <span>SYSTEM OPERATIONAL</span>
     </div>
 
     <!-- Eyebrow -->
-    <p
-      id="hero-eyebrow"
-      class="font-display text-xs sm:text-sm tracking-[0.3em] mb-6 opacity-0"
-      style="color: var(--color-purple-mid);"
-    >
-      ● IT &amp; DIGITAL SOLUTIONS
+    <p id="hero-eyebrow" class="hero-eyebrow" aria-hidden="true">
+      IT &amp; Digital Solutions
     </p>
 
-    <!-- H1 -->
-    <h1
-      id="hero-h1"
-      class="font-display text-5xl sm:text-6xl tracking-widest text-glow mb-6 opacity-0"
-      style="color: var(--color-text-primary);"
-    >
+    <!-- Headline -->
+    <h1 id="hero-h1" class="hero-h1">
       Technology made simple.<br />
-      <span class="gradient-text">Support made personal.</span>
+      <span class="hero-grad">Support made personal.</span>
     </h1>
 
-    <!-- Neon divider -->
-    <div class="neon-divider max-w-md mx-auto mb-6 opacity-0" id="hero-divider" aria-hidden="true"></div>
+    <!-- Thin divider -->
+    <div id="hero-divider" class="hero-divider" aria-hidden="true"></div>
 
-    <!-- Subheadline -->
-    <p
-      id="hero-sub"
-      class="text-lg sm:text-xl max-w-2xl mx-auto leading-relaxed mb-8 opacity-0"
-      style="color: var(--color-text-primary);"
-    >
+    <!-- Subtext -->
+    <p id="hero-sub" class="hero-sub">
       We take care of all your tech, so you can focus on running your business.
     </p>
 
     <!-- CTA -->
-    <div id="hero-cta" class="mb-10 opacity-0">
-      <a href="/contact" class="btn-primary text-base cursor-pointer">
-        See how we can help &rarr;
+    <div id="hero-cta" class="hero-cta-row">
+      <a href="/contact" class="hero-btn-primary">
+        See how we can help
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+          <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
       </a>
+      <a href="#clientele-section" class="hero-btn-ghost">Who we help</a>
     </div>
 
     <!-- Social proof -->
-    <p id="hero-proof" class="text-sm opacity-0" style="color: var(--color-text-muted);">
+    <p id="hero-proof" class="hero-proof">
       <span aria-label="5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
       &nbsp;Trusted by businesses &amp; creators nationwide
     </p>
@@ -107,26 +92,286 @@ import iconColor from '@/assets/images/logos/icon-color.png'
   <!-- Scroll cue -->
   <div
     id="hero-scroll"
-    class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-0 z-20"
+    class="hero-scroll-cue"
     aria-hidden="true"
   >
-    <span class="font-display text-xs tracking-[0.25em]" style="color: var(--color-purple-mid);">SCROLL TO EXPLORE</span>
-    <svg class="scroll-arrow" width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-      <path d="M10 4v12M4 10l6 6 6-6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color: var(--color-purple-mid);"/>
+    <span>SCROLL</span>
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+      <path d="M10 4v12M4 10l6 6 6-6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
     </svg>
   </div>
 </section>
 
 <style>
-  .scroll-arrow {
-    animation: bounce 2s ease-in-out infinite;
+  /* ── Video ── */
+  .hero-video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 0;
+    pointer-events: none;
   }
-  @keyframes bounce {
+
+  /* ── Aurora blobs ── */
+  .hero-aurora {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+    overflow: hidden;
+  }
+  .aurora-blob {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    pointer-events: none;
+  }
+  .aurora-purple {
+    width: 700px;
+    height: 500px;
+    background: radial-gradient(ellipse, rgba(168, 85, 247, 0.18) 0%, transparent 65%);
+    top: -100px;
+    left: -100px;
+    animation: aurora-drift-a 10s ease-in-out infinite;
+  }
+  .aurora-emerald {
+    width: 500px;
+    height: 400px;
+    background: radial-gradient(ellipse, rgba(34, 197, 94, 0.1) 0%, transparent 65%);
+    bottom: -80px;
+    right: -80px;
+    animation: aurora-drift-b 12s ease-in-out infinite;
+  }
+  @keyframes aurora-drift-a {
+    0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.7; }
+    50% { transform: translate(60px, 40px) scale(1.12); opacity: 1; }
+  }
+  @keyframes aurora-drift-b {
+    0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.5; }
+    50% { transform: translate(-40px, -30px) scale(1.08); opacity: 0.85; }
+  }
+
+  /* ── Particles ── */
+  .hero-particles {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    pointer-events: none;
+    overflow: hidden;
+  }
+  /* Individual particles styled via JS inline style */
+
+  /* ── HUD brackets ── */
+  .hud-bracket {
+    position: absolute;
+    width: 36px;
+    height: 36px;
+  }
+  .hud-tl { top: 24px; left: 24px; border-top: 1px solid rgba(168,85,247,0.45); border-left: 1px solid rgba(168,85,247,0.45); }
+  .hud-tr { top: 24px; right: 24px; border-top: 1px solid rgba(168,85,247,0.45); border-right: 1px solid rgba(168,85,247,0.45); }
+  .hud-bl { bottom: 24px; left: 24px; border-bottom: 1px solid rgba(168,85,247,0.45); border-left: 1px solid rgba(168,85,247,0.45); }
+  .hud-br { bottom: 24px; right: 24px; border-bottom: 1px solid rgba(168,85,247,0.45); border-right: 1px solid rgba(168,85,247,0.45); }
+
+  /* ── Status pill ── */
+  .hero-status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 16px;
+    border-radius: 40px;
+    background: rgba(34, 197, 94, 0.07);
+    border: 1px solid rgba(34, 197, 94, 0.2);
+    font-family: 'Orbitron', monospace;
+    font-size: 9px;
+    font-weight: 400;
+    letter-spacing: 0.22em;
+    color: rgba(34, 197, 94, 0.8);
+    text-transform: uppercase;
+    margin-bottom: 24px;
+    opacity: 0;
+  }
+  .hero-live-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: rgba(34, 197, 94, 0.9);
+    animation: hero-live-pulse 2s ease-in-out infinite;
+  }
+  @keyframes hero-live-pulse {
+    0%, 100% { opacity: 0.4; box-shadow: none; }
+    50% { opacity: 1; box-shadow: 0 0 8px rgba(34, 197, 94, 0.7); }
+  }
+
+  /* ── Eyebrow ── */
+  .hero-eyebrow {
+    font-family: 'Orbitron', monospace;
+    font-size: 10px;
+    font-weight: 400;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: rgba(168, 85, 247, 0.7);
+    margin-bottom: 20px;
+    opacity: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+  }
+  .hero-eyebrow::before,
+  .hero-eyebrow::after {
+    content: '';
+    display: block;
+    width: 28px;
+    height: 1px;
+    background: rgba(168, 85, 247, 0.4);
+  }
+
+  /* ── H1 ── */
+  .hero-h1 {
+    font-family: 'Exo 2', sans-serif;
+    font-weight: 900;
+    font-size: clamp(40px, 6vw, 72px);
+    line-height: 1.0;
+    letter-spacing: -0.035em;
+    color: var(--text-primary-aurora);
+    margin-bottom: 20px;
+    opacity: 0;
+  }
+  .hero-grad {
+    background: linear-gradient(120deg, #c084fc 0%, #86efac 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 0 20px rgba(168, 85, 247, 0.45));
+  }
+
+  /* ── Divider ── */
+  .hero-divider {
+    width: 60px;
+    height: 1px;
+    background: linear-gradient(90deg, rgba(168, 85, 247, 0.7), rgba(34, 197, 94, 0.4));
+    margin: 0 auto 24px;
+    opacity: 0;
+    transform: scaleX(0);
+    transform-origin: center;
+  }
+
+  /* ── Subtext ── */
+  .hero-sub {
+    font-family: 'Exo 2', sans-serif;
+    font-weight: 200;
+    font-size: clamp(16px, 2vw, 20px);
+    line-height: 1.7;
+    color: rgba(233, 213, 255, 0.6);
+    max-width: 520px;
+    margin: 0 auto 36px;
+    opacity: 0;
+  }
+
+  /* ── CTAs ── */
+  .hero-cta-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-bottom: 28px;
+    opacity: 0;
+  }
+  .hero-btn-primary {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 28px;
+    border-radius: 10px;
+    background: rgba(168, 85, 247, 0.12);
+    color: var(--text-primary-aurora);
+    font-family: 'Exo 2', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    text-decoration: none;
+    transition: background 0.25s, box-shadow 0.25s, gap 0.2s;
+  }
+  .hero-btn-primary::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 10px;
+    padding: 1px;
+    background: linear-gradient(135deg, rgba(168, 85, 247, 0.8), rgba(34, 197, 94, 0.4));
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+  .hero-btn-primary:hover {
+    background: rgba(168, 85, 247, 0.2);
+    box-shadow: 0 0 30px rgba(168, 85, 247, 0.3);
+    gap: 12px;
+  }
+
+  .hero-btn-ghost {
+    display: inline-flex;
+    align-items: center;
+    padding: 14px 28px;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: rgba(233, 213, 255, 0.55);
+    font-family: 'Exo 2', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: color 0.2s, border-color 0.2s, background 0.2s;
+  }
+  .hero-btn-ghost:hover {
+    color: var(--text-primary-aurora);
+    border-color: rgba(168, 85, 247, 0.35);
+    background: rgba(168, 85, 247, 0.06);
+  }
+
+  /* ── Social proof ── */
+  .hero-proof {
+    font-family: 'Exo 2', sans-serif;
+    font-size: 13px;
+    font-weight: 400;
+    color: rgba(233, 213, 255, 0.35);
+    opacity: 0;
+  }
+
+  /* ── Scroll cue ── */
+  .hero-scroll-cue {
+    position: absolute;
+    bottom: 28px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 20;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    opacity: 0;
+    font-family: 'Orbitron', monospace;
+    font-size: 8px;
+    letter-spacing: 0.28em;
+    color: rgba(168, 85, 247, 0.55);
+  }
+  .hero-scroll-cue svg {
+    animation: hero-bounce 2s ease-in-out infinite;
+    color: rgba(168, 85, 247, 0.55);
+  }
+  @keyframes hero-bounce {
     0%, 100% { transform: translateY(0); }
     50% { transform: translateY(6px); }
   }
+
   @media (prefers-reduced-motion: reduce) {
-    .scroll-arrow { animation: none; }
+    .aurora-purple, .aurora-emerald,
+    .hero-live-dot, .hero-scroll-cue svg {
+      animation: none;
+    }
   }
 </style>
 
@@ -135,14 +380,51 @@ import iconColor from '@/assets/images/logos/icon-color.png'
 
   let heroTl: gsap.core.Timeline | null = null
 
+  function spawnParticles() {
+    const container = document.getElementById('hero-particles')
+    if (!container) return
+    // Clear any existing particles
+    while (container.firstChild) container.removeChild(container.firstChild)
+
+    const count = 28
+    for (let i = 0; i < count; i++) {
+      const dot = document.createElement('span')
+      const size = Math.random() < 0.3 ? 2 : 1
+      const x = Math.random() * 100
+      const y = Math.random() * 100
+      const opacity = 0.15 + Math.random() * 0.4
+      const delay = Math.random() * 6
+      const dur = 3 + Math.random() * 4
+
+      dot.style.cssText = [
+        'position:absolute',
+        `left:${x}%`,
+        `top:${y}%`,
+        `width:${size}px`,
+        `height:${size}px`,
+        'border-radius:50%',
+        `background:${Math.random() > 0.6 ? 'rgba(34,197,94,' + opacity + ')' : 'rgba(168,85,247,' + opacity + ')'}`,
+        `animation:hero-twinkle ${dur}s ease-in-out ${delay}s infinite`,
+      ].join(';')
+      container.appendChild(dot)
+    }
+  }
+
   function initHero() {
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
-    const els = ['hero-status', 'hero-eyebrow', 'hero-h1', 'hero-divider', 'hero-sub', 'hero-cta', 'hero-proof', 'hero-scroll']
-      .map(id => document.getElementById(id))
+    spawnParticles()
+
+    const ids = ['hero-status', 'hero-eyebrow', 'hero-h1', 'hero-divider', 'hero-sub', 'hero-cta', 'hero-proof', 'hero-scroll']
+    const els = ids.map(id => document.getElementById(id))
 
     if (reduced) {
-      els.forEach(el => { if (el) el.style.opacity = '1' })
+      els.forEach(el => {
+        if (el) {
+          el.style.opacity = '1'
+          el.style.transform = 'none'
+        }
+      })
       return
     }
 
@@ -152,7 +434,7 @@ import iconColor from '@/assets/images/logos/icon-color.png'
     heroTl
       .fromTo(status,  { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.5 })
       .fromTo(eyebrow, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.6 }, '-=0.2')
-      .fromTo(h1,      { opacity: 0, y: 30, scale: 0.96 }, { opacity: 1, y: 0, scale: 1, duration: 0.8 }, '-=0.3')
+      .fromTo(h1,      { opacity: 0, y: 30, scale: 0.97 }, { opacity: 1, y: 0, scale: 1, duration: 0.85 }, '-=0.3')
       .fromTo(divider, { opacity: 0, scaleX: 0 }, { opacity: 1, scaleX: 1, duration: 0.5, ease: 'power2.out' }, '-=0.4')
       .fromTo(sub,     { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.6 }, '-=0.3')
       .fromTo(cta,     { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5 }, '-=0.3')
@@ -160,6 +442,17 @@ import iconColor from '@/assets/images/logos/icon-color.png'
       .fromTo(scroll,  { opacity: 0 }, { opacity: 1, duration: 0.5 }, '-=0.2')
   }
 
-  document.addEventListener('astro:before-swap', () => { heroTl?.kill(); heroTl = null })
+  document.addEventListener('astro:before-swap', () => {
+    heroTl?.kill()
+    heroTl = null
+  })
+
   document.addEventListener('astro:page-load', initHero)
 </script>
+
+<style is:global>
+  @keyframes hero-twinkle {
+    0%, 100% { opacity: 0.2; transform: scale(1); }
+    50% { opacity: 0.9; transform: scale(1.5); }
+  }
+</style>

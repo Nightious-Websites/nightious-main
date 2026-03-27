@@ -3,80 +3,357 @@ const steps = [
   {
     number: '01',
     heading: 'Tell us what you need',
-    bodyHtml: 'Fill out the contact form or give us a call. No questionnaires, no runaround. Just tell us what\'s not working. <strong style="color: var(--color-purple-light);">We respond as soon as possible.</strong>',
+    bodyHtml: 'Fill out the contact form or give us a call. No questionnaires, no runaround. Just tell us what\'s not working. <strong>We respond as soon as possible.</strong>',
   },
   {
     number: '02',
     heading: 'We send you a clear plan',
-    bodyHtml: 'We look at your situation and put together a proposal. What we\'ll do, what it costs, how long it takes. <strong style="color: var(--color-purple-light);">No hidden fees. No long-term lock-in.</strong>',
+    bodyHtml: 'We look at your situation and put together a proposal. What we\'ll do, what it costs, how long it takes. <strong>No hidden fees. No long-term lock-in.</strong>',
   },
   {
     number: '03',
     heading: 'We get it done',
-    bodyHtml: 'We handle the work end-to-end and keep you posted along the way. When it\'s finished, we make sure you know how everything works. <strong style="color: var(--color-purple-light);">Ongoing support if you need it.</strong>',
+    bodyHtml: 'We handle the work end-to-end and keep you posted along the way. When it\'s finished, we make sure you know how everything works. <strong>Ongoing support if you need it.</strong>',
   },
 ]
 ---
 
-<section class="py-20 overflow-hidden" aria-label="How it works">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<section class="hiw-section py-24 relative overflow-hidden" aria-label="How it works">
+  <!-- Ghost background numbers -->
+  <div class="hiw-bg-nums" aria-hidden="true">
+    {steps.map(s => <span class="hiw-bg-num">{s.number}</span>)}
+  </div>
+
+  <div class="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8" style="z-index: 2;">
+
+    <!-- Heading -->
     <div class="text-center mb-16">
-      <p class="font-display text-xs tracking-[0.25em] mb-3" style="color: var(--color-purple-mid);">THE PROCESS</p>
-      <h2 class="font-display text-3xl md:text-4xl" style="color: var(--color-text-primary);">
-        How it works
+      <div class="hiw-eyebrow" aria-hidden="true">The process</div>
+      <h2 class="hiw-headline">
+        How it <span class="hiw-grad">works.</span>
       </h2>
     </div>
 
-    <!-- Desktop: horizontal grid with connecting line -->
-    <!-- Mobile: vertical stack -->
+    <!-- Steps -->
     <div class="relative">
 
-      <!-- Horizontal connector line (desktop only) -->
+      <!-- Desktop connector line -->
       <div
-        id="process-line"
-        class="hidden lg:block absolute top-6 left-0 right-0 pointer-events-none"
-        style="height: 1px; background: linear-gradient(to right, transparent, rgba(168,85,247,0.4), transparent); transform-origin: left center; transform: scaleX(0);"
+        id="hiw-line"
+        class="hiw-connector-line"
         aria-hidden="true"
-      ></div>
+      >
+        <div class="hiw-shimmer"></div>
+      </div>
 
-      <ol class="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12 list-none">
+      <ol class="hiw-steps list-none">
         {steps.map((step, i) => (
-          <li
-            class="process-step flex flex-col gap-4 opacity-0"
-          >
-            <!-- Step circle -->
-            <div
-              class="w-12 h-12 rounded-full flex items-center justify-center font-display text-sm flex-shrink-0"
-              style={`background: rgba(124, 58, 237, ${0.12 + i * 0.06}); border: 1px solid rgba(168, 85, 247, 0.45); color: var(--color-purple-light); box-shadow: 0 0 20px rgba(168, 85, 247, ${0.15 + i * 0.05}), inset 0 0 10px rgba(168, 85, 247, 0.05);`}
-            >
-              {step.number}
+          <li class="hiw-step process-step" style="opacity:0;">
+
+            <!-- Orb -->
+            <div class="hiw-orb-wrap">
+              <div class="hiw-orb">
+                <span class="hiw-orb-num">{step.number}</span>
+              </div>
             </div>
 
-            <!-- Mobile connector line (vertical) -->
+            <!-- Mobile connector (vertical) -->
             {i < steps.length - 1 && (
-              <div
-                class="lg:hidden w-px ml-6"
-                style="height: 32px; background: linear-gradient(to bottom, rgba(168,85,247,0.4), rgba(168,85,247,0.1));"
-                aria-hidden="true"
-              ></div>
+              <div class="hiw-mobile-connector lg:hidden" aria-hidden="true">
+                <div class="hiw-mobile-shimmer"></div>
+              </div>
             )}
 
-            <!-- Content -->
-            <div class="glass p-6">
-              <h3 class="font-display text-sm mb-3" style="color: var(--color-text-primary);">{step.heading}</h3>
-              {/* SECURITY: bodyHtml must remain compile-time static. Never accept from CMS, DB, or user input without sanitization. */}
-              <p class="text-sm leading-relaxed" style="color: var(--color-text-primary);" set:html={step.bodyHtml} />
+            <!-- Card -->
+            <div class="hiw-step-card">
+              <h3 class="hiw-step-title">{step.heading}</h3>
+              {/* SECURITY: bodyHtml is compile-time static only. Never accept from CMS, DB, or user input without sanitization. */}
+              <p class="hiw-step-desc" set:html={step.bodyHtml} />
             </div>
+
           </li>
         ))}
       </ol>
     </div>
 
-    <div class="text-center mt-12">
-      <a href="/contact" class="btn-primary cursor-pointer">Get Started &rarr;</a>
+    <div class="text-center mt-14">
+      <a href="/contact" class="hiw-cta">
+        Get started
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+          <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
     </div>
   </div>
 </section>
+
+<style>
+  .hiw-section {
+    background-color: var(--color-bg-deep);
+    position: relative;
+  }
+
+  /* Ghost numbers */
+  .hiw-bg-nums {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: space-around;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+  }
+  .hiw-bg-num {
+    font-family: 'Exo 2', sans-serif;
+    font-weight: 900;
+    font-size: clamp(80px, 14vw, 140px);
+    line-height: 1;
+    color: rgba(168, 85, 247, 0.03);
+    letter-spacing: -0.05em;
+    user-select: none;
+  }
+
+  /* Eyebrow */
+  .hiw-eyebrow {
+    font-family: 'Orbitron', monospace;
+    font-size: 9px;
+    font-weight: 400;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: rgba(168, 85, 247, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+  .hiw-eyebrow::before,
+  .hiw-eyebrow::after {
+    content: '';
+    display: block;
+    width: 20px;
+    height: 1px;
+    background: rgba(168, 85, 247, 0.4);
+  }
+
+  /* Headline */
+  .hiw-headline {
+    font-family: 'Exo 2', sans-serif;
+    font-weight: 900;
+    font-size: clamp(32px, 4.5vw, 52px);
+    line-height: 0.95;
+    letter-spacing: -0.035em;
+    color: var(--text-primary-aurora);
+  }
+  .hiw-grad {
+    background: linear-gradient(120deg, #c084fc 0%, #86efac 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 0 14px rgba(168, 85, 247, 0.4));
+  }
+
+  /* Steps row */
+  .hiw-steps {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 24px;
+  }
+  @media (max-width: 767px) {
+    .hiw-steps { grid-template-columns: 1fr; }
+  }
+
+  .hiw-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+    text-align: center;
+    position: relative;
+  }
+
+  /* Desktop horizontal connector */
+  .hiw-connector-line {
+    display: none;
+    position: absolute;
+    top: 26px; /* orb center */
+    left: calc(100% / 6);
+    right: calc(100% / 6);
+    height: 1px;
+    background: linear-gradient(90deg, rgba(168, 85, 247, 0.5), rgba(34, 197, 94, 0.4));
+    overflow: hidden;
+    transform-origin: left center;
+    transform: scaleX(0);
+    z-index: 1;
+  }
+  @media (min-width: 768px) {
+    .hiw-connector-line { display: block; }
+  }
+  .hiw-shimmer {
+    position: absolute;
+    top: 0;
+    left: -60%;
+    width: 60%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
+    animation: hiw-flow 2.5s ease-in-out infinite;
+  }
+  @keyframes hiw-flow {
+    from { left: -60%; }
+    to   { left: 100%; }
+  }
+
+  /* Mobile vertical connector */
+  .hiw-mobile-connector {
+    width: 1px;
+    height: 28px;
+    background: linear-gradient(180deg, rgba(168,85,247,0.5), rgba(168,85,247,0.1));
+    margin: 12px 0;
+    position: relative;
+    overflow: hidden;
+  }
+  .hiw-mobile-shimmer {
+    position: absolute;
+    left: 0;
+    top: -100%;
+    width: 100%;
+    height: 40%;
+    background: linear-gradient(180deg, transparent, rgba(255,255,255,0.5), transparent);
+    animation: hiw-flow-v 2s ease-in-out infinite;
+  }
+  @keyframes hiw-flow-v {
+    from { top: -40%; }
+    to   { top: 100%; }
+  }
+
+  /* Orb */
+  .hiw-orb-wrap {
+    position: relative;
+    z-index: 2;
+    margin-bottom: 20px;
+  }
+  .hiw-orb {
+    position: relative;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(168, 85, 247, 0.4);
+    backdrop-filter: blur(16px);
+    box-shadow: 0 0 22px rgba(168, 85, 247, 0.28), inset 0 0 10px rgba(168, 85, 247, 0.06);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+  }
+  .hiw-orb::after {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border-radius: 50%;
+    background: conic-gradient(rgba(168, 85, 247, 0.5) 0deg, rgba(34, 197, 94, 0.3) 180deg, transparent 360deg);
+    z-index: -1;
+    animation: hiw-orb-spin 5s linear infinite;
+  }
+  @keyframes hiw-orb-spin {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+  }
+  .hiw-orb-num {
+    font-family: 'Orbitron', monospace;
+    font-size: 12px;
+    font-weight: 400;
+    color: rgba(233, 213, 255, 0.9);
+    letter-spacing: 0.05em;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Step card */
+  .hiw-step-card {
+    position: relative;
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(20px);
+    border-radius: 14px;
+    padding: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    box-shadow: 0 0 24px rgba(168, 85, 247, 0.06);
+    width: 100%;
+  }
+  .hiw-step-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 14px;
+    padding: 1px;
+    background: linear-gradient(160deg, rgba(168, 85, 247, 0.25) 0%, rgba(255,255,255,0.04) 50%, rgba(34,197,94,0.12) 100%);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+  .hiw-step-title {
+    font-family: 'Exo 2', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    color: var(--text-primary-aurora);
+    margin-bottom: 8px;
+    letter-spacing: -0.01em;
+  }
+  .hiw-step-desc {
+    font-family: 'Exo 2', sans-serif;
+    font-weight: 300;
+    font-size: 12px;
+    line-height: 1.65;
+    color: var(--text-muted-aurora);
+    margin: 0;
+  }
+  .hiw-step-desc strong {
+    font-weight: 600;
+    color: rgba(192, 132, 252, 0.85);
+  }
+
+  /* CTA */
+  .hiw-cta {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 28px;
+    border-radius: 10px;
+    background: rgba(168, 85, 247, 0.1);
+    color: var(--text-primary-aurora);
+    font-family: 'Exo 2', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    text-decoration: none;
+    transition: background 0.25s, gap 0.2s, box-shadow 0.25s;
+  }
+  .hiw-cta::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 10px;
+    padding: 1px;
+    background: linear-gradient(135deg, rgba(168, 85, 247, 0.7), rgba(34, 197, 94, 0.35));
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+  .hiw-cta:hover {
+    background: rgba(168, 85, 247, 0.18);
+    box-shadow: 0 0 24px rgba(168, 85, 247, 0.25);
+    gap: 12px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hiw-shimmer, .hiw-mobile-shimmer { animation: none; }
+    .hiw-orb::after { animation: none; }
+  }
+</style>
 
 <script>
   import { gsap } from 'gsap'
@@ -87,13 +364,13 @@ const steps = [
 
   function initProcess() {
     const steps = document.querySelectorAll<HTMLElement>('.process-step')
-    const line = document.getElementById('process-line')
+    const line = document.getElementById('hiw-line')
     if (!steps.length) return
 
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
     if (reduced) {
       steps.forEach(s => { s.style.opacity = '1'; s.style.transform = '' })
-      if (line) line.style.transform = 'scaleX(1)'
+      if (line) { line.style.transform = 'scaleX(1)' }
       return
     }
 
@@ -104,14 +381,14 @@ const steps = [
     processTl.fromTo(
       steps,
       { opacity: 0, y: 30 },
-      { opacity: 1, y: 0, stagger: 0.15, duration: 0.6, ease: 'power2.out' }
+      { opacity: 1, y: 0, stagger: 0.18, duration: 0.65, ease: 'power2.out' }
     )
 
     if (line) {
       processTl.fromTo(
         line,
         { scaleX: 0 },
-        { scaleX: 1, duration: 0.6, ease: 'power2.out' },
+        { scaleX: 1, duration: 0.7, ease: 'power2.out' },
         '<'
       )
     }
