@@ -155,6 +155,8 @@ const faqs = [
     border-radius: 12px;
   }
   .flip-card.flipped .flip-card-inner { transform: rotateY(180deg); }
+  /* backdrop-filter breaks backface-visibility in composited layers — hide explicitly */
+  .flip-card.flipped .flip-front { visibility: hidden; }
 
   /* Shared face */
   .flip-front,
@@ -176,7 +178,6 @@ const faqs = [
     border: 1px solid rgba(168, 85, 247, 0.14);
     gap: 8px;
     transition: border-color 0.2s;
-    position: relative;
   }
   .flip-front::before {
     content: '';
