@@ -73,7 +73,7 @@ const year = new Date().getFullYear()
         <p class="text-sm leading-relaxed mb-5" style="color: var(--color-text-muted);">
           IT & digital solutions for small businesses and content creators.
         </p>
-        <a href="/contact" class="btn-primary text-sm">
+        <a href="/contact" class="btn-ghost text-sm">
           Get a Free Quote →
         </a>
       </div>
@@ -84,6 +84,9 @@ const year = new Date().getFullYear()
         <ul class="flex flex-col gap-2.5 list-none">
           <li><a href="/" class="text-sm transition-colors hover:text-white" style="color: var(--color-text-muted);">Home</a></li>
           <li><a href="/services" class="text-sm transition-colors hover:text-white" style="color: var(--color-text-muted);">All Services</a></li>
+          <li><a href="/for-businesses" class="text-sm transition-colors hover:text-white" style="color: var(--color-text-muted);">For Businesses</a></li>
+          <li><a href="/for-creators" class="text-sm transition-colors hover:text-white" style="color: var(--color-text-muted);">For Creators</a></li>
+          <li><a href="/for-individuals" class="text-sm transition-colors hover:text-white" style="color: var(--color-text-muted);">For Individuals</a></li>
           <li><a href="/contact" class="text-sm transition-colors hover:text-white" style="color: var(--color-text-muted);">Contact</a></li>
         </ul>
       </div>
@@ -146,9 +149,15 @@ const year = new Date().getFullYear()
       <p class="text-xs" style="color: var(--color-text-muted);">
         &copy; {year} Nightious. All rights reserved.
       </p>
-      <p class="text-xs" style="color: var(--color-text-muted);">
-        Your information is private and never shared.
-      </p>
+      <div class="flex flex-col sm:flex-row items-center gap-4">
+        <p class="text-xs" style="color: var(--color-text-muted);">
+          Your information is private and never shared.
+        </p>
+        <div class="flex gap-4">
+          <a href="/privacy" class="text-xs transition-colors hover:text-white" style="color: var(--color-text-muted);">Privacy Policy</a>
+          <a href="/terms" class="text-xs transition-colors hover:text-white" style="color: var(--color-text-muted);">Terms of Service</a>
+        </div>
+      </div>
     </div>
   </div>
 </footer>

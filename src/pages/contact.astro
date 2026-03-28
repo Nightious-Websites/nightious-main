@@ -3,6 +3,9 @@ import { Image } from 'astro:assets'
 import BaseLayout from '@/layouts/BaseLayout.astro'
 import SchemaBreadcrumb from '@/components/seo/SchemaBreadcrumb.astro'
 import GlassCard from '@/components/ui/GlassCard.astro'
+import AuroraBackground from '@/components/ui/AuroraBackground.astro'
+import ConstellationParticles from '@/components/ui/ConstellationParticles.astro'
+import HudBrackets from '@/components/ui/HudBrackets.astro'
 import contactSide from '@/assets/images/photos/contact-side.webp'
 import logoCompleteWhite from '@/assets/images/logos/logo-complete-white.png'
 
@@ -35,43 +38,95 @@ const serviceOptions = [
 >
   <SchemaBreadcrumb items={breadcrumbItems} />
 
-  <!-- Hero -->
+  <!-- ─── Hero ─────────────────────────────────────────────────────────────── -->
   <section
-    class="relative pt-32 pb-8 overflow-hidden"
+    class="contact-hero relative min-h-[52vh] flex flex-col items-center justify-center overflow-hidden pt-28 pb-12"
     aria-label="Contact hero"
+    id="contact-hero-section"
   >
+    <!-- Aurora -->
+    <AuroraBackground variant="subtle" colors="purple-pink" />
+
+    <!-- Particles -->
+    <ConstellationParticles density="low" colors="purple-emerald" />
+
+    <!-- HUD brackets -->
+    <HudBrackets />
+
+    <!-- Scan line -->
+    <div class="scan-line" aria-hidden="true"></div>
+
+    <!-- Grid overlay -->
     <div
-      class="absolute inset-0 pointer-events-none"
-      style="background: radial-gradient(ellipse at top center, rgba(124, 58, 237, 0.18) 0%, transparent 60%);"
+      class="absolute inset-0 bg-grid pointer-events-none"
+      style="z-index: 1; opacity: 0.3;"
       aria-hidden="true"
     ></div>
-    <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-      <p class="font-display text-xs tracking-[0.25em] mb-3" style="color: var(--color-purple-mid);">FREE CONSULTATION</p>
-      <h1 class="font-display text-4xl md:text-5xl mb-4 text-glow" style="color: var(--color-text-primary);">Let's Talk</h1>
-      <p class="text-base max-w-lg mx-auto" style="color: var(--color-text-muted);">
-        Describe your situation and we'll get back to you as soon as possible with a clear plan — no obligation.
+
+    <!-- Content -->
+    <div class="relative max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center" style="z-index: 20;">
+
+      <!-- Status pill -->
+      <div id="ctc-status" class="ctc-status-pill" style="opacity:0;">
+        <span class="pulse-dot" aria-hidden="true"></span>
+        <span>RESPONSE TIME: &lt; 4 HOURS</span>
+      </div>
+
+      <!-- Eyebrow -->
+      <div id="ctc-eyebrow" style="opacity:0; margin-bottom: 20px;">
+        <span class="glass-pill">GET IN TOUCH</span>
+      </div>
+
+      <!-- Headline -->
+      <h1 id="ctc-h1" class="ctc-h1" style="opacity:0;">
+        Let's <span class="gradient-text"><em class="accent-italic">Talk</em></span>
+      </h1>
+
+      <!-- Gradient divider -->
+      <div
+        id="ctc-divider"
+        class="gradient-divider my-6"
+        style="opacity:0; transform:scaleX(0); transform-origin:center;"
+        aria-hidden="true"
+      ></div>
+
+      <!-- Lead -->
+      <p id="ctc-lead" class="ctc-lead" style="opacity:0;">
+        Describe your situation and we'll get back to you with a clear plan — no&nbsp;obligation.
       </p>
+
     </div>
   </section>
 
-  <!-- Form + Trust -->
-  <section class="py-12 pb-20" aria-label="Contact form">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+  <!-- ─── Form + Trust + Image ────────────────────────────────────────────── -->
+  <section class="relative py-12 pb-24 overflow-hidden" aria-label="Contact form">
+
+    <!-- Subtle ambient glow -->
+    <div
+      class="absolute inset-0 pointer-events-none"
+      style="background: radial-gradient(ellipse 70% 40% at 30% 20%, rgba(124,58,237,0.06) 0%, transparent 70%); z-index: 0;"
+      aria-hidden="true"
+    ></div>
+
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" style="z-index: 1;">
       <div class="grid grid-cols-1 lg:grid-cols-7 gap-10">
 
-        <!-- Form -->
-        <div class="lg:col-span-3 xl:col-span-3">
-          <GlassCard class="p-8">
-            <!-- Success state (hidden by default) -->
+        <!-- ── Form ── -->
+        <div id="ctc-form-wrap" class="lg:col-span-3 xl:col-span-3" style="opacity:0; transform:translateY(24px);">
+          <div class="glass-strong neon-top rounded-2xl p-8">
+
+            <!-- Success state -->
             <div
               id="form-success"
               class="hidden flex-col items-center text-center gap-5 py-8"
             >
               <div
                 class="w-16 h-16 rounded-full flex items-center justify-center text-2xl"
-                style="background: rgba(124, 58, 237, 0.2);"
+                style="background: rgba(34, 197, 94, 0.15); border: 1px solid rgba(34, 197, 94, 0.3);"
               >
-                ✓
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M5 13l4 4L19 7" stroke="rgba(34,197,94,0.9)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
               </div>
               <h2 class="font-display text-xl" style="color: var(--color-text-primary);">Message received!</h2>
               <p class="text-sm" style="color: var(--color-text-muted);">
@@ -99,7 +154,7 @@ const serviceOptions = [
 
               <!-- Name -->
               <div class="flex flex-col gap-1.5">
-                <label for="contact-name" class="text-xs font-semibold tracking-wide" style="color: var(--color-purple-light); font-family: 'Exo 2', sans-serif;">
+                <label for="contact-name" class="form-label">
                   Your name <span aria-hidden="true">*</span>
                 </label>
                 <input
@@ -115,7 +170,7 @@ const serviceOptions = [
 
               <!-- Email -->
               <div class="flex flex-col gap-1.5">
-                <label for="contact-email" class="text-xs font-semibold tracking-wide" style="color: var(--color-purple-light); font-family: 'Exo 2', sans-serif;">
+                <label for="contact-email" class="form-label">
                   Email address <span aria-hidden="true">*</span>
                 </label>
                 <input
@@ -132,7 +187,7 @@ const serviceOptions = [
 
               <!-- Service -->
               <div class="flex flex-col gap-1.5">
-                <label for="contact-service" class="text-xs font-semibold tracking-wide" style="color: var(--color-purple-light); font-family: 'Exo 2', sans-serif;">
+                <label for="contact-service" class="form-label">
                   Service (optional)
                 </label>
                 <select
@@ -149,7 +204,7 @@ const serviceOptions = [
 
               <!-- Message -->
               <div class="flex flex-col gap-1.5">
-                <label for="contact-message" class="text-xs font-semibold tracking-wide" style="color: var(--color-purple-light); font-family: 'Exo 2', sans-serif;">
+                <label for="contact-message" class="form-label">
                   What do you need? <span aria-hidden="true">*</span>
                 </label>
                 <textarea
@@ -164,7 +219,7 @@ const serviceOptions = [
                 ></textarea>
               </div>
 
-              <!-- Error message -->
+              <!-- Error -->
               <p
                 id="form-error"
                 class="hidden text-sm"
@@ -177,66 +232,78 @@ const serviceOptions = [
                 Send My Message
               </button>
             </form>
-          </GlassCard>
+          </div>
         </div>
 
-        <!-- Trust signals -->
+        <!-- ── Trust + Next steps ── -->
         <aside class="lg:col-span-2 xl:col-span-2 flex flex-col gap-6">
-          <GlassCard class="p-6 flex flex-col gap-4">
+
+          <!-- Why Nightious -->
+          <div id="ctc-trust" class="glass p-6 flex flex-col gap-5 rounded-2xl" style="opacity:0; transform:translateX(20px);">
             <p class="font-display text-xs tracking-widest" style="color: var(--color-purple-mid);">WHY NIGHTIOUS</p>
-            <ul class="flex flex-col gap-4 list-none">
+
+            <!-- Stat badges -->
+            <div class="flex flex-wrap gap-2">
+              <span class="ctc-badge ctc-badge--emerald">★ 4.9/5 Rating</span>
+              <span class="ctc-badge">50+ Clients</span>
+              <span class="ctc-badge ctc-badge--emerald">Private & Secure</span>
+            </div>
+
+            <ul class="flex flex-col gap-3 list-none">
               <li class="flex items-start gap-3">
-                <span class="text-lg" aria-hidden="true">★★★★★</span>
-                <span class="text-sm" style="color: var(--color-text-muted);">4.9/5 rating across 50+ clients</span>
-              </li>
-              <li class="flex items-start gap-3">
-                <span class="text-lg" aria-hidden="true">⚡</span>
+                <span class="ctc-icon-wrap" aria-hidden="true">
+                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="rgba(168,85,247,0.8)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </span>
                 <span class="text-sm" style="color: var(--color-text-muted);">We'll be in touch as soon as possible</span>
               </li>
               <li class="flex items-start gap-3">
-                <span class="text-lg" aria-hidden="true">🔒</span>
+                <span class="ctc-icon-wrap" aria-hidden="true">
+                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="rgba(168,85,247,0.8)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </span>
                 <span class="text-sm" style="color: var(--color-text-muted);">Your information is private and never shared</span>
               </li>
               <li class="flex items-start gap-3">
-                <span class="text-lg" aria-hidden="true">📍</span>
+                <span class="ctc-icon-wrap" aria-hidden="true">
+                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="rgba(168,85,247,0.8)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </span>
                 <address class="text-sm not-italic" style="color: var(--color-text-muted);">
                   7901 4th St N, Suite 300<br />
                   St. Petersburg, FL 33702
                 </address>
               </li>
             </ul>
-          </GlassCard>
+          </div>
 
-          <GlassCard class="p-6 flex flex-col gap-4">
+          <!-- What Happens Next — 3-step timeline -->
+          <div id="ctc-next" class="glass p-6 flex flex-col gap-5 rounded-2xl" style="opacity:0; transform:translateX(20px);">
             <p class="font-display text-xs tracking-widest" style="color: var(--color-purple-mid);">WHAT HAPPENS NEXT</p>
-            <ol class="flex flex-col gap-4 list-none">
-              <li class="flex items-start gap-3">
-                <span
-                  class="w-7 h-7 rounded-full flex items-center justify-center font-display text-xs flex-shrink-0 mt-0.5"
-                  style="background: rgba(124, 58, 237, 0.2); color: var(--color-purple-light); border: 1px solid rgba(168, 85, 247, 0.3);"
-                >1</span>
-                <span class="text-sm" style="color: var(--color-text-muted);">We review your message and respond as soon as possible</span>
+            <ol class="flex flex-col gap-0 list-none relative">
+
+              <!-- Connecting line -->
+              <div class="ctc-step-line" aria-hidden="true"></div>
+
+              <li class="flex items-start gap-4 relative pb-6">
+                <span class="ctc-step-num flex-shrink-0">1</span>
+                <span class="text-sm pt-0.5" style="color: var(--color-text-muted);">We review your message and respond as soon as possible</span>
               </li>
-              <li class="flex items-start gap-3">
-                <span
-                  class="w-7 h-7 rounded-full flex items-center justify-center font-display text-xs flex-shrink-0 mt-0.5"
-                  style="background: rgba(124, 58, 237, 0.2); color: var(--color-purple-light); border: 1px solid rgba(168, 85, 247, 0.3);"
-                >2</span>
-                <span class="text-sm" style="color: var(--color-text-muted);">You receive a clear breakdown of your options</span>
+              <li class="flex items-start gap-4 relative pb-6">
+                <span class="ctc-step-num flex-shrink-0">2</span>
+                <span class="text-sm pt-0.5" style="color: var(--color-text-muted);">You receive a clear breakdown of your options</span>
               </li>
-              <li class="flex items-start gap-3">
-                <span
-                  class="w-7 h-7 rounded-full flex items-center justify-center font-display text-xs flex-shrink-0 mt-0.5"
-                  style="background: rgba(124, 58, 237, 0.2); color: var(--color-purple-light); border: 1px solid rgba(168, 85, 247, 0.3);"
-                >3</span>
-                <span class="text-sm" style="color: var(--color-text-muted);">We get to work — no long contracts required</span>
+              <li class="flex items-start gap-4 relative">
+                <span class="ctc-step-num flex-shrink-0">3</span>
+                <span class="text-sm pt-0.5" style="color: var(--color-text-muted);">We get to work — no long contracts required</span>
               </li>
             </ol>
-          </GlassCard>
+          </div>
         </aside>
 
-        <!-- Image panel — desktop only -->
-        <div class="hidden xl:block xl:col-span-2 relative rounded-2xl overflow-hidden" style="min-height: 600px;">
+        <!-- ── Image panel (xl+) with HUD overlay ── -->
+        <div
+          id="ctc-image"
+          class="hidden xl:block xl:col-span-2 relative rounded-2xl overflow-hidden"
+          style="min-height: 600px; opacity:0; transform:translateX(24px);"
+        >
           <Image
             src={contactSide}
             alt=""
@@ -246,13 +313,33 @@ const serviceOptions = [
             sizes="(max-width: 1280px) 0px, 300px"
             aria-hidden="true"
           />
+          <!-- Dark + color overlay -->
           <div
             class="absolute inset-0"
-            style="background: linear-gradient(to bottom, rgba(2,0,10,0.3) 0%, rgba(120,81,169,0.25) 60%, rgba(2,0,10,0.8) 100%);"
+            style="background: linear-gradient(to bottom, rgba(2,0,10,0.35) 0%, rgba(120,58,237,0.18) 50%, rgba(2,0,10,0.82) 100%);"
             aria-hidden="true"
           ></div>
+
+          <!-- HUD scan line on image panel -->
+          <div class="scan-line" aria-hidden="true" style="z-index: 5;"></div>
+
+          <!-- Corner HUD brackets (small) -->
+          <HudBrackets size={20} inset={14} color="rgba(168,85,247,0.5)" />
+
+          <!-- Stat overlay pill — top of image -->
+          <div
+            class="absolute top-5 left-0 right-0 flex justify-center"
+            style="z-index: 10;"
+            aria-hidden="true"
+          >
+            <div class="ctc-image-stat">
+              <span class="pulse-dot" style="width:5px; height:5px;"></span>
+              <span>NATIONWIDE</span>
+            </div>
+          </div>
+
           <!-- Logo overlay at bottom -->
-          <div class="absolute bottom-8 left-0 right-0 flex flex-col items-center gap-3">
+          <div class="absolute bottom-8 left-0 right-0 flex flex-col items-center gap-3" style="z-index: 10;">
             <Image
               src={logoCompleteWhite}
               alt="Nightious"
@@ -271,7 +358,71 @@ const serviceOptions = [
   </section>
 </BaseLayout>
 
+<noscript>
+  <style>
+    #ctc-status, #ctc-eyebrow, #ctc-h1, #ctc-divider, #ctc-lead,
+    #ctc-form-wrap, #ctc-trust, #ctc-next, #ctc-image {
+      opacity: 1 !important;
+      transform: none !important;
+    }
+  </style>
+</noscript>
+
 <style>
+  /* ── Hero surface ── */
+  .contact-hero {
+    background: var(--color-bg-deep);
+  }
+
+  /* ── Status pill ── */
+  .ctc-status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 16px;
+    border-radius: 40px;
+    background: rgba(34, 197, 94, 0.07);
+    border: 1px solid rgba(34, 197, 94, 0.22);
+    font-family: 'Orbitron', monospace;
+    font-size: 9px;
+    font-weight: 400;
+    letter-spacing: 0.22em;
+    color: rgba(34, 197, 94, 0.85);
+    text-transform: uppercase;
+    margin-bottom: 24px;
+  }
+
+  /* ── Headline ── */
+  .ctc-h1 {
+    font-family: 'Exo 2', sans-serif;
+    font-weight: 900;
+    font-size: clamp(40px, 5.5vw, 64px);
+    line-height: 1.08;
+    letter-spacing: -0.03em;
+    color: var(--text-primary-aurora);
+    margin-bottom: 0;
+  }
+
+  /* ── Lead ── */
+  .ctc-lead {
+    font-family: 'Exo 2', sans-serif;
+    font-weight: 300;
+    font-size: clamp(15px, 1.8vw, 18px);
+    line-height: 1.75;
+    color: var(--text-muted-aurora);
+    max-width: 480px;
+    margin: 0 auto;
+  }
+
+  /* ── Form inputs ── */
+  .form-label {
+    font-family: 'Exo 2', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: var(--color-purple-light);
+  }
+
   .form-input {
     background: rgba(255, 255, 255, 0.04);
     border: 1px solid rgba(168, 85, 247, 0.2);
@@ -281,18 +432,20 @@ const serviceOptions = [
     font-family: 'Exo 2', sans-serif;
     font-size: 0.875rem;
     width: 100%;
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    transition: border-color 0.22s ease, box-shadow 0.22s ease, background 0.22s ease;
     min-height: 44px;
   }
 
   .form-input::placeholder {
     color: var(--color-text-muted);
+    opacity: 0.7;
   }
 
   .form-input:focus {
     outline: none;
     border-color: var(--color-purple-mid);
-    box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.15);
+    background: rgba(168, 85, 247, 0.04);
+    box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.2);
   }
 
   .form-input option {
@@ -303,16 +456,169 @@ const serviceOptions = [
   textarea.form-input {
     min-height: 120px;
   }
+
+  /* ── Trust badges ── */
+  .ctc-badge {
+    font-family: 'Orbitron', monospace;
+    font-size: 8px;
+    letter-spacing: 0.15em;
+    font-weight: 400;
+    padding: 5px 12px;
+    border-radius: 999px;
+    background: rgba(168, 85, 247, 0.1);
+    border: 1px solid rgba(168, 85, 247, 0.2);
+    color: rgba(168, 85, 247, 0.8);
+    text-transform: uppercase;
+  }
+  .ctc-badge--emerald {
+    background: rgba(34, 197, 94, 0.08);
+    border-color: rgba(34, 197, 94, 0.2);
+    color: rgba(34, 197, 94, 0.8);
+  }
+
+  /* ── Icon wrap ── */
+  .ctc-icon-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 6px;
+    flex-shrink: 0;
+    margin-top: 1px;
+    background: rgba(168, 85, 247, 0.1);
+    border: 1px solid rgba(168, 85, 247, 0.18);
+  }
+
+  /* ── Step numbers with connecting line ── */
+  .ctc-step-num {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Orbitron', monospace;
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--color-purple-light);
+    background: rgba(124, 58, 237, 0.2);
+    border: 1px solid rgba(168, 85, 247, 0.35);
+    position: relative;
+    z-index: 2;
+    box-shadow: 0 0 12px rgba(168, 85, 247, 0.2);
+  }
+
+  .ctc-step-line {
+    position: absolute;
+    left: 13px;
+    top: 28px;
+    bottom: 14px;
+    width: 1px;
+    background: linear-gradient(
+      to bottom,
+      rgba(168, 85, 247, 0.4),
+      rgba(168, 85, 247, 0.15),
+      transparent
+    );
+    z-index: 1;
+  }
+
+  /* ── Image stat pill ── */
+  .ctc-image-stat {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 12px;
+    border-radius: 999px;
+    background: rgba(2, 0, 10, 0.6);
+    border: 1px solid rgba(168, 85, 247, 0.3);
+    font-family: 'Orbitron', monospace;
+    font-size: 8px;
+    letter-spacing: 0.2em;
+    color: rgba(233, 213, 255, 0.65);
+    backdrop-filter: blur(8px);
+  }
 </style>
 
 <script>
+  import { gsap } from 'gsap'
+  import { ScrollTrigger } from 'gsap/ScrollTrigger'
+  gsap.registerPlugin(ScrollTrigger)
+
+  let tl: gsap.core.Timeline | null = null
+
+  function initAnimations() {
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
+    const status   = document.getElementById('ctc-status')
+    const eyebrow  = document.getElementById('ctc-eyebrow')
+    const h1       = document.getElementById('ctc-h1')
+    const divider  = document.getElementById('ctc-divider')
+    const lead     = document.getElementById('ctc-lead')
+    const formWrap = document.getElementById('ctc-form-wrap')
+    const trust    = document.getElementById('ctc-trust')
+    const next     = document.getElementById('ctc-next')
+    const image    = document.getElementById('ctc-image')
+
+    if (reduced) {
+      ;[status, eyebrow, h1, divider, lead, formWrap, trust, next, image].forEach(el => {
+        if (!el) return
+        el.style.opacity = '1'
+        el.style.transform = 'none'
+      })
+      return
+    }
+
+    // Hero entrance
+    tl = gsap.timeline({ defaults: { ease: 'power3.out' } })
+    tl
+      .fromTo(status,  { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.5 })
+      .fromTo(eyebrow, { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 0.55 }, '-=0.2')
+      .fromTo(h1,      { opacity: 0, y: 28, scale: 0.97 }, { opacity: 1, y: 0, scale: 1, duration: 0.8 }, '-=0.25')
+      .fromTo(divider, { opacity: 0, scaleX: 0 }, { opacity: 1, scaleX: 1, duration: 0.45, ease: 'power2.out' }, '-=0.35')
+      .fromTo(lead,    { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 0.55 }, '-=0.3')
+
+    // Form section scroll reveals
+    if (formWrap) {
+      gsap.fromTo(formWrap,
+        { opacity: 0, y: 24 },
+        { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out',
+          scrollTrigger: { trigger: formWrap, start: 'top 90%', once: true } }
+      )
+    }
+    if (trust) {
+      gsap.fromTo(trust,
+        { opacity: 0, x: 20 },
+        { opacity: 1, x: 0, duration: 0.55, ease: 'power2.out',
+          scrollTrigger: { trigger: trust, start: 'top 90%', once: true } }
+      )
+    }
+    if (next) {
+      gsap.fromTo(next,
+        { opacity: 0, x: 20 },
+        { opacity: 1, x: 0, duration: 0.55, ease: 'power2.out', delay: 0.1,
+          scrollTrigger: { trigger: next, start: 'top 90%', once: true } }
+      )
+    }
+    if (image) {
+      gsap.fromTo(image,
+        { opacity: 0, x: 24 },
+        { opacity: 1, x: 0, duration: 0.6, ease: 'power2.out', delay: 0.15,
+          scrollTrigger: { trigger: image, start: 'top 90%', once: true } }
+      )
+    }
+  }
+
   function initContactForm() {
-    const form = document.getElementById('contact-form') as HTMLFormElement | null
+    const form      = document.getElementById('contact-form') as HTMLFormElement | null
     const successEl = document.getElementById('form-success')
-    const errorEl = document.getElementById('form-error')
+    const errorEl   = document.getElementById('form-error')
     const submitBtn = document.getElementById('form-submit') as HTMLButtonElement | null
 
     if (!form) return
+    if (form.dataset.initialized) return
+    form.dataset.initialized = 'true'
 
     form.addEventListener('submit', async (e) => {
       e.preventDefault()
@@ -354,5 +660,16 @@ const serviceOptions = [
     })
   }
 
-  document.addEventListener('astro:page-load', initContactForm)
+  function initContact() {
+    initAnimations()
+    initContactForm()
+  }
+
+  document.addEventListener('astro:before-swap', () => {
+    tl?.kill()
+    tl = null
+    ScrollTrigger.getAll().forEach(t => t.kill())
+  })
+
+  document.addEventListener('astro:page-load', initContact)
 </script>

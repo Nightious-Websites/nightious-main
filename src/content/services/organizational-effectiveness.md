@@ -1,6 +1,6 @@
 ---
 title: Organizational Effectiveness
-tagline: Streamline operations with the right tools, workflows, and automations.
+tagline: Simplify operations with the right tools, workflows, and automations.
 description: Operations consulting for small businesses — tool selection, workflow design, project management setup, and process automation to reduce overhead.
 category: Operations
 color: purple

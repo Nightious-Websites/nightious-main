@@ -1,129 +1,237 @@
 ---
 import BundleLayout from '@/layouts/BundleLayout.astro'
 import BundleHero from '@/components/sections/BundleHero.astro'
-import LivingGrid from '@/components/sections/LivingGrid.astro'
+import { type WalkthroughSection } from '@/components/sections/BundleWalkthrough.astro'
+import ServiceTour, { type TourStep } from '@/components/sections/ServiceTour.astro'
 import CrossSell from '@/components/sections/CrossSell.astro'
 
 const accentRgb = '59, 130, 246'
 const accentColor = '#3b82f6'
 
-const services = [
+// 7 sections covering all 10 services
+const sections: WalkthroughSection[] = [
+  // ── 1. AI Integration — cinematic flagship ──────────────────────
   {
-    slug: 'ai-integration',
-    title: 'AI Integration',
-    icon: '<path stroke-linecap="round" stroke-linejoin="round" d="M8.25 3v1.5M4.5 8.25H3m18 0h-1.5M4.5 12H3m18 0h-1.5m-15 3.75H3m18 0h-1.5M8.25 19.5V21M12 3v1.5m0 15V21m3.75-18v1.5m0 15V21m-9-1.5h10.5a2.25 2.25 0 0 0 2.25-2.25V6.75a2.25 2.25 0 0 0-2.25-2.25H6.75A2.25 2.25 0 0 0 4.5 6.75v10.5a2.25 2.25 0 0 0 2.25 2.25Zm.75-12h9v9h-9v-9Z" />',
-    tier: 'hero' as const,
-    description:
-      'Workflow automation, custom AI agents, chatbots, phone triage, and smart analytics — built around how your business actually runs.',
-    features: [
-      'Custom AI agents & builds',
-      '24/7 phone & chat triage',
-      'Support automation',
-      'Smart reporting & analytics',
+    format: 'cinematic',
+    bgImage: '/images/photos/service-ai-integration-hero.webp',
+    problem: {
+      headline: "You're drowning in tasks your team shouldn't be doing",
+      description:
+        'Answering the same support questions, routing calls, compiling weekly reports, chasing follow-ups — every hour your team spends on these is an hour not spent growing your business. And it compounds every week.',
+      painPoints: [
+        'Repetitive support tickets eating hours of productive time',
+        'Manual reporting that takes half a day to compile each week',
+        'Phone inquiries going unanswered outside business hours',
+      ],
+    },
+    services: [
+      {
+        slug: 'ai-integration',
+        title: 'AI Integration',
+        icon: '<path stroke-linecap="round" stroke-linejoin="round" d="M8.25 3v1.5M4.5 8.25H3m18 0h-1.5M4.5 12H3m18 0h-1.5m-15 3.75H3m18 0h-1.5M8.25 19.5V21M12 3v1.5m0 15V21m3.75-18v1.5m0 15V21m-9-1.5h10.5a2.25 2.25 0 0 0 2.25-2.25V6.75a2.25 2.25 0 0 0-2.25-2.25H6.75A2.25 2.25 0 0 0 4.5 6.75v10.5a2.25 2.25 0 0 0 2.25 2.25Zm.75-12h9v9h-9v-9Z" />',
+        image: '/images/photos/service-ai-integration-1.webp',
+        solutionTagline:
+          'We build custom AI agents, phone triage systems, and workflow automation — designed around how your business actually runs, not a generic off-the-shelf template.',
+        features: ['Custom AI agents & builds', 'Phone & chat triage', 'Support automation', 'Smart reporting & analytics'],
+      },
     ],
   },
+
+  // ── 2. Website Solutions — panel ────────────────────────────────
   {
-    slug: 'website-solutions',
-    title: 'Website Solutions',
-    icon: '<path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9.004 9.004 0 0 0 8.716-6.747M12 21a9.004 9.004 0 0 1-8.716-6.747M12 21c2.485 0 4.5-4.038 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.038-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 0 1 7.843 4.582M12 3a8.997 8.997 0 0 0-7.843 4.582m15.686 0A11.953 11.953 0 0 1 12 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0 1 21 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0 1 12 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 0 1 3 12c0-1.605.42-3.113 1.157-4.418" />',
-    tier: 'standard' as const,
-    description:
-      'Sites built to convert visitors into paying customers. SEO-ready, mobile-first, designed around your business goals.',
-    features: [
-      'Custom design & development',
-      'E-commerce integration',
-      'SEO-ready from day one',
+    format: 'panel',
+    problem: {
+      headline: "Your website isn't pulling its weight",
+      description:
+        'Visitors land on your site, scroll for ten seconds, and leave. No inquiry, no call, no sale. Every week that passes without a site built to convert is leads quietly walking out the door.',
+      painPoints: [
+        'No clear path guiding visitors toward an inquiry or purchase',
+        'Not appearing in local or industry search results',
+        "Design that doesn't communicate credibility or build trust",
+      ],
+    },
+    services: [
+      {
+        slug: 'website-solutions',
+        title: 'Website Solutions',
+        icon: '<path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9.004 9.004 0 0 0 8.716-6.747M12 21a9.004 9.004 0 0 1-8.716-6.747M12 21c2.485 0 4.5-4.038 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.038-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 0 1 7.843 4.582M12 3a8.997 8.997 0 0 0-7.843 4.582m15.686 0A11.953 11.953 0 0 1 12 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0 1 21 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0 1 12 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 0 1 3 12c0-1.605.42-3.113 1.157-4.418" />',
+        image: '/images/photos/service-website-solutions-1.webp',
+        solutionTagline:
+          'We build sites engineered to convert — mobile-first, SEO-optimised, and designed around your specific business goals and customer journey.',
+        features: ['Custom design & development', 'E-commerce integration', 'SEO-ready from day one'],
+      },
     ],
   },
+
+  // ── 3. Digital Marketing — panel ────────────────────────────────
   {
-    slug: 'digital-marketing',
-    title: 'Digital Marketing',
-    icon: '<path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 0 1 3 19.875v-6.75ZM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V8.625ZM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V4.125Z" />',
-    tier: 'standard' as const,
-    description:
-      'SEO, Google Ads, TikTok, Reddit — campaigns that drive qualified leads and measurable growth.',
-    features: [
-      'Technical & on-page SEO',
-      'Multi-platform ads',
-      'Content strategy & publishing',
+    format: 'panel',
+    problem: {
+      headline: "Your competitors show up when customers search — you don't",
+      description:
+        "When a potential customer searches for what you do in your area, they find your competition first. That's not a visibility problem — it's a revenue problem that compounds every single day you're not ranking.",
+      painPoints: [
+        'No consistent pipeline of qualified leads from organic search',
+        'Ad spend going out with no clear return or reporting',
+        'Social presence that posts but never converts to actual business',
+      ],
+    },
+    services: [
+      {
+        slug: 'digital-marketing',
+        title: 'Digital Marketing',
+        icon: '<path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 0 1 3 19.875v-6.75ZM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V8.625ZM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V4.125Z" />',
+        image: '/images/photos/service-digital-marketing-1.webp',
+        solutionTagline:
+          "SEO, Google Ads, TikTok, Reddit — we build and run campaigns that drive qualified leads, with transparent reporting so you see exactly what's working.",
+        features: ['Technical & on-page SEO', 'Multi-platform ads', 'Content strategy & publishing'],
+      },
     ],
   },
+
+  // ── 4. Computer Services + Software Services — bundle ───────────
   {
-    slug: 'computer-services',
-    title: 'Computer Services',
-    icon: '<path stroke-linecap="round" stroke-linejoin="round" d="M9 17.25v1.007a3 3 0 0 1-.879 2.122L7.5 21h9l-.621-.621A3 3 0 0 1 15 18.257V17.25m6-12V15a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 15V5.25m18 0A2.25 2.25 0 0 0 18.75 3H5.25A2.25 2.25 0 0 0 3 5.25m18 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 7.409A2.25 2.25 0 0 1 2.25 5.493V5.25" />',
-    tier: 'standard' as const,
-    description:
-      'Your IT backbone. Remote diagnostics, virus removal, optimization — handled fast so you can focus on running your business.',
-    features: [
-      'Remote diagnostics',
-      'Virus & malware removal',
-      'Performance optimization',
+    format: 'bundle',
+    problem: {
+      headline: 'Your machines break down and your tools are fragmented',
+      description:
+        "A machine goes down mid-project. Your team runs on a dozen tools that don't talk to each other. Every outage is a disruption you can't afford, and every disconnected stack is quietly draining hours from your team every week.",
+      painPoints: [
+        "No fast IT support when something breaks — Google is your current IT department",
+        'Staff using personal accounts for business data with no central control',
+        'Performance issues and security exposures that compound over time',
+      ],
+    },
+    services: [
+      {
+        slug: 'computer-services',
+        title: 'Computer Services',
+        icon: '<path stroke-linecap="round" stroke-linejoin="round" d="M9 17.25v1.007a3 3 0 0 1-.879 2.122L7.5 21h9l-.621-.621A3 3 0 0 1 15 18.257V17.25m6-12V15a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 15V5.25m18 0A2.25 2.25 0 0 0 18.75 3H5.25A2.25 2.25 0 0 0 3 5.25m18 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 7.409A2.25 2.25 0 0 1 2.25 5.493V5.25" />',
+        image: '/images/photos/service-computer-services-1.webp',
+        solutionTagline:
+          'Remote diagnostics, virus removal, performance optimisation, and proactive monitoring — so your machines stay fast, clean, and out of your way.',
+        features: ['Remote diagnostics', 'Virus & malware removal', 'Performance optimization'],
+      },
+      {
+        slug: 'software-services',
+        title: 'Software Services',
+        icon: '<path stroke-linecap="round" stroke-linejoin="round" d="m6.75 7.5 3 2.25-3 2.25m4.5 0h3m-9 8.25h13.5A2.25 2.25 0 0 0 21 18V6a2.25 2.25 0 0 0-2.25-2.25H5.25A2.25 2.25 0 0 0 3 6v12a2.25 2.25 0 0 0 2.25 2.25Z" />',
+        image: '/images/photos/service-software-services-1.webp',
+        solutionTagline:
+          'Google Workspace or Microsoft 365, deployed, configured, and properly integrated — with training so your team actually uses it effectively from day one.',
+        features: ['Google & Microsoft deployment', 'Cloud services & security', 'User onboarding & training'],
+      },
     ],
   },
+
+  // ── 5. Email Solutions + Domain Solutions — bundle ───────────────
   {
-    slug: 'software-services',
-    title: 'Software Services',
-    icon: '<path stroke-linecap="round" stroke-linejoin="round" d="m6.75 7.5 3 2.25-3 2.25m4.5 0h3m-9 8.25h13.5A2.25 2.25 0 0 0 21 18V6a2.25 2.25 0 0 0-2.25-2.25H5.25A2.25 2.25 0 0 0 3 6v12a2.25 2.25 0 0 0 2.25 2.25Z" />',
-    tier: 'standard' as const,
-    description:
-      'Google Workspace, Microsoft 365, cloud tools — deployed, configured, and managed for your team.',
-    features: [
-      'Google & Microsoft deployment',
-      'Cloud services & security',
-      'User onboarding & training',
+    format: 'bundle',
+    problem: {
+      headline: 'Your online identity and email infrastructure are fragile',
+      description:
+        "Sending from a free Gmail address, domain managed on a registrar you haven't visited in years, SSL certificates expiring without warning. Each of these is a small crack that costs you credibility and reliability.",
+      painPoints: [
+        'Business emails landing in recipient spam folders',
+        'Domain and SSL spread across multiple vendors with no single view',
+        'No professional branded email — team still uses personal addresses for work',
+      ],
+    },
+    services: [
+      {
+        slug: 'email-solutions',
+        title: 'Email Solutions',
+        icon: '<path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" />',
+        image: '/images/photos/service-email-solutions-1.webp',
+        solutionTagline:
+          'Professional email on your own domain with SPF, DKIM, and DMARC fully configured — so your messages land in inboxes, not spam, and your brand looks the part.',
+        features: ['Custom domain email', 'SPF/DKIM/DMARC setup', 'Spam filtering'],
+      },
+      {
+        slug: 'domain-solutions',
+        title: 'Domain Solutions',
+        icon: '<path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 0 1 1.242 7.244l-4.5 4.5a4.5 4.5 0 0 1-6.364-6.364l1.757-1.757m13.35-.622 1.757-1.757a4.5 4.5 0 0 0-6.364-6.364l-4.5 4.5a4.5 4.5 0 0 0 1.242 7.244" />',
+        image: '/images/photos/service-domain-solutions-1.webp',
+        solutionTagline:
+          'Domain registration, DNS management, SSL, and CDN — all consolidated and maintained so your infrastructure is never an afterthought.',
+        features: ['Domain registration', 'DNS management', 'SSL & CDN'],
+      },
     ],
   },
+
+  // ── 6. Organizational Effectiveness + Training — bundle ──────────
   {
-    slug: 'email-solutions',
-    title: 'Email Solutions',
-    icon: '<path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" />',
-    tier: 'compact' as const,
-    description:
-      'Professional email on your domain. SPF, DKIM, DMARC configured. Your messages land in inboxes, not spam.',
-    features: ['Custom domain email', 'SPF/DKIM/DMARC setup', 'Spam filtering'],
+    format: 'bundle',
+    problem: {
+      headline: "Your operation has inefficiencies and they compound over time",
+      description:
+        "Hours are being lost between the quote and the invoice. Software has been deployed but adoption is low. Processes live in people's heads, and every new hire starts from zero because nothing is written down.",
+      painPoints: [
+        'Repeated bottlenecks that slow delivery with no obvious fix',
+        'Software deployments that never reach full adoption across the team',
+        "No internal documentation — every question goes to the same one or two people",
+      ],
+    },
+    services: [
+      {
+        slug: 'organizational-effectiveness',
+        title: 'Organizational Effectiveness',
+        icon: '<path stroke-linecap="round" stroke-linejoin="round" d="M3.75 3v11.25A2.25 2.25 0 0 0 6 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0 1 18 16.5h-2.25m-7.5 0h7.5m-7.5 0-1 3m8.5-3 1 3m0 0 .5 1.5m-.5-1.5h-9.5m0 0-.5 1.5m.75-9 3-3 2.148 2.148A12.061 12.061 0 0 1 16.5 7.605" />',
+        image: '/images/photos/service-organizational-effectiveness-1.webp',
+        solutionTagline:
+          "Operational audits, bottleneck mapping, and process redesign — we find where your business is losing time and build the systems to fix it permanently.",
+        features: ['Process audit', 'Bottleneck identification', 'SOP documentation'],
+      },
+      {
+        slug: 'training-documentation',
+        title: 'Training & Documentation',
+        icon: '<path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18a8.967 8.967 0 0 0-6 2.292m0-14.25v14.25" />',
+        image: '/images/photos/service-training-documentation-1.webp',
+        solutionTagline:
+          "Hands-on training and custom documentation built around how your team actually works — so the tools you've invested in deliver on their promise.",
+        features: ['Custom training', 'SOP creation', 'Onboarding materials'],
+      },
+    ],
   },
+
+  // ── 7. Custom Services — panel ───────────────────────────────────
   {
-    slug: 'domain-solutions',
-    title: 'Domain Solutions',
-    icon: '<path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 0 1 1.242 7.244l-4.5 4.5a4.5 4.5 0 0 1-6.364-6.364l1.757-1.757m13.35-.622 1.757-1.757a4.5 4.5 0 0 0-6.364-6.364l-4.5 4.5a4.5 4.5 0 0 0 1.242 7.244" />',
-    tier: 'compact' as const,
-    description:
-      'The right domain, registered and managed. DNS, SSL, CDN, and renewals — all handled.',
-    features: ['Domain registration', 'DNS management', 'SSL & CDN'],
-  },
-  {
-    slug: 'organizational-effectiveness',
-    title: 'Organizational Effectiveness',
-    icon: '<path stroke-linecap="round" stroke-linejoin="round" d="M3.75 3v11.25A2.25 2.25 0 0 0 6 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0 1 18 16.5h-2.25m-7.5 0h7.5m-7.5 0-1 3m8.5-3 1 3m0 0 .5 1.5m-.5-1.5h-9.5m0 0-.5 1.5m.75-9 3-3 2.148 2.148A12.061 12.061 0 0 1 16.5 7.605" />',
-    tier: 'compact' as const,
-    description:
-      'Operational audits, bottleneck identification, process redesign — we find where your business is losing time and fix it.',
-    features: ['Process audit', 'Bottleneck identification', 'SOP documentation'],
-  },
-  {
-    slug: 'custom-services',
-    title: 'Custom Services',
-    icon: '<path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75a4.5 4.5 0 0 1-4.884 4.484c-1.076-.091-2.264.071-2.95.904l-7.152 8.684a2.548 2.548 0 1 1-3.586-3.586l8.684-7.152c.833-.686.995-1.874.904-2.95a4.5 4.5 0 0 1 6.336-4.486l-3.276 3.276a3.004 3.004 0 0 0 2.25 2.25l3.276-3.276c.256.565.398 1.192.398 1.852Z" />',
-    tier: 'compact' as const,
-    description:
-      "Integrations, hybrid solutions, and consulting for problems that don't fit a standard category.",
-    features: ['Custom integrations', 'Hybrid solutions', 'Consulting'],
-  },
-  {
-    slug: 'training-documentation',
-    title: 'Training & Documentation',
-    icon: '<path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18a8.967 8.967 0 0 0-6 2.292m0-14.25v14.25" />',
-    tier: 'compact' as const,
-    description:
-      'Hands-on training and custom documentation so your team knows how to use what was built.',
-    features: ['Custom training', 'SOP creation', 'Onboarding materials'],
+    format: 'panel',
+    problem: {
+      headline: "Your problem doesn't fit a standard category",
+      description:
+        "You've looked at what's available and nothing quite covers what you need. Maybe it's a specific integration, a hybrid solution, or a consulting engagement around a decision you can't get wrong. Those are exactly the problems we take on.",
+      painPoints: [
+        'Technical requirements that fall between two standard service categories',
+        'One-off projects that require a custom scope and build',
+        'Strategic technology decisions that need an expert second opinion',
+      ],
+    },
+    services: [
+      {
+        slug: 'custom-services',
+        title: 'Custom Services',
+        icon: '<path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75a4.5 4.5 0 0 1-4.884 4.484c-1.076-.091-2.264.071-2.95.904l-7.152 8.684a2.548 2.548 0 1 1-3.586-3.586l8.684-7.152c.833-.686.995-1.874.904-2.95a4.5 4.5 0 0 1 6.336-4.486l-3.276 3.276a3.004 3.004 0 0 0 2.25 2.25l3.276-3.276c.256.565.398 1.192.398 1.852Z" />',
+        image: '/images/photos/service-custom-services-1.webp',
+        solutionTagline:
+          "Custom integrations, hybrid solutions, and consulting for problems that don't fit a pre-packaged service. If it's technical, we can help.",
+        features: ['Custom integrations', 'Hybrid solutions', 'Consulting'],
+      },
+    ],
   },
 ]
 
-const heroService = services.find(s => s.tier === 'hero')!
-const standardServices = services.filter(s => s.tier === 'standard')
-const compactServices = services.filter(s => s.tier === 'compact')
+// Flatten sections into tour steps
+const tourSteps: TourStep[] = sections.flatMap(section =>
+  section.services.map(service => ({
+    slug: service.slug,
+    title: service.title,
+    icon: service.icon,
+    image: service.image,
+    tagline: service.solutionTagline,
+    features: service.features,
+  }))
+)
 
 const crossSellBundles = [
   { href: '/for-creators', label: 'For Creators', accentRgb: '236, 72, 153', count: 9 },
@@ -133,7 +241,7 @@ const crossSellBundles = [
 
 <BundleLayout
   title="IT & Digital Solutions for Businesses | Nightious"
-  description="10 services tailored to run, grow, and protect your business. AI integration, web development, marketing, IT support, and more."
+  description="10 services built to run, grow, and protect your business. AI integration, web development, marketing, IT support, and more."
   audience="Businesses"
   accentColor={accentColor}
   accentRgb={accentRgb}
@@ -143,17 +251,10 @@ const crossSellBundles = [
     slot="hero"
     audience="Businesses"
     headline="Your complete tech stack"
-    tagline="tailored to run, grow, and protect your business."
+    tagline="built to run, grow, and protect your business."
     accentRgb={accentRgb}
-    serviceCount={services.length}
+    serviceCount={10}
   />
-  <LivingGrid
-    slot="grid"
-    heroService={heroService}
-    standardServices={standardServices}
-    compactServices={compactServices}
-    accentRgb={accentRgb}
-    columnCount={3}
-  />
+  <ServiceTour slot="grid" steps={tourSteps} accentRgb={accentRgb} />
   <CrossSell slot="crosssell" bundles={crossSellBundles} />
 </BundleLayout>

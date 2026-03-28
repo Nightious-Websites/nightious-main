@@ -1,0 +1,272 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro'
+import AuroraBackground from '@/components/ui/AuroraBackground.astro'
+---
+
+<BaseLayout
+  title="Privacy Policy — Nightious"
+  description="How Nightious collects, uses, and protects your personal information."
+  ogImage="/images/og/og-home.png"
+>
+  <!-- ── Hero ───────────────────────────────────────────────────────────────── -->
+  <section
+    class="relative pt-32 pb-12 overflow-hidden"
+    aria-label="Privacy policy hero"
+    id="privacy-hero"
+  >
+    <AuroraBackground variant="minimal" colors="purple-emerald" />
+
+    <div class="relative max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center" style="z-index: 10;">
+
+      <!-- Eyebrow -->
+      <div id="privacy-eyebrow" class="mb-4" style="opacity:0;">
+        <span class="glass-pill">LEGAL</span>
+      </div>
+
+      <!-- Title -->
+      <h1 id="privacy-title" class="legal-title text-glow" style="opacity:0;">
+        Privacy Policy
+      </h1>
+
+      <!-- Date -->
+      <p id="privacy-date" class="legal-date" style="opacity:0;">
+        Last updated: March 28, 2026
+      </p>
+
+      <!-- Gradient divider -->
+      <div
+        id="privacy-divider"
+        class="gradient-divider mt-6 mx-auto"
+        style="opacity:0; transform: scaleX(0); transform-origin: center;"
+        aria-hidden="true"
+      ></div>
+
+    </div>
+
+    <noscript>
+      <style>
+        #privacy-eyebrow, #privacy-title, #privacy-date,
+        #privacy-divider, #privacy-body {
+          opacity: 1 !important;
+          transform: none !important;
+        }
+      </style>
+    </noscript>
+  </section>
+
+  <!-- ── Content ─────────────────────────────────────────────────────────────── -->
+  <section class="py-10 pb-24" aria-label="Privacy policy content">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div
+        id="privacy-body"
+        class="glass neon-top legal-panel"
+        style="opacity:0;"
+      >
+        <div class="prose-content">
+
+          <h2>Introduction</h2>
+          <p>
+            Nightious respects your privacy. This policy explains what personal information we collect when you use our
+            website or engage our services, how we use it, and the choices you have.
+          </p>
+
+          <h2>Information We Collect</h2>
+
+          <h3>Contact Form Data</h3>
+          <p>
+            When you submit a contact or inquiry form, we collect your name, email address, service interest, and message
+            content. Forms are processed by <strong>Formspree</strong> on our behalf.
+          </p>
+
+          <h3>Analytics Data</h3>
+          <p>
+            We use <strong>Vercel Analytics</strong> to understand how visitors interact with our site. Vercel Analytics
+            is privacy-focused and does not use cookies or track individual users across sites. Data collected includes
+            page views, device type, browser, and referral source — all aggregated and anonymized.
+          </p>
+
+          <h3>Performance Data</h3>
+          <p>
+            We use <strong>Vercel Speed Insights</strong> to monitor page load times and Core Web Vitals. This data is
+            anonymized and used solely to improve site performance.
+          </p>
+
+          <h3>Customer Communication Data</h3>
+          <p>
+            We use <strong>Intercom</strong> for customer support and communication. Intercom may collect your messages,
+            support interactions, device and browser information, IP address, and usage data to facilitate communication
+            and provide support.
+          </p>
+
+          <h2>How We Use Your Information</h2>
+          <ul>
+            <li>Respond to your inquiries and provide the services you request</li>
+            <li>Improve our website performance and user experience</li>
+            <li>Communicate with you about our services via Intercom</li>
+            <li>Send service-related updates — we do not send unsolicited marketing</li>
+          </ul>
+
+          <h2>Third-Party Services</h2>
+
+          <h3>Intercom</h3>
+          <p>
+            Customer messaging and support platform. Intercom may collect device and browser information, IP address, and
+            interaction data. Review <a href="https://www.intercom.com/legal/privacy" target="_blank" rel="noopener noreferrer">Intercom's Privacy Policy</a> for details.
+          </p>
+
+          <h3>Formspree</h3>
+          <p>
+            Form submission processing service. Formspree processes your form data to deliver it to us. Review
+            <a href="https://formspree.io/legal/privacy-policy" target="_blank" rel="noopener noreferrer">Formspree's Privacy Policy</a> for details.
+          </p>
+
+          <h3>Vercel Analytics</h3>
+          <p>
+            Privacy-focused analytics that does not use cookies or track individual users across sites. Data is
+            aggregated and anonymized.
+          </p>
+
+          <h3>Vercel Speed Insights</h3>
+          <p>
+            Performance monitoring that collects anonymized page load metrics. No personally identifiable information is
+            collected.
+          </p>
+
+          <h2>Cookies and Tracking</h2>
+          <ul>
+            <li>Vercel Analytics operates without cookies</li>
+            <li>Intercom may set cookies to support customer messaging functionality</li>
+            <li>We do not use third-party advertising or tracking cookies</li>
+          </ul>
+
+          <h2>Data Retention</h2>
+          <ul>
+            <li><strong>Contact form submissions</strong> — retained for the duration of the business relationship</li>
+            <li><strong>Analytics data</strong> — aggregated and anonymized, retained per Vercel's data policy</li>
+            <li><strong>Intercom data</strong> — retained per Intercom's data retention policy and our business needs</li>
+          </ul>
+
+          <h2>Your Rights</h2>
+          <p>You have the right to:</p>
+          <ul>
+            <li>Request access to the personal data we hold about you</li>
+            <li>Request deletion of your personal data</li>
+            <li>Opt out of non-essential communications</li>
+          </ul>
+          <p>
+            To exercise any of these rights, contact us at the address listed below.
+          </p>
+
+          <h2>Data Security</h2>
+          <ul>
+            <li>All pages are served over SSL/TLS encryption</li>
+            <li>Access to personal data is limited to those who need it</li>
+            <li>We review our security practices regularly</li>
+          </ul>
+
+          <h2>Children's Privacy</h2>
+          <p>
+            Our services are not directed to children under 13. We do not knowingly collect personal information from
+            children. If you believe we have inadvertently collected such data, please contact us and we will delete it.
+          </p>
+
+          <h2>Changes to This Policy</h2>
+          <p>
+            We may update this Privacy Policy from time to time. Changes will be posted on this page with an updated
+            date. Continued use of the site after changes constitutes acceptance of the updated policy.
+          </p>
+
+          <h2>Contact Us</h2>
+          <p>
+            For privacy-related questions or requests, contact us at:
+          </p>
+          <address style="font-style: normal;">
+            Nightious<br />
+            7901 4th St N, Suite 300<br />
+            St. Petersburg, FL 33702
+          </address>
+
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .legal-title {
+    font-family: 'Exo 2', sans-serif;
+    font-weight: 900;
+    font-size: clamp(30px, 5vw, 52px);
+    line-height: 1.1;
+    letter-spacing: -0.025em;
+    color: var(--text-primary-aurora);
+    margin-bottom: 0.5rem;
+  }
+
+  .legal-date {
+    font-family: 'Orbitron', monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--text-dim-aurora);
+  }
+
+  .legal-panel {
+    padding: 2.5rem;
+    border-radius: 20px;
+  }
+
+  @media (max-width: 640px) {
+    .legal-panel {
+      padding: 1.5rem 1.25rem;
+    }
+  }
+
+  /* h2 accent border inside glass panel */
+  .legal-panel :global(.prose-content h2) {
+    padding-left: 0.75rem;
+    border-left: 2px solid;
+    border-image: linear-gradient(to bottom, rgba(168, 85, 247, 0.7), rgba(34, 197, 94, 0.3)) 1;
+  }
+</style>
+
+<script>
+  import { gsap } from 'gsap'
+  import { ScrollTrigger } from 'gsap/ScrollTrigger'
+  gsap.registerPlugin(ScrollTrigger)
+
+  let privacyTl: gsap.core.Timeline | null = null
+
+  function initPrivacyAnimations() {
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
+    const eyebrow = document.getElementById('privacy-eyebrow')
+    const title   = document.getElementById('privacy-title')
+    const date    = document.getElementById('privacy-date')
+    const divider = document.getElementById('privacy-divider')
+    const body    = document.getElementById('privacy-body')
+
+    if (reduced) {
+      ;[eyebrow, title, date, divider, body].forEach(el => {
+        if (el) { el.style.opacity = '1'; el.style.transform = 'none' }
+      })
+      return
+    }
+
+    privacyTl = gsap.timeline({ defaults: { ease: 'power3.out' } })
+    if (eyebrow) privacyTl.fromTo(eyebrow, { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.45 })
+    if (title)   privacyTl.fromTo(title,   { opacity: 0, y: 22, scale: 0.98 }, { opacity: 1, y: 0, scale: 1, duration: 0.65 }, '-=0.2')
+    if (date)    privacyTl.fromTo(date,    { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.4 }, '-=0.25')
+    if (divider) privacyTl.fromTo(divider, { opacity: 0, scaleX: 0 }, { opacity: 1, scaleX: 1, duration: 0.5, ease: 'power2.out' }, '-=0.3')
+    if (body)    privacyTl.fromTo(body,    { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.6 }, '-=0.2')
+  }
+
+  document.addEventListener('astro:before-swap', () => {
+    privacyTl?.kill()
+    privacyTl = null
+    ScrollTrigger.getAll().forEach(t => t.kill())
+    document.removeEventListener('astro:page-load', initPrivacyAnimations)
+  })
+
+  document.addEventListener('astro:page-load', initPrivacyAnimations)
+</script>

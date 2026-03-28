@@ -18,7 +18,7 @@ Custom engagements are scoped around your specific situation. Past custom projec
 - **White-label client portals** — Secure login areas for clients to access files, reports, and invoices.
 - **Niche industry software** — Purpose-built tools for industries with no good off-the-shelf option.
 - **Multi-system migrations** — Moving an entire business stack (email, files, CRM, billing) simultaneously.
-- **Technical audits** — Comprehensive reviews of a business's entire digital footprint.
+- **Technical audits** — Full reviews of a business's entire digital footprint.
 - **Hybrid consulting + implementation** — Strategic advisory combined with hands-on execution.
 - **Ongoing fractional IT** — Part-time technical leadership and IT management without a full-time hire.
 

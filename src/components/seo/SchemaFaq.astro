@@ -1,0 +1,68 @@
+---
+// JSON-LD: FAQPage — homepage only
+// Mirrors the 7 Q&A pairs from FaqSection.astro
+const schema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Do you require long-term contracts?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. We do project-based work and flexible retainers. If it's not working out, you walk. Most clients stick around anyway.",
+      },
+    },
+    {
+      "@type": "Question",
+      "name": "How quickly can you start?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "We respond as soon as possible and can typically start discovery the same week. Fast turnaround is how we work, not a premium add-on.",
+      },
+    },
+    {
+      "@type": "Question",
+      "name": "Do I need to be technical to work with you?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. You tell us the problem, we handle the rest. If you have questions about what we did, we walk you through it.",
+      },
+    },
+    {
+      "@type": "Question",
+      "name": "What if I'm not sure what I need?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "That's what the free consultation is for. Tell us your goal and we'll map out the options. No pressure toward the expensive one.",
+      },
+    },
+    {
+      "@type": "Question",
+      "name": "How much does it cost?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Depends on what you need. A one-off fix is a flat fee. Ongoing support is a retainer. We give you a clear quote upfront — no surprise invoices.",
+      },
+    },
+    {
+      "@type": "Question",
+      "name": "What do you actually do?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Web design, IT support, AI automation, cybersecurity, and digital strategy. Most clients start with one problem and end up working with us across all of it.",
+      },
+    },
+    {
+      "@type": "Question",
+      "name": "How do I get started?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Book a free call and tell us what's going on. We'll tell you what we can do and what it costs. No commitment required.",
+      },
+    },
+  ],
+}
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(schema)} />

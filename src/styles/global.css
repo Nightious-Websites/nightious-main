@@ -11,17 +11,17 @@
 
 @font-face {
   font-family: 'Exo 2';
-  src: url('/fonts/Exo2-Regular.woff2') format('woff2');
-  font-weight: 400;
+  src: url('/fonts/Exo2-Variable.woff2') format('woff2');
+  font-weight: 100 900;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: 'Exo 2';
-  src: url('/fonts/Exo2-SemiBold.woff2') format('woff2');
-  font-weight: 600;
-  font-style: normal;
+  font-family: 'Instrument Serif';
+  src: url('/fonts/InstrumentSerif-Italic.woff2') format('woff2');
+  font-weight: 400;
+  font-style: italic;
   font-display: swap;
 }
 
@@ -51,6 +51,15 @@
   --color-accent-business:   59, 130, 246;
   --color-accent-creator:    236, 72, 153;
   --color-accent-individual: 34, 197, 94;
+
+  /* Direction B — Liquid Glass Aurora */
+  --color-emerald:           #22c55e;
+  --color-purple-aurora:     rgba(168, 85, 247, 0.1);
+  --color-emerald-aurora:    rgba(34, 197, 94, 0.07);
+  --glass-aurora-bg:         rgba(255, 255, 255, 0.03);
+  --text-primary-aurora:     rgba(233, 213, 255, 0.93);
+  --text-muted-aurora:       rgba(233, 213, 255, 0.60);
+  --text-dim-aurora:         rgba(233, 213, 255, 0.50);
 }
 
 /* ─── Base ───────────────────────────────────────────────────────────────────── */
@@ -68,8 +77,9 @@ body {
 
 /* ─── Glass utility ─────────────────────────────────────────────────────────── */
 .glass {
+  position: relative;
   background: var(--glass-bg);
-  border: 1px solid var(--glass-border);
+  background-blend-mode: luminosity;
   border-radius: var(--glass-radius);
   backdrop-filter: blur(var(--glass-blur));
   -webkit-backdrop-filter: blur(var(--glass-blur));
@@ -78,10 +88,32 @@ body {
     var(--glass-shadow-inner),
     var(--glass-shadow-ring);
 }
+.glass::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1.4px;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.35) 0%,
+    rgba(255, 255, 255, 0.12) 20%,
+    rgba(255, 255, 255, 0) 40%,
+    rgba(255, 255, 255, 0) 60%,
+    rgba(255, 255, 255, 0.12) 80%,
+    rgba(255, 255, 255, 0.35) 100%
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  z-index: 1;
+}
 
 /* ─── Typography ────────────────────────────────────────────────────────────── */
 .font-display {
-  font-family: 'Orbitron', sans-serif;
+  font-family: 'Orbitron', monospace;
   font-weight: 700;
 }
 
@@ -181,6 +213,16 @@ body {
   background-color: var(--color-bg-section);
 }
 
+/* ─── Section header ───────────────────────────────────────────────────── */
+.section-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 56px;
+  text-align: center;
+}
+
 /* ─── Reduced motion ────────────────────────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
   html {
@@ -212,8 +254,9 @@ body {
 
 /* ─── Glass strong variant ───────────────────────────────────────────────────── */
 .glass-strong {
+  position: relative;
   background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(168, 85, 247, 0.22);
+  background-blend-mode: luminosity;
   border-radius: var(--glass-radius);
   backdrop-filter: blur(32px);
   -webkit-backdrop-filter: blur(32px);
@@ -222,12 +265,33 @@ body {
     inset 0 0 40px rgba(168, 85, 247, 0.04),
     0 0 0 1px rgba(255, 255, 255, 0.05);
 }
+.glass-strong::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1.4px;
+  background: linear-gradient(
+    180deg,
+    rgba(168, 85, 247, 0.35) 0%,
+    rgba(255, 255, 255, 0.10) 30%,
+    rgba(255, 255, 255, 0) 50%,
+    rgba(255, 255, 255, 0.10) 70%,
+    rgba(168, 85, 247, 0.35) 100%
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  z-index: 1;
+}
 
 /* ─── Neon top border accent ─────────────────────────────────────────────────── */
 .neon-top {
   position: relative;
 }
-.neon-top::before {
+.neon-top::after {
   content: '';
   position: absolute;
   top: -1px;
@@ -236,6 +300,7 @@ body {
   height: 1px;
   background: linear-gradient(90deg, transparent, rgba(168, 85, 247, 0.8), rgba(232, 121, 249, 0.8), transparent);
   border-radius: var(--glass-radius) var(--glass-radius) 0 0;
+  z-index: 2;
 }
 
 /* ─── Neon divider ───────────────────────────────────────────────────────────── */
@@ -296,13 +361,131 @@ body {
 @media (prefers-reduced-motion: reduce) {
   .scan-line { animation: none; }
   .pulse-dot { animation: none; }
+  .glass-pill-dot { animation: none; }
+}
+
+/* ─── Glass pill (eyebrow badge) ─────────────────────────────────────────────── */
+.glass-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Orbitron', monospace;
+  font-size: 9px;
+  font-weight: 400;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: rgba(168, 85, 247, 0.75);
+  background: rgba(168, 85, 247, 0.10);
+  border: 1px solid rgba(168, 85, 247, 0.15);
+  border-radius: 999px;
+  padding: 7px 18px;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+.glass-pill--emerald {
+  color: rgba(34, 197, 94, 0.75);
+  background: rgba(34, 197, 94, 0.10);
+  border-color: rgba(34, 197, 94, 0.15);
+}
+.glass-pill-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: currentColor;
+  animation: glass-pill-pulse 2s ease-in-out infinite;
+}
+@keyframes glass-pill-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+/* ─── Video fade overlays ─────────────────────────────────────────────────────── */
+.video-fade-top,
+.video-fade-bottom {
+  position: absolute;
+  left: 0;
+  right: 0;
+  pointer-events: none;
+  z-index: 2;
+}
+.video-fade-top {
+  top: 0;
+  height: 160px;
+  background: linear-gradient(to bottom, var(--color-bg-deep), transparent);
+}
+.video-fade-bottom {
+  bottom: 0;
+  height: 240px;
+  background: linear-gradient(to top, var(--color-bg-deep), transparent);
+}
+
+/* ─── Italic accent ──────────────────────────────────────────────────────────── */
+.accent-italic {
+  font-family: 'Instrument Serif', Georgia, serif;
+  font-style: italic;
+  font-weight: 400;
+  margin-inline-end: 0.1em;
 }
 
 /* ─── Gradient text ─────────────────────────────────────────────────────────── */
 .gradient-text {
-  background: linear-gradient(135deg, var(--color-purple-light), var(--color-pink));
+  background: linear-gradient(135deg, #c084fc, #86efac);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+}
+
+/* ─── Gradient divider ───────────────────────────────────────────────────────── */
+.gradient-divider {
+  width: 60px;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(168, 85, 247, 0.7), rgba(34, 197, 94, 0.4));
+  margin: 0 auto;
+}
+
+/* ─── Prose content (shared by privacy + terms pages) ───────────────────────── */
+.prose-content h2 {
+  font-family: 'Exo 2', sans-serif;
+  font-weight: 700;
+  font-size: 1.25rem;
+  margin-top: 2.5rem;
+  margin-bottom: 1rem;
+  color: var(--color-text-primary);
+}
+.prose-content h3 {
+  font-family: 'Exo 2', sans-serif;
+  font-weight: 600;
+  font-size: 1rem;
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+  color: var(--color-text-primary);
+}
+.prose-content p,
+.prose-content li {
+  font-size: 0.875rem;
+  line-height: 1.7;
+  color: var(--color-text-muted);
+  margin-bottom: 1rem;
+}
+.prose-content ul {
+  list-style: disc;
+  padding-left: 1.5rem;
+}
+.prose-content strong {
+  color: var(--color-text-primary);
+  font-weight: 600;
+}
+.prose-content a {
+  color: var(--color-purple-light);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.prose-content a:hover {
+  color: var(--color-text-primary);
+}
+.prose-content address {
+  font-size: 0.875rem;
+  line-height: 1.7;
+  color: var(--color-text-muted);
 }
 

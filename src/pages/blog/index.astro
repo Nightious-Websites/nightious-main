@@ -1,0 +1,591 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro'
+import CtaBanner from '@/components/sections/CtaBanner.astro'
+import AuroraBackground from '@/components/ui/AuroraBackground.astro'
+import ConstellationParticles from '@/components/ui/ConstellationParticles.astro'
+import HudBrackets from '@/components/ui/HudBrackets.astro'
+import { getCollection } from 'astro:content'
+
+const posts = (await getCollection('blog', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+
+function formatDate(date: Date): string {
+  return date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
+}
+
+// Status pill label — dynamic if we have posts
+const newestPost = posts[0]
+const statusLabel = newestPost
+  ? `LATEST \u2022 ${formatDate(newestPost.data.date)}`
+  : 'INSIGHTS \u2022 LIVE'
+
+const featuredPost = posts[0]
+const remainingPosts = posts.slice(1)
+---
+
+<BaseLayout
+  title="Blog — Tech Tips, Insights & Updates | Nightious"
+  description="Practical tech tips, industry insights, and behind-the-scenes looks at how we help businesses and creators succeed online."
+  ogType="website"
+>
+  <!-- ── Hero ───────────────────────────────────────────────────────────────── -->
+  <section
+    class="relative min-h-[60vh] flex flex-col items-center justify-center overflow-hidden pt-32 pb-20"
+    aria-label="Blog hero"
+    id="blog-hero"
+  >
+    <AuroraBackground variant="subtle" colors="purple-emerald" />
+    <ConstellationParticles density="low" colors="purple-emerald" />
+    <HudBrackets size={28} inset={20} color="rgba(168,85,247,0.35)" />
+
+    <!-- Scan line -->
+    <div class="scan-line" aria-hidden="true"></div>
+
+    <div class="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center" style="z-index: 20;">
+
+      <!-- Status pill -->
+      <div id="blog-status" class="blog-status-pill">
+        <span class="pulse-dot" aria-hidden="true"></span>
+        <span>{statusLabel}</span>
+      </div>
+
+      <!-- Eyebrow -->
+      <div id="blog-eyebrow" class="mb-5" style="opacity:0;">
+        <span class="glass-pill">BLOG</span>
+      </div>
+
+      <!-- Headline -->
+      <h1 id="blog-h1" class="blog-h1" style="opacity:0;">
+        Where ideas<br />
+        become <span class="gradient-text accent-italic">clarity.</span>
+      </h1>
+
+      <!-- Gradient divider -->
+      <div id="blog-divider" class="gradient-divider my-6 mx-auto" style="opacity:0; transform: scaleX(0); transform-origin: center;"></div>
+
+      <!-- Lead -->
+      <p id="blog-lead" class="blog-lead" style="opacity:0;">
+        Practical tech tips, industry insights, and behind-the-scenes looks at how we help businesses and creators.
+      </p>
+
+    </div>
+  </section>
+
+  <!-- ── Posts ──────────────────────────────────────────────────────────────── -->
+  <section class="pb-20" aria-label="Blog posts">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+      {posts.length === 0 ? (
+        <!-- Empty state -->
+        <div class="empty-state glass-strong neon-top" id="blog-empty">
+          <div class="empty-state-inner">
+            <span class="glass-pill glass-pill--emerald mb-6">COMING SOON</span>
+            <h2 class="empty-title">Something worth reading<br /><span class="accent-italic gradient-text">is on its way.</span></h2>
+            <p class="empty-sub">We're writing something that actually helps — not filler. Check back soon.</p>
+          </div>
+          <AuroraBackground variant="minimal" colors="purple-emerald" zIndex={1} />
+        </div>
+      ) : (
+        <div>
+          <!-- Featured post spotlight -->
+          {featuredPost && (() => {
+            const slug = featuredPost.id.replace(/\.mdx?$/, '')
+            return (
+              <article
+                class="featured-card glass-strong neon-top card-hover mb-10"
+                id="blog-featured"
+                style="opacity:0;"
+              >
+                <a href={`/blog/${slug}`} class="featured-link" aria-label={`Read: ${featuredPost.data.title}`}>
+                  {featuredPost.data.image && (
+                    <div class="featured-img-wrap">
+                      <img
+                        src={featuredPost.data.image}
+                        alt=""
+                        class="featured-img"
+                        loading="eager"
+                      />
+                      <div class="featured-img-overlay" aria-hidden="true"></div>
+                    </div>
+                  )}
+                  <div class="featured-body">
+                    <div class="featured-meta">
+                      <span class="glass-pill glass-pill--emerald featured-badge">
+                        <span class="pulse-dot" aria-hidden="true"></span>
+                        FEATURED
+                      </span>
+                      <span class="featured-date font-display">{formatDate(featuredPost.data.date)}</span>
+                    </div>
+                    <h2 class="featured-title">{featuredPost.data.title}</h2>
+                    <p class="featured-excerpt">{featuredPost.data.description}</p>
+                    {featuredPost.data.tags.length > 0 && (
+                      <div class="featured-tags">
+                        {featuredPost.data.tags.map((tag: string) => (
+                          <span class="tag-pill">{tag}</span>
+                        ))}
+                      </div>
+                    )}
+                    <span class="featured-cta">
+                      Read article
+                      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                        <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                      </svg>
+                    </span>
+                  </div>
+                </a>
+              </article>
+            )
+          })()}
+
+          <!-- Remaining posts grid -->
+          {remainingPosts.length > 0 && (
+            <ul class="posts-grid list-none" id="blog-grid">
+              {remainingPosts.map((post, i) => {
+                const slug = post.id.replace(/\.mdx?$/, '')
+                return (
+                  <li class="post-item" style="opacity:0;" data-index={i}>
+                    <article class="post-card glass card-hover h-full">
+                      <a href={`/blog/${slug}`} class="post-card-link" aria-label={`Read: ${post.data.title}`}>
+                        {post.data.image && (
+                          <div class="post-img-wrap">
+                            <img
+                              src={post.data.image}
+                              alt=""
+                              class="post-img"
+                              loading="lazy"
+                            />
+                          </div>
+                        )}
+                        <div class="post-body">
+                          <p class="post-date font-display">{formatDate(post.data.date)}</p>
+                          <h2 class="post-title">{post.data.title}</h2>
+                          <p class="post-excerpt">{post.data.description}</p>
+                          {post.data.tags.length > 0 && (
+                            <div class="post-tags">
+                              {post.data.tags.map((tag: string) => (
+                                <span class="tag-pill">{tag}</span>
+                              ))}
+                            </div>
+                          )}
+                          <span class="post-read-more">
+                            Read more
+                            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                              <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                          </span>
+                        </div>
+                      </a>
+                    </article>
+                  </li>
+                )
+              })}
+            </ul>
+          )}
+        </div>
+      )}
+
+    </div>
+  </section>
+
+  <CtaBanner />
+</BaseLayout>
+
+<noscript>
+  <style>
+    #blog-status, #blog-eyebrow, #blog-h1, #blog-divider, #blog-lead,
+    #blog-featured, #blog-empty, .post-item {
+      opacity: 1 !important;
+      transform: none !important;
+    }
+  </style>
+</noscript>
+
+<style>
+  /* ── Status pill ── */
+  .blog-status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 16px;
+    border-radius: 40px;
+    background: rgba(34, 197, 94, 0.07);
+    border: 1px solid rgba(34, 197, 94, 0.2);
+    font-family: 'Orbitron', monospace;
+    font-size: 9px;
+    font-weight: 400;
+    letter-spacing: 0.22em;
+    color: rgba(34, 197, 94, 0.8);
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    opacity: 0;
+  }
+
+  /* ── Headline ── */
+  .blog-h1 {
+    font-family: 'Exo 2', sans-serif;
+    font-weight: 900;
+    font-size: clamp(38px, 6vw, 68px);
+    line-height: 1.08;
+    letter-spacing: -0.03em;
+    color: var(--text-primary-aurora);
+    margin-bottom: 0;
+  }
+
+  /* ── Lead ── */
+  .blog-lead {
+    font-family: 'Exo 2', sans-serif;
+    font-weight: 300;
+    font-size: clamp(15px, 1.8vw, 18px);
+    line-height: 1.7;
+    color: var(--text-muted-aurora);
+    max-width: 480px;
+    margin: 0 auto;
+  }
+
+  /* ── Empty state ── */
+  .empty-state {
+    position: relative;
+    overflow: hidden;
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 4rem 3rem;
+    text-align: center;
+  }
+  .empty-state-inner {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .empty-title {
+    font-family: 'Exo 2', sans-serif;
+    font-weight: 900;
+    font-size: clamp(24px, 3.5vw, 36px);
+    line-height: 1.15;
+    color: var(--text-primary-aurora);
+    margin-bottom: 1rem;
+  }
+  .empty-sub {
+    font-family: 'Exo 2', sans-serif;
+    font-weight: 300;
+    font-size: 0.95rem;
+    color: var(--text-muted-aurora);
+    max-width: 380px;
+  }
+
+  /* ── Tag pills ── */
+  .tag-pill {
+    display: inline-block;
+    font-family: 'Exo 2', sans-serif;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    padding: 3px 10px;
+    border-radius: 999px;
+    background: rgba(168, 85, 247, 0.12);
+    color: var(--color-purple-light);
+    border: 1px solid rgba(168, 85, 247, 0.2);
+    text-transform: uppercase;
+  }
+
+  /* ── Featured card ── */
+  .featured-card {
+    position: relative;
+    overflow: hidden;
+    border-radius: 20px;
+  }
+  .featured-link {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: 380px;
+    text-decoration: none;
+    color: inherit;
+  }
+  @media (max-width: 768px) {
+    .featured-link {
+      grid-template-columns: 1fr;
+    }
+  }
+  .featured-img-wrap {
+    position: relative;
+    overflow: hidden;
+    min-height: 280px;
+  }
+  @media (max-width: 768px) {
+    .featured-img-wrap {
+      min-height: 200px;
+    }
+  }
+  .featured-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+  }
+  .featured-card:hover .featured-img {
+    transform: scale(1.04);
+  }
+  .featured-img-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, transparent 60%, rgba(2, 0, 10, 0.7) 100%);
+    pointer-events: none;
+  }
+  @media (max-width: 768px) {
+    .featured-img-overlay {
+      background: linear-gradient(180deg, transparent 60%, rgba(2, 0, 10, 0.7) 100%);
+    }
+  }
+  .featured-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 2.5rem 2rem;
+    gap: 0;
+    position: relative;
+    z-index: 5;
+  }
+  .featured-meta {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+  }
+  .featured-badge {
+    font-size: 8px;
+    padding: 4px 12px;
+    gap: 6px;
+  }
+  .featured-date {
+    font-family: 'Orbitron', monospace;
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    color: var(--text-dim-aurora);
+    text-transform: uppercase;
+  }
+  .featured-title {
+    font-family: 'Exo 2', sans-serif;
+    font-weight: 900;
+    font-size: clamp(20px, 2.5vw, 28px);
+    line-height: 1.15;
+    color: var(--text-primary-aurora);
+    margin-bottom: 0.75rem;
+    letter-spacing: -0.02em;
+  }
+  .featured-excerpt {
+    font-family: 'Exo 2', sans-serif;
+    font-weight: 300;
+    font-size: 0.9rem;
+    line-height: 1.65;
+    color: var(--text-muted-aurora);
+    margin-bottom: 1rem;
+  }
+  .featured-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 1.5rem;
+  }
+  .featured-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: 'Exo 2', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    color: rgba(168, 85, 247, 0.85);
+    transition: gap 0.2s ease, color 0.2s ease;
+  }
+  .featured-card:hover .featured-cta {
+    gap: 10px;
+    color: var(--color-purple-light);
+  }
+
+  /* ── Posts grid ── */
+  .posts-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+  @media (max-width: 1024px) {
+    .posts-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (max-width: 640px) {
+    .posts-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* ── Post card ── */
+  .post-card {
+    height: 100%;
+    border-radius: 16px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+  .post-card-link {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    text-decoration: none;
+    color: inherit;
+  }
+  .post-img-wrap {
+    width: 100%;
+    height: 180px;
+    overflow: hidden;
+  }
+  .post-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+  }
+  .post-card:hover .post-img {
+    transform: scale(1.05);
+  }
+  .post-body {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    padding: 1.5rem;
+    gap: 0;
+  }
+  .post-date {
+    font-family: 'Orbitron', monospace;
+    font-size: 8px;
+    letter-spacing: 0.2em;
+    color: var(--text-dim-aurora);
+    text-transform: uppercase;
+    margin-bottom: 0.6rem;
+  }
+  .post-title {
+    font-family: 'Exo 2', sans-serif;
+    font-weight: 700;
+    font-size: 1.05rem;
+    line-height: 1.3;
+    color: var(--text-primary-aurora);
+    margin-bottom: 0.6rem;
+    letter-spacing: -0.01em;
+  }
+  .post-excerpt {
+    font-family: 'Exo 2', sans-serif;
+    font-weight: 300;
+    font-size: 0.85rem;
+    line-height: 1.65;
+    color: var(--text-muted-aurora);
+    flex: 1;
+    margin-bottom: 1rem;
+  }
+  .post-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-bottom: 1rem;
+  }
+  .post-read-more {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-family: 'Exo 2', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    color: rgba(168, 85, 247, 0.75);
+    transition: gap 0.2s ease, color 0.2s ease;
+  }
+  .post-card:hover .post-read-more {
+    gap: 8px;
+    color: var(--color-purple-light);
+  }
+</style>
+
+<script>
+  import { gsap } from 'gsap'
+  import { ScrollTrigger } from 'gsap/ScrollTrigger'
+  gsap.registerPlugin(ScrollTrigger)
+
+  let blogTl: gsap.core.Timeline | null = null
+
+  function initBlogAnimations() {
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
+    const status   = document.getElementById('blog-status')
+    const eyebrow  = document.getElementById('blog-eyebrow')
+    const h1       = document.getElementById('blog-h1')
+    const divider  = document.getElementById('blog-divider')
+    const lead     = document.getElementById('blog-lead')
+    const featured = document.getElementById('blog-featured')
+    const gridItems = document.querySelectorAll<HTMLElement>('.post-item')
+    const empty    = document.getElementById('blog-empty')
+
+    if (reduced) {
+      ;[status, eyebrow, h1, divider, lead, featured, empty].forEach(el => {
+        if (el) { el.style.opacity = '1'; el.style.transform = 'none' }
+      })
+      gridItems.forEach(el => { el.style.opacity = '1'; el.style.transform = 'none' })
+      return
+    }
+
+    // Hero entrance
+    blogTl = gsap.timeline({ defaults: { ease: 'power3.out' } })
+    if (status)  blogTl.fromTo(status,  { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.45 })
+    if (eyebrow) blogTl.fromTo(eyebrow, { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 0.5 }, '-=0.2')
+    if (h1)      blogTl.fromTo(h1,      { opacity: 0, y: 30, scale: 0.97 }, { opacity: 1, y: 0, scale: 1, duration: 0.8 }, '-=0.25')
+    if (divider) blogTl.fromTo(divider, { opacity: 0, scaleX: 0 }, { opacity: 1, scaleX: 1, duration: 0.5, ease: 'power2.out' }, '-=0.4')
+    if (lead)    blogTl.fromTo(lead,    { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.5 }, '-=0.3')
+
+    // Featured post scroll-reveal
+    if (featured) {
+      ScrollTrigger.create({
+        trigger: featured,
+        start: 'top 85%',
+        onEnter: () => {
+          gsap.fromTo(featured,
+            { opacity: 0, y: 40 },
+            { opacity: 1, y: 0, duration: 0.75, ease: 'power3.out' }
+          )
+        },
+        once: true,
+      })
+    }
+
+    // Empty state reveal
+    if (empty) {
+      gsap.fromTo(empty, { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out', delay: 0.3 })
+    }
+
+    // Grid items staggered scroll-reveal with alternating directions
+    if (gridItems.length) {
+      gridItems.forEach((item, i) => {
+        const fromX = i % 3 === 0 ? -24 : i % 3 === 1 ? 0 : 24
+        const fromY = i % 3 === 1 ? 32 : 20
+        ScrollTrigger.create({
+          trigger: item,
+          start: 'top 88%',
+          onEnter: () => {
+            gsap.fromTo(item,
+              { opacity: 0, x: fromX, y: fromY },
+              { opacity: 1, x: 0, y: 0, duration: 0.6, delay: (i % 3) * 0.08, ease: 'power3.out' }
+            )
+          },
+          once: true,
+        })
+      })
+    }
+  }
+
+  document.addEventListener('astro:before-swap', () => {
+    blogTl?.kill()
+    blogTl = null
+    ScrollTrigger.getAll().forEach(t => t.kill())
+  })
+
+  document.addEventListener('astro:page-load', initBlogAnimations)
+</script>

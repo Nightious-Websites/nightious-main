@@ -1,54 +1,172 @@
 ---
-const items = [
-  'Website Solutions',
-  'Email Solutions',
-  'AI Integration',
-  'Digital Marketing',
-  'Computer Services',
-  'Streaming Consultation',
-  'Online Privacy',
-  'Domain Solutions',
-  'Software Services',
-  'Organizational Effectiveness',
-  'Custom Services',
-  'Training & Documentation',
+const stats = [
+  { num: 'Zero',    label: 'Long Contracts' },
+  { num: '7-Day',   label: 'Support' },
+  { num: 'Same-Day', label: 'Response' },
+  { num: '12',      label: 'Service Areas' },
+  { num: '100%',    label: 'US-Based Team' },
+  { num: '1-Day',   label: 'Setup Available' },
 ]
 ---
 
-<section class="section-alt overflow-hidden" aria-label="Our services">
-  <div class="glass-strong neon-top overflow-hidden">
-    <div class="ticker-track flex whitespace-nowrap">
-      <div class="flex items-center flex-shrink-0">
-        {items.map(item => (
-          <span class="flex items-center gap-6 px-6 py-4">
-            <span class="font-display text-xs tracking-widest gradient-text">{item}</span>
-            <span style="color: var(--color-text-muted);" aria-hidden="true">·</span>
-          </span>
-        ))}
-      </div>
-      <div class="flex items-center flex-shrink-0" aria-hidden="true">
-        {items.map(item => (
-          <span class="flex items-center gap-6 px-6 py-4">
-            <span class="font-display text-xs tracking-widest gradient-text">{item}</span>
-            <span style="color: var(--color-text-muted);">·</span>
-          </span>
-        ))}
-      </div>
+<section
+  class="st-ribbon"
+  aria-label="Service statistics"
+  style="background-color: var(--color-bg-deep);"
+>
+  <div class="st-track-wrap">
+    <!-- Two identical sets for seamless loop -->
+    <div class="st-track" aria-hidden="true">
+      {[...stats, ...stats].map(s => (
+        <div class="st-item">
+          <span class="st-num">{s.num}</span>
+          <span class="st-sep" aria-hidden="true">/</span>
+          <span class="st-label">{s.label}</span>
+          <span class="st-divider" aria-hidden="true">·</span>
+        </div>
+      ))}
+    </div>
+    <!-- Accessible, non-animated copy -->
+    <div class="st-track st-track-live" role="list">
+      {stats.map(s => (
+        <div class="st-item" role="listitem">
+          <span class="st-num">{s.num}</span>
+          <span class="st-sep" aria-hidden="true">/</span>
+          <span class="st-label">{s.label}</span>
+          <span class="st-divider" aria-hidden="true">·</span>
+        </div>
+      ))}
     </div>
   </div>
 </section>
 
 <style>
-  @keyframes ticker-scroll {
-    from { transform: translateX(0); }
-    to { transform: translateX(-50%); }
+  .st-ribbon {
+    position: relative;
+    height: 72px;
+    overflow: hidden;
+    border-top: 1px solid;
+    border-bottom: 1px solid;
+    border-image: linear-gradient(
+      90deg,
+      rgba(168, 85, 247, 0.3),
+      rgba(34, 197, 94, 0.2),
+      rgba(168, 85, 247, 0.3)
+    ) 1;
+    background: rgba(168, 85, 247, 0.04) !important;
   }
-  .ticker-track {
-    animation: ticker-scroll 40s linear infinite;
+
+  /* Edge fade masks */
+  .st-ribbon::before,
+  .st-ribbon::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 80px;
+    z-index: 2;
+    pointer-events: none;
   }
+  .st-ribbon::before {
+    left: 0;
+    background: linear-gradient(90deg, var(--color-bg-deep) 0%, transparent 100%);
+  }
+  .st-ribbon::after {
+    right: 0;
+    background: linear-gradient(270deg, var(--color-bg-deep) 0%, transparent 100%);
+  }
+
+  .st-track-wrap {
+    position: relative;
+    height: 100%;
+    display: flex;
+    align-items: center;
+  }
+
+  .st-track {
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+    flex-shrink: 0;
+    animation: st-scroll 28s linear infinite;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  /* The accessible live copy is screen-reader visible but visually hidden behind animated copy */
+  .st-track-live {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+    animation: none;
+  }
+
+  @keyframes st-scroll {
+    from { transform: translateX(0) translateY(-50%); }
+    to   { transform: translateX(-50%) translateY(-50%); }
+  }
+
+  .st-ribbon:hover .st-track {
+    animation-play-state: paused;
+  }
+
+  .st-item {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 5px;
+    padding: 0 24px;
+  }
+
+  .st-num {
+    font-family: 'Exo 2', sans-serif;
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 1;
+    background: linear-gradient(135deg, #a855f7, #22c55e);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 0 6px rgba(168, 85, 247, 0.5));
+  }
+
+  .st-sep {
+    font-family: 'Exo 2', sans-serif;
+    font-size: 11px;
+    color: rgba(168, 85, 247, 0.3);
+    line-height: 1;
+  }
+
+  .st-label {
+    font-family: 'Exo 2', sans-serif;
+    font-weight: 500;
+    font-size: 11px;
+    letter-spacing: 0.05em;
+    color: rgba(233, 213, 255, 0.65);
+    line-height: 1;
+  }
+
+  .st-divider {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.06);
+    padding-left: 24px;
+    line-height: 1;
+  }
+
   @media (prefers-reduced-motion: reduce) {
-    .ticker-track {
-      animation: none;
+    .st-track { animation: none; }
+    .st-track:not(.st-track-live) {
+      display: none;
+    }
+    .st-track-live {
+      position: relative !important;
+      opacity: 1 !important;
+      pointer-events: auto !important;
+      width: auto !important;
+      height: auto !important;
+      clip: auto !important;
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
     }
   }
 </style>

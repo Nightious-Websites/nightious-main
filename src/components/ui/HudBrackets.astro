@@ -1,0 +1,81 @@
+---
+interface Props {
+  size?:   number  // bracket arm length in px, default 36
+  inset?:  number  // distance from edges in px, default 24
+  color?:  string  // CSS color, default 'rgba(168,85,247,0.45)'
+  zIndex?: number
+}
+
+const {
+  size   = 36,
+  inset  = 24,
+  color  = 'rgba(168,85,247,0.45)',
+  zIndex = 20,
+} = Astro.props
+
+const dim    = `${size}px`
+const border = `1px solid ${color}`
+const pos    = `${inset}px`
+---
+
+<div
+  class="hud-brackets-container"
+  style={`z-index: ${zIndex};`}
+  aria-hidden="true"
+>
+  <!-- Top-left -->
+  <div
+    style={`
+      position: absolute;
+      top: ${pos}; left: ${pos};
+      width: ${dim}; height: ${dim};
+      border-top: ${border};
+      border-left: ${border};
+      pointer-events: none;
+    `}
+  ></div>
+
+  <!-- Top-right -->
+  <div
+    style={`
+      position: absolute;
+      top: ${pos}; right: ${pos};
+      width: ${dim}; height: ${dim};
+      border-top: ${border};
+      border-right: ${border};
+      pointer-events: none;
+    `}
+  ></div>
+
+  <!-- Bottom-left -->
+  <div
+    style={`
+      position: absolute;
+      bottom: ${pos}; left: ${pos};
+      width: ${dim}; height: ${dim};
+      border-bottom: ${border};
+      border-left: ${border};
+      pointer-events: none;
+    `}
+  ></div>
+
+  <!-- Bottom-right -->
+  <div
+    style={`
+      position: absolute;
+      bottom: ${pos}; right: ${pos};
+      width: ${dim}; height: ${dim};
+      border-bottom: ${border};
+      border-right: ${border};
+      pointer-events: none;
+    `}
+  ></div>
+</div>
+
+<style>
+  .hud-brackets-container {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+</style>

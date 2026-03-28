@@ -11,25 +11,22 @@ const testimonials = [
 ]
 
 const avatarGradients = [
-  'linear-gradient(135deg, #a855f7, #ec4899)',
-  'linear-gradient(135deg, #6366f1, #a855f7)',
-  'linear-gradient(135deg, #ec4899, #a855f7)',
-  'linear-gradient(135deg, #7c3aed, #06b6d4)',
+  'linear-gradient(135deg, rgba(168,85,247,0.7), rgba(34,197,94,0.5))',
+  'linear-gradient(135deg, rgba(34,197,94,0.6), rgba(168,85,247,0.6))',
+  'linear-gradient(135deg, rgba(168,85,247,0.8), rgba(192,132,252,0.5))',
+  'linear-gradient(135deg, rgba(34,197,94,0.7), rgba(168,85,247,0.4))',
 ]
 ---
 
-<section class="py-20 relative overflow-hidden" aria-label="Client testimonials" style="background-color: var(--color-bg-deep);">
-  <div
-    class="absolute inset-0 pointer-events-none"
-    style="background: radial-gradient(ellipse at center, rgba(168,85,247,0.06) 0%, transparent 60%);"
-    aria-hidden="true"
-  ></div>
+<section class="testi-section py-20 relative overflow-hidden" aria-label="Client testimonials">
+  <!-- Emerald aurora -->
+  <div class="testi-aurora" aria-hidden="true"></div>
 
   <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="text-center mb-12">
-      <p class="font-display text-xs tracking-[0.25em] mb-3" style="color: var(--color-purple-mid);">CLIENT RESULTS</p>
-      <h2 class="font-display text-3xl md:text-4xl" style="color: var(--color-text-primary);">
-        Don't take our word for it
+      <span class="glass-pill glass-pill--emerald" aria-hidden="true"><span class="glass-pill-dot"></span> Client Results</span>
+      <h2 class="testi-headline">
+        Don't take <span class="accent-italic">our</span> <span class="testi-grad">word for it.</span>
       </h2>
     </div>
   </div>
@@ -39,25 +36,22 @@ const avatarGradients = [
     <div class="carousel-overflow overflow-hidden">
       <div class="carousel-track flex gap-4" id="testimonial-track">
         {testimonials.map((t, i) => (
-          <article
-            class="testimonial-card glass flex-shrink-0 flex flex-col gap-3 p-6"
-            style="border-color: rgba(168,85,247,0.15);"
-          >
-            <div class="text-sm" style="color: var(--color-purple-mid);" aria-label="5 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-            <blockquote class="text-sm leading-relaxed flex-1" style="color: var(--color-text-primary);">
+          <article class="testimonial-card flex-shrink-0 flex flex-col gap-3 p-6">
+            <div class="testi-stars" aria-label="5 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+            <blockquote class="testi-quote flex-1">
               &ldquo;{t.quote}&rdquo;
             </blockquote>
             <footer class="flex items-center gap-3">
               <div
-                class="flex-shrink-0 flex items-center justify-center rounded-full text-xs font-bold text-white"
-                style={`width: 34px; height: 34px; background: ${avatarGradients[i % 4]};`}
+                class="testi-avatar flex-shrink-0 flex items-center justify-center rounded-full text-xs font-bold text-white"
+                style={`background: ${avatarGradients[i % 4]};`}
                 aria-hidden="true"
               >
                 {t.initials}
               </div>
               <div>
-                <p class="text-sm font-semibold" style="color: var(--color-text-primary);">{t.name}</p>
-                <p class="text-xs" style="color: var(--color-text-muted);">{t.company}</p>
+                <p class="testi-name">{t.name}</p>
+                <p class="testi-company">{t.company}</p>
               </div>
             </footer>
           </article>
@@ -66,44 +60,157 @@ const avatarGradients = [
     </div>
 
     <!-- Edge fades -->
-    <div class="absolute top-0 left-4 sm:left-6 lg:left-8 bottom-0 w-8 sm:w-16 pointer-events-none z-10"
-      style="background: linear-gradient(to right, var(--color-bg-deep), transparent);" aria-hidden="true"></div>
-    <div class="absolute top-0 right-4 sm:right-6 lg:right-8 bottom-0 w-8 sm:w-16 pointer-events-none z-10"
-      style="background: linear-gradient(to left, var(--color-bg-deep), transparent);" aria-hidden="true"></div>
+    <div class="testi-fade-left" aria-hidden="true"></div>
+    <div class="testi-fade-right" aria-hidden="true"></div>
   </div>
-
 </section>
 
 <style>
-  /* Responsive card widths — gap is gap-4 = 16px */
+  .testi-section {
+    background-color: var(--color-bg-section);
+    position: relative;
+  }
+
+  /* Emerald aurora blob */
+  .testi-aurora {
+    position: absolute;
+    width: 500px;
+    height: 360px;
+    background: radial-gradient(ellipse, rgba(34, 197, 94, 0.1) 0%, transparent 65%);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    filter: blur(60px);
+    pointer-events: none;
+    animation: testi-breathe 7s ease-in-out infinite;
+    z-index: 0;
+  }
+  @keyframes testi-breathe {
+    0%, 100% { opacity: 0.5; transform: translate(-50%,-50%) scale(1); }
+    50% { opacity: 0.9; transform: translate(-50%,-50%) scale(1.18); }
+  }
+
+  /* Headline */
+  .testi-headline {
+    font-family: 'Exo 2', sans-serif;
+    font-weight: 900;
+    font-size: clamp(32px, 4.5vw, 52px);
+    line-height: 1.05;
+    letter-spacing: -0.035em;
+    color: var(--text-primary-aurora);
+  }
+  .testi-grad {
+    background: linear-gradient(120deg, #86efac 0%, #c084fc 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 0 14px rgba(34, 197, 94, 0.35));
+  }
+
+  /* Testimonial cards */
   .testimonial-card {
-    /* Mobile: 1 card fills the track */
+    position: relative;
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border-radius: 14px;
+    transition: box-shadow 0.25s;
     width: 100%;
     flex-shrink: 0;
-    /* NOTE: No transform on hover — GSAP carousel controls translateX on the track.
-       Adding transform: scale here would conflict with that. Use box-shadow only. */
-    transition: box-shadow 0.2s, border-color 0.2s;
+  }
+  .testimonial-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 14px;
+    padding: 1px;
+    background: linear-gradient(160deg, rgba(168, 85, 247, 0.28) 0%, rgba(255,255,255,0.04) 50%, rgba(34,197,94,0.14) 100%);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+    transition: background 0.25s;
+  }
+  .testimonial-card:hover {
+    box-shadow: 0 0 30px rgba(168, 85, 247, 0.14);
+  }
+  .testimonial-card:hover::before {
+    background: linear-gradient(160deg, rgba(168, 85, 247, 0.5) 0%, rgba(255,255,255,0.06) 50%, rgba(34,197,94,0.22) 100%);
   }
 
   @media (min-width: 640px) {
-    /* Tablet: 2 cards. width = (100% - 1×16px) / 2 */
     .testimonial-card { width: calc(50% - 8px); }
   }
-
   @media (min-width: 1024px) {
-    /* Desktop: 4 cards. width = (100% - 3×16px) / 4 */
     .testimonial-card { width: calc(25% - 12px); }
   }
-
-  .testimonial-card:hover {
-    box-shadow: 0 0 24px rgba(168,85,247,0.15);
-    border-color: rgba(168,85,247,0.3) !important;
-  }
-
-  /* Reduced motion: static 2-col wrap */
   @media (prefers-reduced-motion: reduce) {
     .carousel-track { flex-wrap: wrap; }
     .testimonial-card { width: calc(50% - 8px); }
+  }
+
+  /* Card content */
+  .testi-stars {
+    font-size: 13px;
+    color: rgba(34, 197, 94, 0.85);
+    letter-spacing: 2px;
+  }
+  .testi-quote {
+    font-family: 'Exo 2', sans-serif;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--text-primary-aurora);
+    font-style: normal;
+  }
+  .testi-avatar {
+    width: 34px;
+    height: 34px;
+    font-family: 'Exo 2', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+  }
+  .testi-name {
+    font-family: 'Exo 2', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-primary-aurora);
+  }
+  .testi-company {
+    font-family: 'Exo 2', sans-serif;
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--text-muted-aurora);
+  }
+
+  /* Edge fades */
+  .testi-fade-left,
+  .testi-fade-right {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 60px;
+    pointer-events: none;
+    z-index: 10;
+  }
+  .testi-fade-left {
+    left: 16px;
+    background: linear-gradient(to right, var(--color-bg-section), transparent);
+  }
+  .testi-fade-right {
+    right: 16px;
+    background: linear-gradient(to left, var(--color-bg-section), transparent);
+  }
+  @media (min-width: 640px) {
+    .testi-fade-left { left: 24px; width: 80px; }
+    .testi-fade-right { right: 24px; width: 80px; }
+  }
+  @media (min-width: 1024px) {
+    .testi-fade-left { left: 32px; }
+    .testi-fade-right { right: 32px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .testi-aurora { animation: none; }
   }
 </style>
 
@@ -115,7 +222,6 @@ const avatarGradients = [
   let listenerAc: AbortController | null = null
 
   function initCarousel() {
-    // Clean up any previous state
     scrollTween?.kill()
     scrollTween = null
     if (resizeHandler) {
@@ -132,13 +238,11 @@ const avatarGradients = [
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
     if (reduced) return
 
-    // Remove clones from any previous init
     track.querySelectorAll('[data-cloned]').forEach(el => el.remove())
 
     const originals = Array.from(track.querySelectorAll<HTMLElement>('.testimonial-card'))
     if (originals.length === 0) return
 
-    // Append clones — makes the loop seamless by having identical content after the originals
     originals.forEach(card => {
       const clone = card.cloneNode(true) as HTMLElement
       clone.setAttribute('data-cloned', 'true')
@@ -148,28 +252,25 @@ const avatarGradients = [
 
     gsap.set(track, { x: 0 })
 
-    // Scroll distance = one full pass of original cards (clones pick up seamlessly)
     const cardWidth = originals[0].offsetWidth
-    const gap = 16 // gap-4 = 16px
+    const gap = 16
     const loopDistance = originals.length * (cardWidth + gap)
 
     scrollTween = gsap.to(track, {
       x: -loopDistance,
-      duration: originals.length * 5, // 5s per card
+      duration: originals.length * 5,
       ease: 'none',
       repeat: -1,
     })
 
-    // Pause on hover / touch / focus
     const overflow = track.closest('.carousel-overflow') as HTMLElement | null
     overflow?.addEventListener('mouseenter', () => scrollTween?.pause(), sig)
     overflow?.addEventListener('mouseleave', () => scrollTween?.resume(), sig)
-    overflow?.addEventListener('touchstart', () => scrollTween?.pause(), { passive: true, signal: listenerAc.signal })
-    overflow?.addEventListener('touchend', () => scrollTween?.resume(), { passive: true, signal: listenerAc.signal })
-    overflow?.addEventListener('focusin', () => scrollTween?.pause(), sig)
-    overflow?.addEventListener('focusout', () => scrollTween?.resume(), sig)
+    overflow?.addEventListener('touchstart', () => scrollTween?.pause(), { passive: true, signal: listenerAc!.signal })
+    overflow?.addEventListener('touchend',   () => scrollTween?.resume(), { passive: true, signal: listenerAc!.signal })
+    overflow?.addEventListener('focusin',    () => scrollTween?.pause(), sig)
+    overflow?.addEventListener('focusout',   () => scrollTween?.resume(), sig)
 
-    // Reinitialise on resize — card widths change at breakpoints
     resizeHandler = () => initCarousel()
     window.addEventListener('resize', resizeHandler, { passive: true })
   }

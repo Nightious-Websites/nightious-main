@@ -19,6 +19,8 @@ Nightious (nightious.com) is a technology services company providing practical I
 - [Homepage](https://nightious.com): Overview of services, client stats, how-it-works process, testimonials, and primary CTA
 - [Services](https://nightious.com/services): Full catalog of all ${services.length} service categories with audience filtering
 - [Contact](https://nightious.com/contact): Inquiry form and business details
+- [Privacy Policy](https://nightious.com/privacy): How Nightious collects, uses, and protects personal information
+- [Terms of Service](https://nightious.com/terms): Terms and conditions governing use of Nightious services and website
 
 ## Audience Pages
 

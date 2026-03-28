@@ -11,38 +11,45 @@ function isActive(href: string) {
   return pathname === href || pathname.startsWith(href + '/')
 }
 
+/* Grid visual order:
+   Row 1: Website (purple)  | AI (purple)       | Digital Marketing (pink)
+   Row 2: Computer (blue)   | Email (blue)       | Domain (blue)
+   Row 3: Software (purple) | Privacy (purple)   | Streaming (pink)
+   Row 4: Org Eff (purple)  | Training (purple)  | Custom (pink)         */
 const services = [
-  { slug: 'website-solutions',            title: 'Website Solutions',            icon: '🌐' },
-  { slug: 'email-solutions',              title: 'Email Solutions',              icon: '✉️' },
-  { slug: 'domain-solutions',             title: 'Domain Solutions',             icon: '🔗' },
-  { slug: 'ai-integration',               title: 'AI Integration',               icon: '🤖' },
-  { slug: 'digital-marketing',            title: 'Digital Marketing',            icon: '📈' },
-  { slug: 'computer-services',            title: 'Computer Services',            icon: '💻' },
-  { slug: 'streaming-consultation',       title: 'Streaming Consultation',       icon: '🎙️' },
-  { slug: 'online-privacy',               title: 'Online Privacy',               icon: '🔒' },
-  { slug: 'organizational-effectiveness', title: 'Organizational Effectiveness', icon: '⚙️' },
-  { slug: 'software-services',            title: 'Software Services',            icon: '🖥️' },
-  { slug: 'custom-services',              title: 'Custom Services',              icon: '✨' },
-  { slug: 'training-documentation',       title: 'Training & Documentation',     icon: '📚' },
+  { slug: 'website-solutions',            title: 'Website Solutions', icon: '🌐', color: 'purple', tagline: 'Fast sites built to convert.'      },
+  { slug: 'ai-integration',               title: 'AI Integration',    icon: '🤖', color: 'purple', tagline: 'Automate with custom AI.'           },
+  { slug: 'digital-marketing',            title: 'Digital Marketing', icon: '📈', color: 'pink',   tagline: 'Grow your audience online.'         },
+  { slug: 'computer-services',            title: 'Computer Services', icon: '💻', color: 'blue',   tagline: 'Setup, repair, and optimize.'       },
+  { slug: 'email-solutions',              title: 'Email Solutions',   icon: '✉️', color: 'blue',   tagline: 'Pro email on your domain.'          },
+  { slug: 'domain-solutions',             title: 'Domain Solutions',  icon: '🔗', color: 'blue',   tagline: 'The right domain, set up right.'    },
+  { slug: 'software-services',            title: 'Software Services', icon: '🖥️', color: 'purple', tagline: 'Custom scripts & integrations.'     },
+  { slug: 'online-privacy',               title: 'Online Privacy',    icon: '🔒', color: 'purple', tagline: 'VPNs, 2FA, digital hygiene.'        },
+  { slug: 'streaming-consultation',       title: 'Streaming',         icon: '🎙️', color: 'pink',   tagline: 'Go live like a pro.'                },
+  { slug: 'organizational-effectiveness', title: 'Org Effectiveness', icon: '⚙️', color: 'purple', tagline: 'Right tools, better workflows.'      },
+  { slug: 'training-documentation',       title: 'Training & Docs',   icon: '📚', color: 'purple', tagline: 'Make your team self-sufficient.'     },
+  { slug: 'custom-services',              title: 'Custom Services',   icon: '✨', color: 'pink',   tagline: 'Bespoke solutions for you.'          },
 ]
 
 const navLinks = [
-  { href: '/',               label: 'Home' },
-  { href: '/for-businesses', label: 'Businesses' },
+  { href: '/',                label: 'Home'        },
+  { href: '/for-businesses',  label: 'Businesses'  },
   { href: '/for-individuals', label: 'Individuals' },
-  { href: '/for-creators',   label: 'Creators' },
+  { href: '/for-creators',    label: 'Creators'    },
+  { href: '/blog',            label: 'Blog'        },
 ]
 ---
 
 <!-- ─── Header bar ─────────────────────────────────────────────────────────── -->
 <header id="navbar" class="fixed top-0 left-0 right-0 z-50">
   <nav
-    class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 grid grid-cols-3 items-center"
+    class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center"
     aria-label="Main"
   >
 
-    <!-- ① Logo (left) -->
-    <a href="/" aria-label="Nightious — Home" class="justify-self-start flex-shrink-0">
+    <!-- ① Logo (left) — flex-1 balances the right column so center stays centered -->
+    <div class="flex-1 flex items-center">
+    <a href="/" aria-label="Nightious — Home" class="flex-shrink-0">
       <Image
         src={logoWhite}
         alt="Nightious"
@@ -52,9 +59,10 @@ const navLinks = [
         loading="eager"
       />
     </a>
+    </div>
 
-    <!-- ② Center nav links (desktop only) -->
-    <div class="hidden md:flex items-center justify-center gap-6">
+    <!-- ② Center nav links — flex-1 flanks keep this naturally centered at any width -->
+    <div class="hidden md:flex items-center gap-6">
       {navLinks.map(link => (
         <a
           href={link.href}
@@ -68,14 +76,15 @@ const navLinks = [
     </div>
 
     <!-- ③ Right actions (desktop: Services + Contact | mobile: hamburger) -->
-    <div class="justify-self-end flex items-center gap-3">
+    <!-- relative here anchors the dropdown to the full right-column width -->
+    <div class="flex-1 flex items-center justify-end gap-3 relative">
 
       <!-- Services dropdown trigger — desktop only -->
-      <div class="hidden md:block relative" id="services-nav">
+      <div class="hidden md:block" id="services-nav">
         <button
           type="button"
           id="services-nav-btn"
-          aria-haspopup="true"
+          aria-haspopup="menu"
           aria-expanded="false"
           aria-controls="services-dropdown"
           class="nav-link text-sm font-semibold tracking-wide transition-colors flex items-center gap-1 cursor-pointer"
@@ -90,43 +99,62 @@ const navLinks = [
             <path d="M2.5 4.5L6 8L9.5 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </button>
+      </div>
 
-        <!-- Compact 2-column dropdown, anchored to right edge of trigger -->
-        <div
-          id="services-dropdown"
-          aria-label="Services"
-          class="services-dropdown absolute top-full right-0 mt-3 w-[380px] glass p-4"
-          style="border-radius: 14px;"
-        >
-          <div class="grid grid-cols-2 gap-0.5">
+      <!-- ── Mega-panel: outside trigger wrapper, anchored to right-column ── -->
+      <!-- right-0 aligns dropdown's right edge with Contact button's right edge -->
+      <div
+        id="services-dropdown"
+        aria-label="Services"
+        class="services-mega hidden md:block absolute top-full right-0 mt-4"
+      >
+          <!-- Panel header -->
+          <div class="flex items-center justify-between mb-4">
+            <span class="font-display text-[10px] tracking-[0.25em] uppercase" style="color: var(--color-purple-mid);">Services</span>
+            <a
+              href="/services"
+              class="text-[11px] font-semibold transition-colors"
+              style="color: var(--color-text-muted);"
+              tabindex="-1"
+            >12 solutions →</a>
+          </div>
+
+          <!-- 3-column service grid -->
+          <div class="grid grid-cols-3 gap-1">
             {services.map(s => (
               <a
                 href={`/services/${s.slug}`}
-                class="dropdown-item flex items-center gap-2 px-3 py-2 rounded-lg transition-colors text-xs"
-                style="color: var(--color-text-muted);"
+                class="svc-card flex items-center gap-2.5 px-3 py-2.5 rounded-[10px]"
+                data-color={s.color}
               >
-                <span class="text-sm flex-shrink-0" aria-hidden="true">{s.icon}</span>
-                <span class="font-medium leading-tight">{s.title}</span>
+                <div
+                  class="svc-icon-pill flex-shrink-0 flex items-center justify-center rounded-[8px] text-lg"
+                  data-color={s.color}
+                  aria-hidden="true"
+                >{s.icon}</div>
+                <div class="flex flex-col min-w-0">
+                  <span class="svc-title font-semibold leading-tight truncate">{s.title}</span>
+                  <span class="svc-tagline leading-snug">{s.tagline}</span>
+                </div>
               </a>
             ))}
           </div>
-          <div class="mt-3 pt-2.5 border-t" style="border-color: rgba(168, 85, 247, 0.15);">
-            <a
-              href="/services"
-              class="flex items-center justify-center gap-1.5 py-1.5 text-xs font-semibold tracking-wide transition-colors"
-              style="color: var(--color-purple-mid);"
-            >
-              View all 12 services →
-            </a>
-          </div>
+
+          <!-- Footer CTA -->
+          <div class="neon-divider mt-4 mb-3"></div>
+          <a
+            href="/services"
+            class="flex items-center justify-center gap-1.5 py-1 text-xs font-semibold tracking-wide gradient-text font-display transition-opacity hover:opacity-75"
+          >
+            Browse all 12 services →
+          </a>
         </div>
-      </div>
 
       <!-- Contact CTA — glow-breathe animation, desktop only -->
       <a
         href="/contact"
         aria-current={isActive('/contact') ? 'page' : undefined}
-        class="btn-contact hidden md:inline-flex items-center gap-1.5 text-sm font-semibold tracking-wide px-4 py-2 rounded-lg"
+        class="btn-contact hidden md:inline-flex items-center gap-1.5 text-sm font-semibold tracking-wide px-4 py-2 rounded-lg whitespace-nowrap"
       >
         Contact Us →
       </a>
@@ -200,6 +228,7 @@ const navLinks = [
         id="mobile-services-toggle"
         type="button"
         aria-expanded="false"
+        aria-controls="mobile-services-list"
         class="mobile-link flex items-center gap-2 py-3 px-8 text-2xl font-semibold tracking-wide transition-colors"
         style="color: var(--color-text-primary);"
       >
@@ -209,23 +238,29 @@ const navLinks = [
         </svg>
       </button>
 
-      <div id="mobile-services-list" class="hidden w-full items-center gap-0.5 pb-2 px-4">
+      <div id="mobile-services-list" class="hidden w-full gap-0.5 pb-2 px-4">
         {services.map(s => (
           <a
             href={`/services/${s.slug}`}
-            class="mobile-link flex items-center gap-2 py-2 px-4 text-sm rounded-lg transition-colors w-full max-w-xs justify-center"
-            style="color: var(--color-text-muted);"
+            class="mobile-link flex items-center gap-3 py-2.5 px-4 rounded-xl transition-colors w-full"
+            data-color={s.color}
           >
-            <span aria-hidden="true">{s.icon}</span>
-            {s.title}
+            <div
+              class="svc-icon-pill flex-shrink-0 flex items-center justify-center rounded-[8px] text-base"
+              data-color={s.color}
+              aria-hidden="true"
+            >{s.icon}</div>
+            <div class="flex flex-col">
+              <span class="text-sm font-semibold" style="color: var(--color-text-primary);">{s.title}</span>
+              <span class="svc-tagline">{s.tagline}</span>
+            </div>
           </a>
         ))}
         <a
           href="/services"
-          class="mobile-link py-2 px-4 text-xs font-semibold"
-          style="color: var(--color-purple-mid);"
+          class="mobile-link mt-1 py-2 px-4 text-xs font-semibold gradient-text font-display"
         >
-          View all services →
+          Browse all services →
         </a>
       </div>
     </div>
@@ -266,25 +301,82 @@ const navLinks = [
     color: var(--color-purple-light) !important;
   }
 
-  /* ── Services dropdown ──────────────────────────────────────────────── */
-  /* Override .glass background: darker base keeps it readable at any
-     scroll position — the navbar blur would otherwise "eat" the dropdown. */
-  #services-dropdown {
-    background: rgba(8, 0, 22, 0.95);
+  /* ── Services mega-panel ─────────────────────────────────────────────── */
+  .services-mega {
+    width: 640px;
+    background: rgba(5, 0, 15, 0.97);
+    border: 1px solid rgba(168, 85, 247, 0.25);
+    border-radius: 18px;
+    backdrop-filter: blur(40px);
+    -webkit-backdrop-filter: blur(40px);
+    box-shadow:
+      0 0 80px rgba(168, 85, 247, 0.18),
+      inset 0 0 40px rgba(168, 85, 247, 0.04),
+      0 0 0 1px rgba(255, 255, 255, 0.05);
+    padding: 20px;
     opacity: 0;
     pointer-events: none;
-    transform: translateY(6px);
+    transform: translateY(8px);
     transition: opacity 0.2s ease, transform 0.2s ease;
   }
-  .services-dropdown.is-open {
+  /* Neon top accent line */
+  .services-mega::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 12px;
+    right: 12px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(168, 85, 247, 0.8), rgba(232, 121, 249, 0.8), transparent);
+  }
+  .services-mega.is-open {
     opacity: 1;
     pointer-events: auto;
     transform: translateY(0);
   }
-  .dropdown-item:hover {
-    background: rgba(168, 85, 247, 0.1);
-    color: var(--color-purple-light) !important;
+
+  /* ── Service card (desktop + mobile) ─────────────────────────────────── */
+  .svc-card {
+    border: 1px solid transparent;
+    transition: background 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
   }
+  .svc-card[data-color="purple"]:hover {
+    background: rgba(168, 85, 247, 0.1);
+    border-color: rgba(168, 85, 247, 0.2);
+    transform: translateY(-1px);
+  }
+  .svc-card[data-color="pink"]:hover {
+    background: rgba(236, 72, 153, 0.1);
+    border-color: rgba(236, 72, 153, 0.2);
+    transform: translateY(-1px);
+  }
+  .svc-card[data-color="blue"]:hover {
+    background: rgba(96, 165, 250, 0.1);
+    border-color: rgba(96, 165, 250, 0.2);
+    transform: translateY(-1px);
+  }
+
+  /* ── Icon pill: 36×36, color-coded background ─────────────────────────── */
+  .svc-icon-pill {
+    width: 36px;
+    height: 36px;
+  }
+  .svc-icon-pill[data-color="purple"] { background: rgba(168, 85, 247, 0.18); }
+  .svc-icon-pill[data-color="pink"]   { background: rgba(236, 72, 153, 0.18); }
+  .svc-icon-pill[data-color="blue"]   { background: rgba(96, 165, 250, 0.18); }
+
+  /* ── Service text ────────────────────────────────────────────────────── */
+  .svc-title {
+    font-size: 13px;
+    color: var(--color-text-primary);
+  }
+  .svc-tagline {
+    font-size: 11px;
+    color: var(--color-text-muted);
+    line-height: 1.3;
+    margin-top: 1px;
+  }
+
   /* Chevron rotates when dropdown is open */
   #services-nav-btn.is-open .services-chevron {
     transform: rotate(180deg);
@@ -344,14 +436,21 @@ const navLinks = [
   import gsap from 'gsap'
 
   let navController: AbortController | null = null
+  // Module-level so cleanupNav can clear any pending timer before DOM swap
+  let closeTimer: ReturnType<typeof setTimeout> | null = null
 
   function cleanupNav(): void {
+    // Clear pending close timer before DOM is torn down
+    if (closeTimer) { clearTimeout(closeTimer); closeTimer = null }
+    // Abort all signal-attached listeners to prevent stale-DOM access
+    navController?.abort()
+    navController = null
     gsap.killTweensOf('#mobile-nav-links > *')
+    gsap.killTweensOf('#services-dropdown .svc-card')
     document.body.style.overflow = ''
   }
 
   function initNav(): void {
-    navController?.abort()
     navController = new AbortController()
     const { signal } = navController
 
@@ -374,6 +473,22 @@ const navLinks = [
     onScroll()
 
     // ── Mobile overlay ───────────────────────────────────────────────────
+    // Focus trap for mobile overlay
+    function trapFocus(e: KeyboardEvent) {
+      if (e.key !== 'Tab') return;
+      const focusableEls = overlay!.querySelectorAll<HTMLElement>(
+        'a[href]:not([tabindex="-1"]), button:not([disabled]):not([tabindex="-1"]), [tabindex="0"]'
+      );
+      if (focusableEls.length === 0) return;
+      const first = focusableEls[0];
+      const last = focusableEls[focusableEls.length - 1];
+      if (e.shiftKey) {
+        if (document.activeElement === first) { e.preventDefault(); last.focus(); }
+      } else {
+        if (document.activeElement === last) { e.preventDefault(); first.focus(); }
+      }
+    }
+
     function openOverlay(): void {
       if (!overlay || !hamburger) return
       overlay.classList.add('is-open')
@@ -390,6 +505,7 @@ const navLinks = [
       }
 
       overlayClose?.focus()
+      overlay.addEventListener('keydown', trapFocus)
     }
 
     function closeOverlay(): void {
@@ -398,6 +514,7 @@ const navLinks = [
       overlay.setAttribute('aria-hidden', 'true')
       hamburger.setAttribute('aria-expanded', 'false')
       document.body.style.overflow = ''
+      overlay.removeEventListener('keydown', trapFocus)
       hamburger.focus()
     }
 
@@ -409,26 +526,46 @@ const navLinks = [
       a.addEventListener('click', closeOverlay, { signal })
     )
 
+    // Auto-close mobile overlay when viewport resizes past md breakpoint
+    window.matchMedia('(min-width: 768px)').addEventListener('change', e => {
+      if (e.matches && overlay?.classList.contains('is-open')) closeOverlay()
+    }, { signal } as AddEventListenerOptions)
+
     document.addEventListener('keydown', e => {
-      if (e.key === 'Escape' && overlay?.classList.contains('is-open')) closeOverlay()
+      if (e.key === 'Escape') {
+        if (overlay?.classList.contains('is-open')) closeOverlay()
+        if (servicesDropdown?.classList.contains('is-open')) {
+          servicesDropdown.classList.remove('is-open')
+          servicesBtn?.classList.remove('is-open')
+          servicesBtn?.setAttribute('aria-expanded', 'false')
+          servicesBtn?.focus()
+        }
+      }
     }, { signal })
 
     // ── Desktop services dropdown (hover + click + gap-safe close delay) ─
-    let closeTimer: ReturnType<typeof setTimeout> | null = null
-
     const openDropdown = () => {
       if (closeTimer) { clearTimeout(closeTimer); closeTimer = null }
+      const alreadyOpen = servicesDropdown?.classList.contains('is-open')
       servicesDropdown?.classList.add('is-open')
       servicesBtn?.classList.add('is-open')
       servicesBtn?.setAttribute('aria-expanded', 'true')
+      if (!reducedMotion && !alreadyOpen) {
+        gsap.fromTo(
+          '#services-dropdown .svc-card',
+          { opacity: 0, y: 8 },
+          { opacity: 1, y: 0, stagger: 0.025, duration: 0.28, ease: 'power2.out', clearProps: 'all' }
+        )
+      }
     }
 
     const scheduleClose = () => {
       closeTimer = setTimeout(() => {
+        closeTimer = null
         servicesDropdown?.classList.remove('is-open')
         servicesBtn?.classList.remove('is-open')
         servicesBtn?.setAttribute('aria-expanded', 'false')
-      }, 150)
+      }, 600)
     }
 
     servicesNav?.addEventListener('mouseenter', openDropdown, { signal })
@@ -444,21 +581,13 @@ const navLinks = [
       else openDropdown()
     }, { signal })
 
-    // Close when clicking outside the services nav
+    // Click-outside: exclude both the trigger AND the dropdown panel (now siblings)
     document.addEventListener('click', (e) => {
-      if (!servicesNav?.contains(e.target as Node)) {
+      const target = e.target as Node
+      if (!servicesNav?.contains(target) && !servicesDropdown?.contains(target)) {
         servicesDropdown?.classList.remove('is-open')
         servicesBtn?.classList.remove('is-open')
         servicesBtn?.setAttribute('aria-expanded', 'false')
-      }
-    }, { signal })
-
-    document.addEventListener('keydown', e => {
-      if (e.key === 'Escape' && servicesDropdown?.classList.contains('is-open')) {
-        servicesDropdown.classList.remove('is-open')
-        servicesBtn?.classList.remove('is-open')
-        servicesBtn?.setAttribute('aria-expanded', 'false')
-        servicesBtn?.focus()
       }
     }, { signal })
 

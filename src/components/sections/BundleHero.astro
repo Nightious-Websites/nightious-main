@@ -1,4 +1,8 @@
 ---
+import AuroraBackground from '@/components/ui/AuroraBackground.astro'
+import ConstellationParticles from '@/components/ui/ConstellationParticles.astro'
+import HudBrackets from '@/components/ui/HudBrackets.astro'
+
 interface Props {
   audience: string
   headline: string
@@ -11,32 +15,224 @@ const { audience, headline, tagline, accentRgb, serviceCount } = Astro.props
 ---
 
 <section
-  class="relative py-24 lg:py-32 overflow-hidden"
+  class="bh-section relative flex flex-col items-center justify-center overflow-hidden"
   aria-label={`Services for ${audience}`}
-  style="background-color: var(--color-bg-deep);"
+  id="bundle-hero-section"
 >
-  <div
-    class="absolute inset-0 pointer-events-none"
-    style={`background-image: radial-gradient(circle, rgba(${accentRgb}, 0.4) 1px, transparent 1px); background-size: 28px 28px; opacity: 0.15;`}
-    aria-hidden="true"
-  ></div>
-  <div
-    class="absolute inset-0 pointer-events-none"
-    style={`background: radial-gradient(ellipse at center, rgba(${accentRgb}, 0.1) 0%, transparent 65%);`}
-    aria-hidden="true"
-  ></div>
-  <!-- Grid overlay -->
-  <div class="absolute inset-0 bg-grid pointer-events-none" aria-hidden="true"></div>
+  <!-- Aurora background: accent-colored per bundle -->
+  <AuroraBackground variant="subtle" colors="accent" accentRgb={accentRgb} zIndex={2} />
 
-  <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-    <p class="font-display text-xs tracking-[0.25em] mb-4" style={`color: rgba(${accentRgb}, 0.8);`}>
+  <!-- Constellation particles -->
+  <ConstellationParticles density="medium" colors="purple-emerald" zIndex={3} />
+
+  <!-- Grid texture overlay -->
+  <div class="absolute inset-0 bg-grid pointer-events-none" style="z-index: 4;" aria-hidden="true"></div>
+
+  <!-- Scan line -->
+  <div class="scan-line" style="z-index: 5;" aria-hidden="true"></div>
+
+  <!-- HUD corner brackets: accent-colored -->
+  <HudBrackets color={`rgba(${accentRgb}, 0.35)`} zIndex={20} />
+
+  <!-- Main content -->
+  <div class="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center" style="z-index: 20;">
+
+    <!-- Status pill -->
+    <div id="bh-status" class="bh-status-pill" style={`opacity:0; background: rgba(${accentRgb}, 0.07); border-color: rgba(${accentRgb}, 0.2); color: rgba(${accentRgb}, 0.8);`}>
+      <span
+        class="bh-pulse-dot"
+        style={`background: rgba(${accentRgb}, 0.9); box-shadow: 0 0 6px rgba(${accentRgb}, 0.8);`}
+        aria-hidden="true"
+      ></span>
+      <span>FOR {audience.toUpperCase()} &bull; {serviceCount} SERVICES</span>
+    </div>
+
+    <!-- Eyebrow glass-pill -->
+    <span
+      id="bh-eyebrow"
+      class="glass-pill bh-eyebrow"
+      style={`opacity:0; color: rgba(${accentRgb}, 0.75); background: rgba(${accentRgb}, 0.10); border-color: rgba(${accentRgb}, 0.15);`}
+      aria-hidden="true"
+    >
       FOR {audience.toUpperCase()}
-    </p>
-    <h1 class="font-display text-4xl sm:text-5xl lg:text-6xl tracking-wide mb-4" style="color: var(--color-text-primary);">
-      {headline}
+    </span>
+
+    <!-- Headline -->
+    <h1 id="bh-h1" class="bh-h1">
+      <span class="bh-h1-main gradient-text">{headline}</span><br />
+      <span class="bh-h1-sub accent-italic">{tagline}</span>
     </h1>
-    <p class="text-base sm:text-lg max-w-2xl mx-auto" style="color: var(--color-text-muted);">
-      {serviceCount} services {tagline}
-    </p>
+
+    <!-- Gradient divider: accent-colored -->
+    <div
+      id="bh-divider"
+      class="bh-divider"
+      style={`background: linear-gradient(90deg, rgba(${accentRgb}, 0.7), rgba(168, 85, 247, 0.4)); opacity:0; transform:scaleX(0);`}
+      aria-hidden="true"
+    ></div>
+
   </div>
+
+  <!-- Scroll cue -->
+  <div id="bh-scroll" class="bh-scroll-cue" aria-hidden="true">
+    <span>EXPLORE SERVICES</span>
+    <div class="bh-scroll-line" style={`background: linear-gradient(to bottom, rgba(${accentRgb}, 0.5), transparent);`}></div>
+  </div>
+
+  <noscript>
+    <style>
+      #bh-status, #bh-eyebrow, #bh-h1, #bh-divider, #bh-scroll {
+        opacity: 1 !important;
+        transform: none !important;
+      }
+    </style>
+  </noscript>
 </section>
+
+<style>
+  /* ── Section ── */
+  .bh-section {
+    min-height: 80vh;
+    min-height: 80dvh;
+    padding-top: 9rem;
+    padding-bottom: 5rem;
+    background-color: var(--color-bg-deep);
+  }
+
+  /* ── Status pill ── */
+  .bh-status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 16px;
+    border-radius: 40px;
+    border: 1px solid transparent;
+    font-family: 'Orbitron', monospace;
+    font-size: 9px;
+    font-weight: 400;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+  }
+
+  .bh-pulse-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    animation: bh-dot-pulse 2s ease-in-out infinite;
+  }
+  @keyframes bh-dot-pulse {
+    0%, 100% { opacity: 0.4; }
+    50%       { opacity: 1; }
+  }
+
+  /* ── Eyebrow ── */
+  .bh-eyebrow {
+    display: block;
+    width: fit-content;
+    margin: 0 auto 20px;
+  }
+
+  /* ── Headline ── */
+  .bh-h1 {
+    font-family: 'Exo 2', sans-serif;
+    font-weight: 900;
+    font-size: clamp(40px, 6vw, 72px);
+    line-height: 1.08;
+    letter-spacing: -0.035em;
+    color: var(--text-primary-aurora);
+    margin-bottom: 24px;
+    opacity: 0;
+  }
+
+  .bh-h1-main {
+    /* gradient-text from global.css handles this */
+  }
+
+  .bh-h1-sub {
+    /* accent-italic from global.css: Instrument Serif italic */
+    font-size: 0.88em;
+    color: var(--text-muted-aurora);
+    -webkit-text-fill-color: var(--text-muted-aurora);
+    background: none;
+  }
+
+  /* ── Divider ── */
+  .bh-divider {
+    width: 60px;
+    height: 1px;
+    margin: 0 auto 0;
+    transform-origin: center;
+  }
+
+  /* ── Scroll cue ── */
+  .bh-scroll-cue {
+    position: absolute;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 20;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    opacity: 0;
+    font-family: 'Orbitron', monospace;
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    color: var(--text-dim-aurora);
+    white-space: nowrap;
+  }
+
+  .bh-scroll-line {
+    width: 1px;
+    height: 36px;
+  }
+
+  /* ── Reduced motion ── */
+  @media (prefers-reduced-motion: reduce) {
+    .bh-pulse-dot { animation: none; }
+  }
+</style>
+
+<script>
+  import { gsap } from 'gsap'
+
+  let bundleHeroTl: gsap.core.Timeline | null = null
+
+  function initBundleHero() {
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
+    const ids = ['bh-status', 'bh-eyebrow', 'bh-h1', 'bh-divider', 'bh-scroll']
+    const els = ids.map(id => document.getElementById(id))
+
+    if (reduced) {
+      els.forEach(el => {
+        if (el) {
+          el.style.opacity = '1'
+          el.style.transform = 'none'
+        }
+      })
+      return
+    }
+
+    const [status, eyebrow, h1, divider, scroll] = els
+    if (!status) return // not on a bundle page
+
+    bundleHeroTl = gsap.timeline({ defaults: { ease: 'power3.out' } })
+    bundleHeroTl
+      .fromTo(status,  { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.5 })
+      .fromTo(eyebrow, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.6 }, '-=0.2')
+      .fromTo(h1,      { opacity: 0, y: 30, scale: 0.97 }, { opacity: 1, y: 0, scale: 1, duration: 0.85 }, '-=0.3')
+      .fromTo(divider, { opacity: 0, scaleX: 0 }, { opacity: 1, scaleX: 1, duration: 0.5, ease: 'power2.out' }, '-=0.4')
+      .fromTo(scroll,  { opacity: 0 }, { opacity: 1, duration: 0.5 }, '-=0.2')
+  }
+
+  document.addEventListener('astro:before-swap', () => {
+    bundleHeroTl?.kill()
+    bundleHeroTl = null
+  })
+
+  document.addEventListener('astro:page-load', initBundleHero)
+</script>

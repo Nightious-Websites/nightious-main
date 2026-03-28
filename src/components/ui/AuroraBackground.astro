@@ -1,0 +1,111 @@
+---
+interface Props {
+  variant?: 'full' | 'subtle' | 'minimal'
+  colors?: 'purple-emerald' | 'purple-pink' | 'accent'
+  accentRgb?: string
+  zIndex?: number
+}
+
+const {
+  variant = 'full',
+  colors = 'purple-emerald',
+  accentRgb = '168, 85, 247',
+  zIndex = 2,
+} = Astro.props
+
+// Blob dimensions per variant
+const sizes = {
+  full:    { primaryW: 700, primaryH: 500, secondaryW: 500, secondaryH: 400 },
+  subtle:  { primaryW: 500, primaryH: 350, secondaryW: 350, secondaryH: 280 },
+  minimal: { primaryW: 350, primaryH: 250, secondaryW: 250, secondaryH: 200 },
+}
+
+// Base opacity per variant (applied to the blob's radial gradient stop)
+const opacities = {
+  full:    { primary: 0.18, secondary: 0.10 },
+  subtle:  { primary: 0.11, secondary: 0.06 },
+  minimal: { primary: 0.07, secondary: 0.04 },
+}
+
+const { primaryW, primaryH, secondaryW, secondaryH } = sizes[variant]
+const { primary: primaryOpacity, secondary: secondaryOpacity } = opacities[variant]
+
+// Color resolution
+let primaryColor: string
+let secondaryColor: string
+
+if (colors === 'purple-emerald') {
+  primaryColor  = `rgba(168, 85, 247, ${primaryOpacity})`
+  secondaryColor = `rgba(34, 197, 94, ${secondaryOpacity})`
+} else if (colors === 'purple-pink') {
+  primaryColor  = `rgba(168, 85, 247, ${primaryOpacity})`
+  secondaryColor = `rgba(232, 121, 249, ${secondaryOpacity})`
+} else {
+  // accent mode — use accentRgb for primary, purple for secondary
+  primaryColor  = `rgba(${accentRgb}, ${primaryOpacity})`
+  secondaryColor = `rgba(168, 85, 247, ${secondaryOpacity})`
+}
+
+const primaryBg  = `radial-gradient(ellipse, ${primaryColor} 0%, transparent 65%)`
+const secondaryBg = `radial-gradient(ellipse, ${secondaryColor} 0%, transparent 65%)`
+---
+
+<div
+  class="aurora-bg-container"
+  style={`z-index: ${zIndex};`}
+  aria-hidden="true"
+>
+  <div
+    class="aurora-blob aurora-primary"
+    style={`width:${primaryW}px; height:${primaryH}px; background:${primaryBg};`}
+  ></div>
+  <div
+    class="aurora-blob aurora-secondary"
+    style={`width:${secondaryW}px; height:${secondaryH}px; background:${secondaryBg};`}
+  ></div>
+</div>
+
+<style>
+  .aurora-bg-container {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  .aurora-blob {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    pointer-events: none;
+  }
+
+  .aurora-primary {
+    top: -100px;
+    left: -100px;
+    animation: aurora-drift-a 10s ease-in-out infinite;
+  }
+
+  .aurora-secondary {
+    bottom: -80px;
+    right: -80px;
+    animation: aurora-drift-b 12s ease-in-out infinite;
+  }
+
+  @keyframes aurora-drift-a {
+    0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.7; }
+    50%       { transform: translate(60px, 40px) scale(1.12); opacity: 1; }
+  }
+
+  @keyframes aurora-drift-b {
+    0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.5; }
+    50%       { transform: translate(-40px, -30px) scale(1.08); opacity: 0.85; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .aurora-primary,
+    .aurora-secondary {
+      animation: none;
+    }
+  }
+</style>
