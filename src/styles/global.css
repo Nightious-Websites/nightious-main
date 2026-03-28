@@ -11,22 +11,6 @@
 
 @font-face {
   font-family: 'Exo 2';
-  src: url('/fonts/Exo2-Regular.woff2') format('woff2');
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Exo 2';
-  src: url('/fonts/Exo2-SemiBold.woff2') format('woff2');
-  font-weight: 600;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Exo 2';
   src: url('/fonts/Exo2-Variable.woff2') format('woff2');
   font-weight: 100 900;
   font-style: normal;
@@ -74,8 +58,8 @@
   --color-emerald-aurora:    rgba(34, 197, 94, 0.07);
   --glass-aurora-bg:         rgba(255, 255, 255, 0.03);
   --text-primary-aurora:     rgba(233, 213, 255, 0.93);
-  --text-muted-aurora:       rgba(233, 213, 255, 0.42);
-  --text-dim-aurora:         rgba(233, 213, 255, 0.22);
+  --text-muted-aurora:       rgba(233, 213, 255, 0.60);
+  --text-dim-aurora:         rgba(233, 213, 255, 0.50);
 }
 
 /* ─── Base ───────────────────────────────────────────────────────────────────── */
@@ -129,7 +113,7 @@ body {
 
 /* ─── Typography ────────────────────────────────────────────────────────────── */
 .font-display {
-  font-family: 'Orbitron', sans-serif;
+  font-family: 'Orbitron', monospace;
   font-weight: 700;
 }
 
@@ -227,6 +211,16 @@ body {
 /* ─── Section alternating bg ────────────────────────────────────────────────── */
 .section-alt {
   background-color: var(--color-bg-section);
+}
+
+/* ─── Section header ───────────────────────────────────────────────────── */
+.section-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 56px;
+  text-align: center;
 }
 
 /* ─── Reduced motion ────────────────────────────────────────────────────────── */
@@ -435,9 +429,63 @@ body {
 
 /* ─── Gradient text ─────────────────────────────────────────────────────────── */
 .gradient-text {
-  background: linear-gradient(135deg, var(--color-purple-light), var(--color-pink));
+  background: linear-gradient(135deg, #c084fc, #86efac);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+}
+
+/* ─── Gradient divider ───────────────────────────────────────────────────────── */
+.gradient-divider {
+  width: 60px;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(168, 85, 247, 0.7), rgba(34, 197, 94, 0.4));
+  margin: 0 auto;
+}
+
+/* ─── Prose content (shared by privacy + terms pages) ───────────────────────── */
+.prose-content h2 {
+  font-family: 'Exo 2', sans-serif;
+  font-weight: 700;
+  font-size: 1.25rem;
+  margin-top: 2.5rem;
+  margin-bottom: 1rem;
+  color: var(--color-text-primary);
+}
+.prose-content h3 {
+  font-family: 'Exo 2', sans-serif;
+  font-weight: 600;
+  font-size: 1rem;
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+  color: var(--color-text-primary);
+}
+.prose-content p,
+.prose-content li {
+  font-size: 0.875rem;
+  line-height: 1.7;
+  color: var(--color-text-muted);
+  margin-bottom: 1rem;
+}
+.prose-content ul {
+  list-style: disc;
+  padding-left: 1.5rem;
+}
+.prose-content strong {
+  color: var(--color-text-primary);
+  font-weight: 600;
+}
+.prose-content a {
+  color: var(--color-purple-light);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.prose-content a:hover {
+  color: var(--color-text-primary);
+}
+.prose-content address {
+  font-size: 0.875rem;
+  line-height: 1.7;
+  color: var(--color-text-muted);
 }
 

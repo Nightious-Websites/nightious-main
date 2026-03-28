@@ -1,10 +1,10 @@
 ---
-// JSON-LD: Organization + WebSite — homepage only
+// JSON-LD: LocalBusiness + Organization + WebSite — homepage only
 const schema = {
   "@context": "https://schema.org",
   "@graph": [
     {
-      "@type": "Organization",
+      "@type": ["LocalBusiness", "ProfessionalService", "Organization"],
       "@id": "https://nightious.com/#organization",
       "name": "Nightious",
       "url": "https://nightious.com",
@@ -14,12 +14,57 @@ const schema = {
         "width": 1123,
         "height": 1123,
       },
-      "description": "Web design, AI integration, IT support & digital marketing for small businesses and content creators.",
+      "image": "https://nightious.com/images/logos/icon-color.png",
+      "description": "Web design, AI integration, IT support & digital marketing for small businesses and content creators in St. Petersburg, FL.",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "7901 4th St N, Suite 300",
+        "addressLocality": "St. Petersburg",
+        "addressRegion": "FL",
+        "postalCode": "33702",
+        "addressCountry": "US",
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": 27.8161,
+        "longitude": -82.6268,
+      },
+      "openingHoursSpecification": [
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+          "opens": "14:00",
+          "closes": "23:00",
+        },
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": "Saturday",
+          "opens": "09:00",
+          "closes": "23:00",
+        },
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": "Sunday",
+          "opens": "12:00",
+          "closes": "23:00",
+        },
+      ],
+      "priceRange": "$$",
+      "areaServed": {
+        "@type": "Country",
+        "name": "US",
+      },
       "contactPoint": {
         "@type": "ContactPoint",
         "contactType": "customer service",
         "areaServed": "US",
         "availableLanguage": "English",
+      },
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.9",
+        "bestRating": "5",
+        "ratingCount": "50",
       },
     },
     {

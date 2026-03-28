@@ -1,0 +1,712 @@
+---
+export interface TourStep {
+  slug: string
+  title: string
+  icon: string
+  image: string
+  tagline: string
+  features: string[]
+}
+
+interface Props {
+  steps: TourStep[]
+  accentRgb: string
+}
+
+const { steps, accentRgb } = Astro.props
+const count = steps.length
+---
+
+<section class="st-section" aria-label="Service tour">
+
+  <!-- Accent aurora blob -->
+  <div
+    class="st-aurora-blob"
+    style={`background: radial-gradient(ellipse, rgba(${accentRgb}, 0.08) 0%, transparent 65%);`}
+    aria-hidden="true"
+  ></div>
+
+  <!-- Nav bar -->
+  <div class="st-nav-wrap">
+    <div class="container mx-auto px-6">
+
+      <!-- Tab row -->
+      <div class="st-tabs" role="tablist" aria-label="Service steps">
+        {steps.map((step, i) => (
+          <button
+            class={`st-tab${i === 0 ? ' active' : ''}`}
+            role="tab"
+            aria-selected={i === 0 ? 'true' : 'false'}
+            aria-controls={`st-panel-${i}`}
+            id={`st-tab-${i}`}
+            data-step={i}
+            data-accent={accentRgb}
+            tabindex={i === 0 ? 0 : -1}
+            style={i === 0
+              ? `background: rgba(${accentRgb}, 0.12); border-color: rgba(${accentRgb}, 0.3); color: rgba(${accentRgb}, 1);`
+              : ''}
+          >
+            <span class="st-tab-num">{String(i + 1).padStart(2, '0')}</span>
+            <span class="st-tab-label">{step.title}</span>
+          </button>
+        ))}
+      </div>
+
+      <!-- Progress bar -->
+      <div class="st-progress" role="progressbar" aria-valuemin={1} aria-valuemax={count} aria-valuenow={1} aria-label="Tour progress">
+        <div
+          class="st-progress-fill"
+          id="st-progress-fill"
+          style={`width: ${(1 / count) * 100}%; background: rgba(${accentRgb}, 0.7);`}
+        ></div>
+      </div>
+      <span class="st-progress-label" style={`color: rgba(${accentRgb}, 0.55);`}>
+        Step 1 of {count}
+      </span>
+
+    </div>
+  </div>
+
+  <!-- Neon divider between nav and panels -->
+  <div class="st-neon-divider neon-divider" aria-hidden="true"></div>
+
+  <!-- Panels -->
+  <div class="container mx-auto px-6" style="position:relative; z-index:10;">
+    <div id="st-panels">
+      {steps.map((step, i) => (
+        <div
+          class={`st-panel${i === 0 ? ' active' : ''}`}
+          role="tabpanel"
+          id={`st-panel-${i}`}
+          aria-labelledby={`st-tab-${i}`}
+          hidden={i !== 0}
+        >
+          <div class="st-panel-inner">
+
+            <!-- Left: text -->
+            <div class="st-text-col">
+              <!-- Icon + title -->
+              <div class="st-heading">
+                <div
+                  class="st-icon-wrap"
+                  style={`background: rgba(${accentRgb}, 0.1); border: 1px solid rgba(${accentRgb}, 0.2);`}
+                  aria-hidden="true"
+                >
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke={`rgba(${accentRgb}, 0.9)`} stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                    <path d={step.icon} />
+                  </svg>
+                </div>
+                <h3 class="st-step-title">{step.title}</h3>
+              </div>
+
+              <!-- Tagline -->
+              <p class="st-tagline">{step.tagline}</p>
+
+              <!-- Feature checklist -->
+              <ul class="st-features" aria-label={`${step.title} features`}>
+                {step.features.map((feat) => (
+                  <li class="st-feature-item">
+                    <span class="st-check" style={`color: rgba(${accentRgb}, 0.9);`} aria-hidden="true">
+                      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M2 7l3.5 3.5L12 3" />
+                      </svg>
+                    </span>
+                    <span>{feat}</span>
+                  </li>
+                ))}
+              </ul>
+
+              <!-- Learn more -->
+              <a
+                href={`/services/${step.slug}`}
+                class="st-learn-more"
+                style={`color: rgba(${accentRgb}, 0.9); border-color: rgba(${accentRgb}, 0.25);`}
+              >
+                Learn more
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                  <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </a>
+            </div>
+
+            <!-- Right: mock browser preview -->
+            <div class="st-preview" style={`--accent: rgba(${accentRgb}, 0.6);`}>
+              <div class="st-window" style={`border-color: rgba(${accentRgb}, 0.18); box-shadow: 0 0 50px rgba(${accentRgb}, 0.09), inset 0 0 30px rgba(${accentRgb}, 0.03), 0 0 0 1px rgba(255,255,255,0.03);`}>
+
+                <!-- macOS titlebar -->
+                <div class="st-titlebar">
+                  <div class="st-trafficlights" aria-hidden="true">
+                    <span class="st-dot st-dot--close"></span>
+                    <span class="st-dot st-dot--min"></span>
+                    <span class="st-dot st-dot--max"></span>
+                  </div>
+                  <span class="st-window-title" style={`color: rgba(${accentRgb}, 0.5);`}>
+                    {step.slug.replace(/-/g, ' ')}
+                  </span>
+                </div>
+
+                <!-- Image viewport -->
+                <div class="st-viewport">
+                  <img
+                    src={step.image}
+                    alt={`${step.title} preview`}
+                    class="st-img"
+                    loading={i === 0 ? 'eager' : 'lazy'}
+                    width="800"
+                    height="480"
+                  />
+                  <div class="st-img-glow" style={`background: radial-gradient(ellipse at 50% 100%, rgba(${accentRgb}, 0.12) 0%, transparent 70%);`} aria-hidden="true"></div>
+                </div>
+
+              </div>
+            </div>
+
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+
+</section>
+
+<!-- Noscript fallback: show all panels stacked -->
+<noscript>
+  <style>
+    .st-panel[hidden] { display: block !important; }
+    .st-panels-noscript { display: flex; flex-direction: column; gap: 3rem; }
+    .st-nav-wrap { display: none; }
+  </style>
+</noscript>
+
+<style>
+  /* ── Section ── */
+  .st-section {
+    position: relative;
+    background-color: var(--color-bg-deep);
+    padding: 64px 0 96px;
+    overflow: hidden;
+  }
+
+  /* ── Accent aurora blob ── */
+  .st-aurora-blob {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 800px;
+    height: 500px;
+    border-radius: 50%;
+    filter: blur(100px);
+    pointer-events: none;
+    z-index: 1;
+    animation: st-aurora-pulse 12s ease-in-out infinite;
+  }
+  @keyframes st-aurora-pulse {
+    0%, 100% { opacity: 0.6; transform: translate(-50%, -50%) scale(1); }
+    50%       { opacity: 1;   transform: translate(-50%, -50%) scale(1.1); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .st-aurora-blob { animation: none; }
+  }
+
+  /* ── Neon divider ── */
+  .st-neon-divider {
+    position: relative;
+    z-index: 10;
+    margin: 0 24px 32px;
+    opacity: 0.6;
+  }
+
+  /* ── Nav bar ── */
+  .st-nav-wrap {
+    position: relative;
+    z-index: 20;
+    padding: 16px 0;
+    margin-bottom: 40px;
+    background-color: var(--color-bg-deep);
+  }
+  @media (min-width: 1024px) {
+    .st-nav-wrap {
+      position: sticky;
+      top: 64px;
+    }
+  }
+
+  /* ── Tabs row ── */
+  .st-tabs {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    padding: 4px 0;
+    justify-content: center;
+  }
+  .st-tabs::-webkit-scrollbar { display: none; }
+
+  /* ── Individual tab pill ── */
+  .st-tab {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 44px;
+    min-width: 44px;
+    padding: 8px 16px;
+    flex-shrink: 0;
+    border-radius: 9999px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: var(--color-text-muted);
+    font-family: 'Exo 2', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.25s ease;
+  }
+  .st-tab:hover {
+    background: rgba(255, 255, 255, 0.07);
+    border-color: rgba(255, 255, 255, 0.12);
+  }
+
+  .st-tab-num {
+    font-family: 'Orbitron', monospace;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+  }
+
+  .st-tab-label {
+    display: none;
+  }
+  @media (min-width: 640px) {
+    .st-tab-label {
+      display: inline;
+      max-width: 100px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+  @media (min-width: 1024px) {
+    .st-tab-label { max-width: none; }
+  }
+
+  /* ── Progress bar ── */
+  .st-progress {
+    height: 2px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 9999px;
+    margin-top: 12px;
+    overflow: hidden;
+  }
+  .st-progress-fill {
+    height: 100%;
+    border-radius: 9999px;
+    transition: width 0.4s ease;
+  }
+  .st-progress-label {
+    font-family: 'Orbitron', monospace;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    margin-top: 8px;
+    display: block;
+    text-align: center;
+    text-transform: uppercase;
+  }
+
+  /* ── Panel ── */
+  .st-panel {
+    /* panels without .active or not hidden are not shown */
+  }
+
+  .st-panel-inner {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 40px;
+    align-items: center;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 0 24px;
+  }
+  @media (min-width: 1024px) {
+    .st-panel-inner {
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+    }
+  }
+
+  /* ── Text column ── */
+  .st-text-col {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .st-heading {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .st-icon-wrap {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .st-step-title {
+    font-family: 'Exo 2', sans-serif;
+    font-weight: 800;
+    font-size: clamp(22px, 2.5vw, 30px);
+    line-height: 1.1;
+    letter-spacing: -0.025em;
+    color: var(--text-primary-aurora);
+    margin: 0;
+  }
+
+  .st-tagline {
+    font-family: 'Exo 2', sans-serif;
+    font-size: 15px;
+    line-height: 1.65;
+    color: var(--text-muted-aurora);
+    margin: 0;
+  }
+
+  /* ── Feature checklist ── */
+  .st-features {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .st-feature-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-family: 'Exo 2', sans-serif;
+    font-size: 14px;
+    color: var(--text-muted-aurora);
+    line-height: 1.5;
+  }
+
+  .st-check {
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  /* ── Learn more link ── */
+  .st-learn-more {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: 'Exo 2', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    padding-bottom: 2px;
+    transition: gap 0.2s ease, opacity 0.2s ease;
+    width: fit-content;
+  }
+  .st-learn-more:hover {
+    gap: 10px;
+    opacity: 0.8;
+  }
+
+  /* ── Preview container ── */
+  .st-preview {
+    position: relative;
+  }
+  .st-preview::before {
+    content: '';
+    position: absolute;
+    inset: -40px;
+    border-radius: 50%;
+    background: var(--accent, transparent);
+    filter: blur(60px);
+    opacity: 0.15;
+    z-index: -1;
+    pointer-events: none;
+  }
+
+  /* Mobile: image above text */
+  @media (max-width: 1023px) {
+    .st-preview { order: -1; }
+  }
+
+  /* ── Mock browser window ── */
+  .st-window {
+    position: relative;
+    border-radius: 18px;
+    overflow: hidden;
+    backdrop-filter: blur(32px);
+    -webkit-backdrop-filter: blur(32px);
+    background: rgba(255, 255, 255, 0.045);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+  .st-window::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 10%;
+    right: 10%;
+    height: 1px;
+    border-radius: 1px;
+    z-index: 2;
+  }
+
+  .st-titlebar {
+    display: flex;
+    align-items: center;
+    padding: 13px 16px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    background: rgba(255, 255, 255, 0.02);
+    position: relative;
+  }
+
+  .st-trafficlights {
+    display: flex;
+    gap: 8px;
+  }
+
+  .st-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.25);
+  }
+  .st-dot--close {
+    background: #FF5F57;
+    box-shadow: inset 0 -1px 0 rgba(0,0,0,0.25), 0 0 4px rgba(255, 95, 87, 0.4);
+  }
+  .st-dot--min {
+    background: #FEBC2E;
+    box-shadow: inset 0 -1px 0 rgba(0,0,0,0.25), 0 0 4px rgba(254, 188, 46, 0.3);
+  }
+  .st-dot--max {
+    background: #28C840;
+    box-shadow: inset 0 -1px 0 rgba(0,0,0,0.25), 0 0 4px rgba(40, 200, 64, 0.3);
+  }
+
+  .st-window-title {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'Orbitron', monospace;
+    font-size: 8px;
+    font-weight: 400;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .st-viewport {
+    position: relative;
+    overflow: hidden;
+  }
+  .st-img {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: cover;
+    max-height: 400px;
+  }
+  .st-img-glow {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  /* ── Reduced motion ── */
+  @media (prefers-reduced-motion: reduce) {
+    .st-panel,
+    .st-panel[hidden] {
+      display: block !important;
+      opacity: 1 !important;
+      position: relative !important;
+    }
+    #st-panels {
+      display: flex;
+      flex-direction: column;
+      gap: 3rem;
+    }
+    .st-nav-wrap {
+      position: relative !important;
+    }
+    .st-progress-fill {
+      transition: none !important;
+    }
+    .st-tab {
+      opacity: 1 !important;
+    }
+  }
+</style>
+
+<script>
+  import { gsap } from 'gsap'
+  import { ScrollTrigger } from 'gsap/ScrollTrigger'
+  gsap.registerPlugin(ScrollTrigger)
+
+  let entranceTrigger: ScrollTrigger | null = null
+  let activeIndex = 0
+  let isAnimating = false
+
+  function switchStep(newIndex: number) {
+    const tabs = document.querySelectorAll<HTMLElement>('.st-tab')
+    const panels = document.querySelectorAll<HTMLElement>('.st-panel')
+    const progressBar = document.querySelector<HTMLElement>('[role="progressbar"]')
+    const count = tabs.length
+    if (newIndex < 0 || newIndex >= count || newIndex === activeIndex || isAnimating) return
+    isAnimating = true
+
+    const progressFill = document.getElementById('st-progress-fill')
+    const progressLabel = document.querySelector<HTMLElement>('.st-progress-label')
+    const oldPanel = panels[activeIndex]
+    const newPanel = panels[newIndex]
+    const direction = newIndex > activeIndex ? 1 : -1
+
+    // Update tabs
+    tabs.forEach((tab, i) => {
+      const isActive = i === newIndex
+      tab.classList.toggle('active', isActive)
+      tab.setAttribute('aria-selected', String(isActive))
+      tab.setAttribute('tabindex', isActive ? '0' : '-1')
+      if (isActive) {
+        const accentRgb = tab.style.getPropertyValue('--accent-rgb') ||
+          getComputedStyle(document.documentElement).getPropertyValue('--color-accent-business').trim()
+        // Re-apply active styles from data attribute
+        const accentAttr = tab.dataset.accent
+        if (accentAttr) {
+          tab.style.background = `rgba(${accentAttr}, 0.12)`
+          tab.style.borderColor = `rgba(${accentAttr}, 0.3)`
+          tab.style.color = `rgba(${accentAttr}, 1)`
+        }
+      } else {
+        tab.style.background = ''
+        tab.style.borderColor = ''
+        tab.style.color = ''
+      }
+    })
+    tabs[newIndex]?.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' })
+
+    // Update progress
+    if (progressFill) progressFill.style.width = `${((newIndex + 1) / count) * 100}%`
+    if (progressLabel) progressLabel.textContent = `Step ${newIndex + 1} of ${count}`
+    if (progressBar) {
+      progressBar.setAttribute('aria-valuenow', String(newIndex + 1))
+    }
+
+    // Reduced motion: instant swap
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      oldPanel.hidden = true
+      oldPanel.classList.remove('active')
+      newPanel.hidden = false
+      newPanel.classList.add('active')
+      activeIndex = newIndex
+      isAnimating = false
+      return
+    }
+
+    // GSAP crossfade
+    gsap.to(oldPanel, {
+      opacity: 0, y: -16 * direction, duration: 0.25, ease: 'power2.in',
+      onComplete: () => {
+        oldPanel.hidden = true
+        oldPanel.classList.remove('active')
+        newPanel.hidden = false
+        newPanel.classList.add('active')
+        gsap.set(newPanel, { opacity: 0, y: 20 * direction })
+        gsap.to(newPanel, {
+          opacity: 1, y: 0, duration: 0.35, ease: 'power2.out',
+          onComplete: () => { activeIndex = newIndex; isAnimating = false }
+        })
+      }
+    })
+  }
+
+  function handleKeydown(e: KeyboardEvent) {
+    const count = document.querySelectorAll('.st-tab').length
+    const tabs = document.querySelectorAll<HTMLElement>('.st-tab')
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+      e.preventDefault()
+      const next = (activeIndex + 1) % count
+      switchStep(next); tabs[next]?.focus()
+    } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+      e.preventDefault()
+      const prev = (activeIndex - 1 + count) % count
+      switchStep(prev); tabs[prev]?.focus()
+    } else if (e.key === 'Home') {
+      e.preventDefault(); switchStep(0); tabs[0]?.focus()
+    } else if (e.key === 'End') {
+      e.preventDefault(); const last = count - 1; switchStep(last); tabs[last]?.focus()
+    }
+  }
+
+  function initServiceTour() {
+    activeIndex = 0
+    isAnimating = false
+    const tabs = document.querySelectorAll<HTMLElement>('.st-tab')
+    const panels = document.querySelectorAll<HTMLElement>('.st-panel')
+    if (!tabs.length) return
+
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      panels.forEach(p => {
+        p.hidden = false
+        p.style.opacity = '1'
+      })
+      return
+    }
+
+    // Tab clicks
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => switchStep(Number(tab.dataset.step)))
+    })
+
+    // Keyboard nav on tablist
+    document.querySelector('[role="tablist"]')?.addEventListener('keydown', handleKeydown as EventListener)
+
+    // Touch swipe on panels
+    const panelsEl = document.getElementById('st-panels')
+    if (panelsEl) {
+      let startX = 0, startY = 0
+      panelsEl.addEventListener('touchstart', (e) => {
+        startX = e.touches[0].clientX; startY = e.touches[0].clientY
+      }, { passive: true })
+      panelsEl.addEventListener('touchend', (e) => {
+        const dx = e.changedTouches[0].clientX - startX
+        const dy = e.changedTouches[0].clientY - startY
+        if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) {
+          if (dx < 0) switchStep(activeIndex + 1)
+          else switchStep(activeIndex - 1)
+        }
+      }, { passive: true })
+    }
+
+    // Entrance ScrollTrigger
+    const section = document.querySelector<HTMLElement>('.st-section')
+    if (section) {
+      gsap.set(section, { opacity: 0, y: 30 })
+      entranceTrigger = ScrollTrigger.create({
+        trigger: section,
+        start: 'top 82%',
+        once: true,
+        onEnter: () => gsap.to(section, { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out' })
+      })
+    }
+  }
+
+  document.addEventListener('astro:before-swap', () => {
+    entranceTrigger?.kill()
+    entranceTrigger = null
+    ScrollTrigger.getAll().forEach(t => t.kill())
+  })
+  document.addEventListener('astro:page-load', initServiceTour)
+</script>

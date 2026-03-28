@@ -1,0 +1,243 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro'
+import AuroraBackground from '@/components/ui/AuroraBackground.astro'
+---
+
+<BaseLayout
+  title="Terms of Service — Nightious"
+  description="Terms and conditions governing use of Nightious services and the nightious.com website."
+  ogImage="/images/og/og-home.png"
+>
+  <!-- ── Hero ───────────────────────────────────────────────────────────────── -->
+  <section
+    class="relative pt-32 pb-12 overflow-hidden"
+    aria-label="Terms of service hero"
+    id="terms-hero"
+  >
+    <AuroraBackground variant="minimal" colors="purple-emerald" />
+
+    <div class="relative max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center" style="z-index: 10;">
+
+      <!-- Eyebrow -->
+      <div id="terms-eyebrow" class="mb-4" style="opacity:0;">
+        <span class="glass-pill">LEGAL</span>
+      </div>
+
+      <!-- Title -->
+      <h1 id="terms-title" class="legal-title text-glow" style="opacity:0;">
+        Terms of Service
+      </h1>
+
+      <!-- Date -->
+      <p id="terms-date" class="legal-date" style="opacity:0;">
+        Last updated: March 28, 2026
+      </p>
+
+      <!-- Gradient divider -->
+      <div
+        id="terms-divider"
+        class="gradient-divider mt-6 mx-auto"
+        style="opacity:0; transform: scaleX(0); transform-origin: center;"
+        aria-hidden="true"
+      ></div>
+
+    </div>
+
+    <noscript>
+      <style>
+        #terms-eyebrow, #terms-title, #terms-date,
+        #terms-divider, #terms-body {
+          opacity: 1 !important;
+          transform: none !important;
+        }
+      </style>
+    </noscript>
+  </section>
+
+  <!-- ── Content ─────────────────────────────────────────────────────────────── -->
+  <section class="py-10 pb-24" aria-label="Terms of service content">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div
+        id="terms-body"
+        class="glass neon-top legal-panel"
+        style="opacity:0;"
+      >
+        <div class="prose-content">
+
+          <h2>Agreement to Terms</h2>
+          <p>
+            By using nightious.com or engaging our services, you agree to these Terms of Service. If you do not agree,
+            please do not use our website or services.
+          </p>
+
+          <h2>Services</h2>
+          <p>
+            Nightious provides IT consulting, web design, AI integration, digital marketing, and related technology
+            services to small businesses, content creators, and individuals.
+          </p>
+          <ul>
+            <li>Specific deliverables are defined per project in individual agreements or quotes</li>
+            <li>We reserve the right to modify our service offerings at any time</li>
+            <li>All services are delivered remotely unless otherwise agreed</li>
+          </ul>
+
+          <h2>Engagement Process</h2>
+          <ul>
+            <li>Services begin after mutual agreement on scope and pricing</li>
+            <li>We provide a clear written quote before work begins — no surprise fees</li>
+            <li>No long-term contracts are required unless specifically agreed upon</li>
+          </ul>
+
+          <h2>Payment Terms</h2>
+          <ul>
+            <li><strong>One-off projects</strong> — flat fee, due upon completion or as agreed in the project quote</li>
+            <li><strong>Retainer engagements</strong> — monthly billing on terms defined per agreement</li>
+            <li>All prices are quoted in US dollars (USD)</li>
+          </ul>
+
+          <h2>Intellectual Property</h2>
+          <ul>
+            <li>Work product created specifically for you becomes your property upon receipt of full payment</li>
+            <li>We retain the right to use general techniques, methodologies, and knowledge gained through our work</li>
+            <li>Pre-existing tools, frameworks, and templates developed by Nightious remain our property</li>
+            <li>Open-source components included in deliverables retain their original licenses</li>
+          </ul>
+
+          <h2>Client Responsibilities</h2>
+          <p>To ensure a smooth engagement, you agree to:</p>
+          <ul>
+            <li>Provide timely access to systems, accounts, content, and feedback as needed</li>
+            <li>Ensure you have the legal right to use any content, images, or materials you provide to us</li>
+            <li>Maintain backups of your existing systems before we begin any work</li>
+          </ul>
+
+          <h2>Limitation of Liability</h2>
+          <ul>
+            <li>Our liability is limited to the fees paid for the specific service in question</li>
+            <li>We are not liable for indirect, consequential, incidental, or punitive damages</li>
+            <li>We do not guarantee specific business outcomes such as increased traffic, leads, or revenue</li>
+          </ul>
+
+          <h2>Termination</h2>
+          <ul>
+            <li>Either party may end an engagement with reasonable written notice</li>
+            <li>You are responsible for payment of work completed up to the termination date</li>
+            <li>We will deliver all completed deliverables for work that has been paid</li>
+          </ul>
+
+          <h2>Warranties and Disclaimers</h2>
+          <ul>
+            <li>We warrant that our work will be performed professionally and with reasonable care and skill</li>
+            <li>We do not warrant uninterrupted or error-free operation of websites, applications, or systems</li>
+            <li>Third-party services such as hosting providers, domain registrars, and APIs are subject to their own
+                terms and conditions — we are not responsible for their availability or performance</li>
+          </ul>
+
+          <h2>Governing Law</h2>
+          <p>
+            These Terms of Service are governed by and construed in accordance with the laws of the State of Florida,
+            United States of America. Any disputes arising from these terms shall be subject to the jurisdiction of the
+            courts of Pinellas County, Florida.
+          </p>
+
+          <h2>Changes to Terms</h2>
+          <p>
+            We may update these Terms of Service from time to time. Changes will be posted on this page with an updated
+            date. Continued use of our website or services after changes are posted constitutes acceptance of the updated
+            terms.
+          </p>
+
+          <h2>Contact</h2>
+          <p>
+            Questions about these terms? Reach us at:
+          </p>
+          <address style="font-style: normal;">
+            Nightious<br />
+            7901 4th St N, Suite 300<br />
+            St. Petersburg, FL 33702
+          </address>
+
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .legal-title {
+    font-family: 'Exo 2', sans-serif;
+    font-weight: 900;
+    font-size: clamp(30px, 5vw, 52px);
+    line-height: 1.1;
+    letter-spacing: -0.025em;
+    color: var(--text-primary-aurora);
+    margin-bottom: 0.5rem;
+  }
+
+  .legal-date {
+    font-family: 'Orbitron', monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--text-dim-aurora);
+  }
+
+  .legal-panel {
+    padding: 2.5rem;
+    border-radius: 20px;
+  }
+
+  @media (max-width: 640px) {
+    .legal-panel {
+      padding: 1.5rem 1.25rem;
+    }
+  }
+
+  /* h2 accent border inside glass panel */
+  .legal-panel :global(.prose-content h2) {
+    padding-left: 0.75rem;
+    border-left: 2px solid;
+    border-image: linear-gradient(to bottom, rgba(168, 85, 247, 0.7), rgba(34, 197, 94, 0.3)) 1;
+  }
+</style>
+
+<script>
+  import { gsap } from 'gsap'
+  import { ScrollTrigger } from 'gsap/ScrollTrigger'
+  gsap.registerPlugin(ScrollTrigger)
+
+  let termsTl: gsap.core.Timeline | null = null
+
+  function initTermsAnimations() {
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
+    const eyebrow = document.getElementById('terms-eyebrow')
+    const title   = document.getElementById('terms-title')
+    const date    = document.getElementById('terms-date')
+    const divider = document.getElementById('terms-divider')
+    const body    = document.getElementById('terms-body')
+
+    if (reduced) {
+      ;[eyebrow, title, date, divider, body].forEach(el => {
+        if (el) { el.style.opacity = '1'; el.style.transform = 'none' }
+      })
+      return
+    }
+
+    termsTl = gsap.timeline({ defaults: { ease: 'power3.out' } })
+    if (eyebrow) termsTl.fromTo(eyebrow, { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.45 })
+    if (title)   termsTl.fromTo(title,   { opacity: 0, y: 22, scale: 0.98 }, { opacity: 1, y: 0, scale: 1, duration: 0.65 }, '-=0.2')
+    if (date)    termsTl.fromTo(date,    { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.4 }, '-=0.25')
+    if (divider) termsTl.fromTo(divider, { opacity: 0, scaleX: 0 }, { opacity: 1, scaleX: 1, duration: 0.5, ease: 'power2.out' }, '-=0.3')
+    if (body)    termsTl.fromTo(body,    { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.6 }, '-=0.2')
+  }
+
+  document.addEventListener('astro:before-swap', () => {
+    termsTl?.kill()
+    termsTl = null
+    ScrollTrigger.getAll().forEach(t => t.kill())
+    document.removeEventListener('astro:page-load', initTermsAnimations)
+  })
+
+  document.addEventListener('astro:page-load', initTermsAnimations)
+</script>

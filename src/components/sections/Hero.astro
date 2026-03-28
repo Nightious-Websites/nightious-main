@@ -2,7 +2,7 @@
 ---
 
 <section
-  class="relative min-h-dvh flex flex-col items-center justify-end overflow-hidden pt-16 pb-16"
+  class="relative min-h-dvh flex flex-col items-center justify-center overflow-hidden pt-24 pb-20"
   aria-label="Hero"
   id="hero-section"
 >
@@ -15,8 +15,10 @@
     playsinline
     aria-hidden="true"
     tabindex="-1"
+    poster="/images/hero-poster.webp"
   >
-    <source src="https://assets.mixkit.co/videos/18059/18059-720.mp4" type="video/mp4" />
+    <source src="/videos/hero-bg.webm" type="video/webm" />
+    <source src="/videos/hero-bg.mp4" type="video/mp4" />
   </video>
 
   <!-- Deep overlay — brings video into our dark palette -->
@@ -94,7 +96,7 @@
         <div class="hero-avatar" style="background: linear-gradient(135deg, rgba(168,85,247,0.8), rgba(192,132,252,0.5));">EC</div>
         <div class="hero-avatar" style="background: linear-gradient(135deg, rgba(34,197,94,0.7), rgba(168,85,247,0.4));">MT</div>
       </div>
-      <span><strong>50+</strong> businesses already transformed</span>
+      <span><strong>50+</strong> businesses already served</span>
     </div>
   </div>
 
@@ -107,6 +109,16 @@
     <span>SCROLL</span>
     <div class="hero-scroll-line"></div>
   </div>
+
+  <noscript>
+    <style>
+      .hero-status-pill, .hero-eyebrow, .hero-h1, .hero-divider,
+      .hero-sub, .hero-cta-row, .hero-proof, .hero-scroll-cue {
+        opacity: 1 !important;
+        transform: none !important;
+      }
+    </style>
+  </noscript>
 </section>
 
 <style>
@@ -221,7 +233,7 @@
     font-family: 'Exo 2', sans-serif;
     font-weight: 900;
     font-size: clamp(40px, 6vw, 72px);
-    line-height: 1.0;
+    line-height: 1.08;
     letter-spacing: -0.035em;
     color: var(--text-primary-aurora);
     margin-bottom: 20px;
@@ -230,6 +242,7 @@
   .hero-grad {
     background: linear-gradient(120deg, #c084fc 0%, #86efac 100%);
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
     filter: drop-shadow(0 0 20px rgba(168, 85, 247, 0.45));
   }
@@ -248,7 +261,7 @@
   /* ── Subtext ── */
   .hero-sub {
     font-family: 'Exo 2', sans-serif;
-    font-weight: 200;
+    font-weight: 300;
     font-size: clamp(16px, 2vw, 20px);
     line-height: 1.7;
     color: rgba(233, 213, 255, 0.6);
@@ -329,7 +342,7 @@
     font-family: 'Exo 2', sans-serif;
     font-size: 13px;
     font-weight: 400;
-    color: rgba(233, 213, 255, 0.35);
+    color: rgba(233, 213, 255, 0.55);
     opacity: 0;
   }
   .avatar-stack {
@@ -356,7 +369,8 @@
   .hero-scroll-cue {
     position: absolute;
     bottom: 20px;
-    right: 32px;
+    left: 50%;
+    transform: translateX(-50%);
     z-index: 20;
     display: flex;
     flex-direction: column;
@@ -372,6 +386,10 @@
     width: 1px;
     height: 40px;
     background: linear-gradient(to bottom, rgba(168, 85, 247, 0.4), transparent);
+  }
+
+  @media (min-height: 900px) {
+    section { padding-bottom: 10vh; }
   }
 
   @media (prefers-reduced-motion: reduce) {

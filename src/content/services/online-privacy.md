@@ -1,6 +1,6 @@
 ---
 title: Online Privacy
-tagline: VPNs, password managers, and digital hygiene tailored to your risk level.
+tagline: VPNs, password managers, and digital hygiene built for your risk level.
 description: Online privacy and security consulting for small businesses and individuals — VPN setup, password management, data breach monitoring, and threat assessment.
 category: Privacy
 color: purple

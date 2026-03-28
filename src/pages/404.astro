@@ -1,6 +1,9 @@
 ---
 import { Image } from 'astro:assets'
 import BaseLayout from '@/layouts/BaseLayout.astro'
+import AuroraBackground from '@/components/ui/AuroraBackground.astro'
+import ConstellationParticles from '@/components/ui/ConstellationParticles.astro'
+import HudBrackets from '@/components/ui/HudBrackets.astro'
 import cityNight from '@/assets/images/photos/city-night.jpg'
 import logoCompleteColor from '@/assets/images/logos/logo-complete-color.png'
 ---
@@ -11,8 +14,9 @@ import logoCompleteColor from '@/assets/images/logos/logo-complete-color.png'
   noindex={true}
 >
   <section
-    class="relative min-h-dvh flex items-center justify-center overflow-hidden pt-16"
+    class="e404-section relative min-h-dvh flex items-center justify-center overflow-hidden pt-16"
     aria-label="404 error"
+    id="e404-section"
   >
     <!-- Background photo -->
     <div class="absolute inset-0 z-0" aria-hidden="true">
@@ -24,41 +28,45 @@ import logoCompleteColor from '@/assets/images/logos/logo-complete-color.png'
         widths={[800, 1200, 1920]}
         sizes="100vw"
       />
+      <!-- Deep dark overlay -->
       <div
         class="absolute inset-0"
-        style="background: linear-gradient(to bottom, rgba(2,0,10,0.7) 0%, rgba(2,0,10,0.55) 50%, rgba(2,0,10,0.85) 100%);"
+        style="background: linear-gradient(to bottom, rgba(2,0,10,0.75) 0%, rgba(2,0,10,0.6) 50%, rgba(2,0,10,0.88) 100%);"
       ></div>
-      <!-- Purple tint -->
-      <div class="absolute inset-0" style="background: rgba(124,58,237,0.12);"></div>
+      <!-- Amber/red tint — signals error -->
+      <div class="absolute inset-0" style="background: rgba(180,40,20,0.06);"></div>
     </div>
 
-    <!-- Static blobs on top of photo -->
-    <div aria-hidden="true" class="absolute inset-0 z-10">
-      <div
-        class="blob"
-        style="
-          width: 500px;
-          height: 500px;
-          background: radial-gradient(circle, rgba(124, 58, 237, 0.25) 0%, transparent 70%);
-          top: -80px;
-          left: -120px;
-        "
-      ></div>
-      <div
-        class="blob"
-        style="
-          width: 380px;
-          height: 380px;
-          background: radial-gradient(circle, rgba(232, 121, 249, 0.15) 0%, transparent 70%);
-          top: -30px;
-          right: -80px;
-        "
-      ></div>
+    <!-- Aurora (full variant for max drama) -->
+    <AuroraBackground variant="full" colors="purple-pink" zIndex={2} />
+
+    <!-- Constellation particles -->
+    <ConstellationParticles density="medium" colors="purple-only" zIndex={3} />
+
+    <!-- HUD brackets — full page frame -->
+    <HudBrackets zIndex={21} />
+
+    <!-- Scan line -->
+    <div class="scan-line" aria-hidden="true" style="z-index: 15;"></div>
+
+    <!-- Grid overlay — gives it a terminal feel -->
+    <div
+      class="absolute inset-0 bg-grid pointer-events-none"
+      style="z-index: 4; opacity: 0.25;"
+      aria-hidden="true"
+    ></div>
+
+    <!-- Status pill — route error (amber) -->
+    <div id="e404-status" class="e404-status-pill" style="opacity:0; z-index: 22;">
+      <span class="e404-error-dot" aria-hidden="true"></span>
+      <span>ROUTE NOT FOUND</span>
     </div>
 
-    <div class="relative z-20 max-w-lg mx-auto px-4 sm:px-6 text-center">
-      <!-- Logo (color variant — stands out on dark photo) -->
-      <div class="flex justify-center mb-8">
+    <!-- Main content -->
+    <div class="relative max-w-lg mx-auto px-4 sm:px-6 text-center" style="z-index: 22;">
+
+      <!-- Logo -->
+      <div id="e404-logo" class="flex justify-center mb-8" style="opacity:0;">
         <Image
           src={logoCompleteColor}
           alt="Nightious"
@@ -68,30 +76,29 @@ import logoCompleteColor from '@/assets/images/logos/logo-complete-color.png'
         />
       </div>
 
-      <!-- Large 404 -->
+      <!-- Glitch 404 -->
       <p
-        class="font-display text-8xl sm:text-9xl mb-2 select-none"
-        style="
-          background: linear-gradient(135deg, rgba(168, 85, 247, 0.4), rgba(232, 121, 249, 0.4));
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          background-clip: text;
-          line-height: 1;
-        "
+        id="e404-number"
+        class="e404-glitch select-none"
+        data-text="404"
         aria-hidden="true"
+        style="opacity:0;"
       >
         404
       </p>
 
-      <h1 class="font-display text-2xl sm:text-3xl mb-4 text-glow" style="color: var(--color-text-primary);">
+      <!-- Heading -->
+      <h1 id="e404-heading" class="e404-heading text-glow" style="opacity:0;">
         Lost in the Network
       </h1>
 
-      <p class="text-base mb-10" style="color: var(--color-text-muted);">
+      <!-- Subtext -->
+      <p id="e404-sub" class="e404-sub" style="opacity:0;">
         This page doesn't exist — but your solution does.
       </p>
 
-      <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+      <!-- Buttons -->
+      <div id="e404-btns" class="flex flex-col sm:flex-row items-center justify-center gap-4" style="opacity:0;">
         <a href="/" class="btn-primary">
           Back to Home
         </a>
@@ -99,6 +106,231 @@ import logoCompleteColor from '@/assets/images/logos/logo-complete-color.png'
           View Our Services
         </a>
       </div>
+
     </div>
   </section>
 </BaseLayout>
+
+<noscript>
+  <style>
+    #e404-status, #e404-logo, #e404-number, #e404-heading, #e404-sub, #e404-btns {
+      opacity: 1 !important;
+      transform: none !important;
+    }
+  </style>
+</noscript>
+
+<style>
+  /* ── Section ── */
+  .e404-section {
+    background: var(--color-bg-deep);
+  }
+
+  /* ── Status pill — amber/error variant ── */
+  .e404-status-pill {
+    position: absolute;
+    top: 88px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 16px;
+    border-radius: 40px;
+    background: rgba(251, 146, 60, 0.08);
+    border: 1px solid rgba(251, 146, 60, 0.28);
+    font-family: 'Orbitron', monospace;
+    font-size: 9px;
+    font-weight: 400;
+    letter-spacing: 0.22em;
+    color: rgba(251, 146, 60, 0.9);
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .e404-error-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: rgba(251, 146, 60, 0.95);
+    box-shadow: 0 0 8px rgba(251, 146, 60, 0.7);
+    animation: e404-dot-pulse 1.6s ease-in-out infinite;
+  }
+  @keyframes e404-dot-pulse {
+    0%, 100% { opacity: 0.5; box-shadow: 0 0 4px rgba(251, 146, 60, 0.5); }
+    50%       { opacity: 1;   box-shadow: 0 0 12px rgba(251, 146, 60, 0.9); }
+  }
+
+  /* ── Glitch 404 ── */
+  .e404-glitch {
+    font-family: 'Exo 2', sans-serif;
+    font-weight: 900;
+    font-size: clamp(96px, 18vw, 180px);
+    line-height: 1;
+    letter-spacing: -0.04em;
+    /* Base: gradient fill */
+    background: linear-gradient(135deg, rgba(168,85,247,0.65), rgba(232,121,249,0.55));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 8px;
+    position: relative;
+    display: inline-block;
+    animation: glitch-main 5s ease-in-out infinite;
+  }
+
+  /* Pseudo-elements for RGB split effect */
+  .e404-glitch::before,
+  .e404-glitch::after {
+    content: attr(data-text);
+    position: absolute;
+    inset: 0;
+    /* Override gradient — pseudo-elements get solid color for the split */
+    background: none;
+    -webkit-text-fill-color: transparent;
+    -webkit-background-clip: text;
+    background-clip: text;
+  }
+  .e404-glitch::before {
+    background: linear-gradient(135deg, rgba(0,255,255,0.6), rgba(0,200,200,0.4));
+    -webkit-background-clip: text;
+    background-clip: text;
+    left: 2px;
+    top: -1px;
+    animation: glitch-before 5s ease-in-out infinite;
+    clip-path: polygon(0 20%, 100% 20%, 100% 40%, 0 40%);
+  }
+  .e404-glitch::after {
+    background: linear-gradient(135deg, rgba(255,0,100,0.55), rgba(200,0,80,0.4));
+    -webkit-background-clip: text;
+    background-clip: text;
+    left: -2px;
+    top: 1px;
+    animation: glitch-after 5s ease-in-out infinite;
+    clip-path: polygon(0 60%, 100% 60%, 100% 80%, 0 80%);
+  }
+
+  @keyframes glitch-main {
+    0%, 88%, 100% { transform: none; filter: none; }
+    90%  { transform: skewX(-1.5deg); }
+    92%  { transform: skewX(0.8deg); }
+    94%  { transform: none; }
+  }
+  @keyframes glitch-before {
+    0%, 88%, 100% { transform: none; opacity: 0; }
+    90%  { transform: translate(-3px, 0); opacity: 1; }
+    92%  { transform: translate(3px, 0); opacity: 0.8; }
+    94%  { transform: none; opacity: 0; }
+  }
+  @keyframes glitch-after {
+    0%, 88%, 100% { transform: none; opacity: 0; }
+    90%  { transform: translate(3px, 0); opacity: 1; }
+    92%  { transform: translate(-3px, 0); opacity: 0.7; }
+    94%  { transform: none; opacity: 0; }
+  }
+
+  /* ── Heading ── */
+  .e404-heading {
+    font-family: 'Exo 2', sans-serif;
+    font-weight: 900;
+    font-size: clamp(22px, 3.5vw, 36px);
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    color: var(--text-primary-aurora);
+    margin-bottom: 16px;
+  }
+
+  /* ── Subtext ── */
+  .e404-sub {
+    font-family: 'Exo 2', sans-serif;
+    font-weight: 300;
+    font-size: 16px;
+    line-height: 1.65;
+    color: var(--text-muted-aurora);
+    margin-bottom: 36px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .e404-glitch,
+    .e404-glitch::before,
+    .e404-glitch::after,
+    .e404-error-dot {
+      animation: none;
+    }
+    .e404-glitch::before,
+    .e404-glitch::after {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  import { gsap } from 'gsap'
+
+  let tl: gsap.core.Timeline | null = null
+  let mouseMoveController: AbortController | null = null
+
+  function initAnimations() {
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
+    const status  = document.getElementById('e404-status')
+    const logo    = document.getElementById('e404-logo')
+    const number  = document.getElementById('e404-number')
+    const heading = document.getElementById('e404-heading')
+    const sub     = document.getElementById('e404-sub')
+    const btns    = document.getElementById('e404-btns')
+
+    // Find the constellation particles container to parallax it
+    const particles = document.querySelector<HTMLElement>('.constellation-particles')
+
+    if (reduced) {
+      ;[status, logo, number, heading, sub, btns].forEach(el => {
+        if (!el) return
+        el.style.opacity = '1'
+        el.style.transform = 'none'
+      })
+      return
+    }
+
+    // Entrance timeline
+    tl = gsap.timeline({ defaults: { ease: 'power3.out' } })
+    tl
+      .fromTo(status,  { opacity: 0, y: -8 }, { opacity: 1, y: 0, duration: 0.45 }, 0.1)
+      .fromTo(logo,    { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.5 }, 0.2)
+      .fromTo(number,  { opacity: 0, scale: 0.88, y: 20 }, { opacity: 1, scale: 1, y: 0, duration: 0.75 }, 0.35)
+      .fromTo(heading, { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 0.55 }, '-=0.3')
+      .fromTo(sub,     { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.5 }, '-=0.3')
+      .fromTo(btns,    { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.5 }, '-=0.25')
+
+    // Easter egg: subtle particle parallax on mouse move
+    if (particles) {
+      mouseMoveController = new AbortController()
+      const { signal } = mouseMoveController
+
+      document.addEventListener('mousemove', (e: MouseEvent) => {
+        const cx = window.innerWidth / 2
+        const cy = window.innerHeight / 2
+        const dx = (e.clientX - cx) / cx   // -1 to 1
+        const dy = (e.clientY - cy) / cy   // -1 to 1
+        const maxOffset = 10
+
+        gsap.to(particles, {
+          x: dx * maxOffset,
+          y: dy * maxOffset,
+          duration: 1.2,
+          ease: 'power1.out',
+          overwrite: 'auto',
+        })
+      }, { signal })
+    }
+  }
+
+  document.addEventListener('astro:before-swap', () => {
+    tl?.kill()
+    tl = null
+    mouseMoveController?.abort()
+    mouseMoveController = null
+  })
+
+  document.addEventListener('astro:page-load', initAnimations)
+</script>

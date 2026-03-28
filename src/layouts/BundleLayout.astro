@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro'
+import AuroraBackground from '@/components/ui/AuroraBackground.astro'
 
 export interface Props {
   title: string
@@ -19,18 +20,236 @@ const { title, description, audience, accentColor, accentRgb, ogImage } = Astro.
     <slot name="grid" />
     <slot name="crosssell" />
 
-    <!-- CTA -->
-    <section class="py-16 text-center" style="background-color: var(--color-bg-deep);">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex gap-4 justify-center items-center flex-wrap">
-        <a
-          href="/services"
-          class="btn-ghost cursor-pointer"
-          style={`border-color: rgba(${accentRgb}, 0.4); color: rgba(${accentRgb}, 1);`}
-        >
-          View All Services &rarr;
-        </a>
-        <a href="/contact" class="btn-primary cursor-pointer">Talk to Us &rarr;</a>
+    <!-- CTA section -->
+    <section class="bl-cta-section relative overflow-hidden" aria-label="Get started">
+
+      <!-- Aurora backdrop -->
+      <AuroraBackground variant="subtle" colors="accent" accentRgb={accentRgb} zIndex={1} />
+
+      <!-- Grid texture -->
+      <div class="absolute inset-0 bg-grid pointer-events-none" style="z-index:2;" aria-hidden="true"></div>
+
+      <!-- Neon top border -->
+      <div
+        class="bl-cta-neon"
+        style={`background: linear-gradient(90deg, transparent, rgba(${accentRgb}, 0.6), rgba(168, 85, 247, 0.6), transparent);`}
+        aria-hidden="true"
+      ></div>
+
+      <div class="relative max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center" style="z-index:10;">
+
+        <!-- Eyebrow -->
+        <p id="bl-cta-eyebrow" class="bl-cta-eyebrow font-display" style={`color: rgba(${accentRgb}, 0.75);`}>
+          READY TO START
+        </p>
+
+        <!-- Headline -->
+        <h2 id="bl-cta-h2" class="bl-cta-h2">
+          Let's build something<br />
+          <span class="gradient-text">that works for you.</span>
+        </h2>
+
+        <!-- Subtext -->
+        <p id="bl-cta-sub" class="bl-cta-sub">
+          Talk to us about what you need — no commitment, no pressure.
+        </p>
+
+        <!-- Divider -->
+        <div
+          id="bl-cta-divider"
+          class="bl-cta-divider"
+          style={`background: linear-gradient(90deg, rgba(${accentRgb}, 0.7), rgba(168, 85, 247, 0.4));`}
+          aria-hidden="true"
+        ></div>
+
+        <!-- Buttons -->
+        <div id="bl-cta-buttons" class="bl-cta-buttons">
+          <a href="/contact" class="bl-btn-primary" style={`background: rgba(${accentRgb}, 0.12);`}>
+            <span>Talk to Us</span>
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <!-- Gradient border via pseudo element -->
+            <span class="bl-btn-border" style={`background: linear-gradient(135deg, rgba(${accentRgb}, 0.8), rgba(168, 85, 247, 0.5));`} aria-hidden="true"></span>
+          </a>
+          <a
+            href="/services"
+            class="btn-ghost bl-btn-ghost"
+            style={`border-color: rgba(${accentRgb}, 0.35); color: rgba(${accentRgb}, 0.9);`}
+          >
+            View All Services &rarr;
+          </a>
+        </div>
+
       </div>
+
+      <noscript>
+        <style>
+          #bl-cta-eyebrow, #bl-cta-h2, #bl-cta-sub, #bl-cta-divider, #bl-cta-buttons {
+            opacity: 1 !important;
+            transform: none !important;
+          }
+        </style>
+      </noscript>
     </section>
   </div>
 </BaseLayout>
+
+<style>
+  /* ── CTA section ── */
+  .bl-cta-section {
+    padding: 96px 0 112px;
+    background-color: var(--color-bg-deep);
+  }
+
+  /* ── Neon top border ── */
+  .bl-cta-neon {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    z-index: 3;
+  }
+
+  /* ── Eyebrow ── */
+  .bl-cta-eyebrow {
+    font-size: 9px;
+    letter-spacing: 0.28em;
+    margin-bottom: 20px;
+    opacity: 0;
+  }
+
+  /* ── Headline ── */
+  .bl-cta-h2 {
+    font-family: 'Exo 2', sans-serif;
+    font-weight: 900;
+    font-size: clamp(32px, 5vw, 60px);
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    color: var(--text-primary-aurora);
+    margin-bottom: 20px;
+    opacity: 0;
+  }
+
+  /* ── Subtext ── */
+  .bl-cta-sub {
+    font-family: 'Exo 2', sans-serif;
+    font-size: clamp(15px, 1.8vw, 18px);
+    font-weight: 300;
+    line-height: 1.7;
+    color: var(--text-muted-aurora);
+    margin-bottom: 28px;
+    opacity: 0;
+  }
+
+  /* ── Divider ── */
+  .bl-cta-divider {
+    width: 60px;
+    height: 1px;
+    margin: 0 auto 36px;
+    transform-origin: center;
+    transform: scaleX(0);
+    opacity: 0;
+  }
+
+  /* ── Button row ── */
+  .bl-cta-buttons {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+    opacity: 0;
+  }
+
+  /* ── Primary button ── */
+  .bl-btn-primary {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 28px;
+    border-radius: 10px;
+    color: var(--text-primary-aurora);
+    font-family: 'Exo 2', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    text-decoration: none;
+    overflow: hidden;
+    transition: gap 0.2s ease, box-shadow 0.25s ease;
+  }
+  .bl-btn-primary:hover {
+    gap: 12px;
+    box-shadow: 0 0 30px rgba(var(--accent-rgb, 168,85,247), 0.3);
+  }
+  .bl-btn-border {
+    position: absolute;
+    inset: 0;
+    border-radius: 10px;
+    padding: 1px;
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+
+  /* ── Ghost button tweaks ── */
+  .bl-btn-ghost:hover {
+    background: rgba(var(--accent-rgb, 168,85,247), 0.08) !important;
+    border-color: var(--accent, rgba(168,85,247,0.6)) !important;
+    color: var(--text-primary-aurora) !important;
+  }
+</style>
+
+<script>
+  import { gsap } from 'gsap'
+  import { ScrollTrigger } from 'gsap/ScrollTrigger'
+  gsap.registerPlugin(ScrollTrigger)
+
+  let blCtaTrigger: ScrollTrigger | null = null
+
+  function initBundleLayoutCta() {
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    const ids = ['bl-cta-eyebrow', 'bl-cta-h2', 'bl-cta-sub', 'bl-cta-divider', 'bl-cta-buttons']
+    const els = ids.map(id => document.getElementById(id))
+
+    if (reduced) {
+      els.forEach(el => {
+        if (!el) return
+        el.style.opacity = '1'
+        el.style.transform = 'none'
+      })
+      return
+    }
+
+    const section = document.querySelector<HTMLElement>('.bl-cta-section')
+    if (!section) return
+
+    const [eyebrow, h2, sub, divider, buttons] = els
+
+    blCtaTrigger = ScrollTrigger.create({
+      trigger: section,
+      start: 'top 80%',
+      once: true,
+      onEnter: () => {
+        const tl = gsap.timeline({ defaults: { ease: 'power3.out' } })
+        if (eyebrow) tl.fromTo(eyebrow, { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.5 })
+        if (h2)      tl.fromTo(h2,      { opacity: 0, y: 24, scale: 0.97 }, { opacity: 1, y: 0, scale: 1, duration: 0.7 }, '-=0.3')
+        if (sub)     tl.fromTo(sub,     { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.55 }, '-=0.3')
+        if (divider) tl.fromTo(divider, { opacity: 0, scaleX: 0 }, { opacity: 1, scaleX: 1, duration: 0.5, ease: 'power2.out' }, '-=0.3')
+        if (buttons) tl.fromTo(buttons, { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.5 }, '-=0.2')
+      }
+    })
+    ScrollTrigger.refresh()
+  }
+
+  document.addEventListener('astro:before-swap', () => {
+    blCtaTrigger?.kill()
+    blCtaTrigger = null
+  })
+
+  document.addEventListener('astro:page-load', initBundleLayoutCta)
+</script>

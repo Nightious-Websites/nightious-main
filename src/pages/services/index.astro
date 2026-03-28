@@ -4,6 +4,9 @@ import SchemaBreadcrumb from '@/components/seo/SchemaBreadcrumb.astro'
 import ServiceFilterTabs from '@/components/services/ServiceFilterTabs.astro'
 import ServiceDetailCard from '@/components/services/ServiceDetailCard.astro'
 import CtaBanner from '@/components/sections/CtaBanner.astro'
+import AuroraBackground from '@/components/ui/AuroraBackground.astro'
+import ConstellationParticles from '@/components/ui/ConstellationParticles.astro'
+import HudBrackets from '@/components/ui/HudBrackets.astro'
 import { getAllServices, entrySlug } from '@/utils/services'
 
 const services = await getAllServices()
@@ -37,49 +40,102 @@ const breadcrumbItems = [
 >
   <SchemaBreadcrumb items={breadcrumbItems} />
 
-  <!-- Hero -->
+  <!-- ─── Hero ─────────────────────────────────────────────────────────────── -->
   <section
-    class="relative pt-32 pb-16 overflow-hidden"
+    class="srv-hero relative min-h-[72vh] flex flex-col items-center justify-center overflow-hidden pt-28 pb-20"
     aria-label="Services hero"
+    id="services-hero-section"
   >
-    <!-- Background image -->
-    <div class="absolute inset-0 pointer-events-none" aria-hidden="true">
-      <img
-        src="/images/photos/tech-screens.jpg"
-        alt=""
-        class="w-full h-full object-cover object-center"
-        loading="eager"
-        width="1920"
-        height="1080"
-      />
-      <div class="absolute inset-0" style="background: linear-gradient(to bottom, rgba(2,0,10,0.82) 0%, rgba(2,0,10,0.75) 60%, rgba(2,0,10,0.95) 100%);"></div>
-      <div class="absolute inset-0" style="background: radial-gradient(ellipse at top center, rgba(124, 58, 237, 0.2) 0%, transparent 60%);"></div>
-    </div>
-    <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-      <p class="font-display text-xs tracking-[0.25em] mb-3" style="color: var(--color-purple-mid);">12 SERVICE AREAS</p>
-      <h1 class="font-display text-4xl md:text-5xl mb-4 text-glow" style="color: var(--color-text-primary);">What We Do</h1>
-      <p class="text-base max-w-xl mx-auto" style="color: var(--color-text-muted);">
-        From your first website to full operational transformation — every service, handled end to end.
+    <!-- Aurora blobs -->
+    <AuroraBackground variant="subtle" colors="purple-emerald" />
+
+    <!-- Constellation particles -->
+    <ConstellationParticles density="medium" colors="purple-emerald" />
+
+    <!-- HUD brackets -->
+    <HudBrackets />
+
+    <!-- Scan line -->
+    <div class="scan-line" aria-hidden="true"></div>
+
+    <!-- Grid overlay -->
+    <div
+      class="absolute inset-0 bg-grid pointer-events-none"
+      style="z-index: 1; opacity: 0.35;"
+      aria-hidden="true"
+    ></div>
+
+    <!-- Content -->
+    <div class="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center" style="z-index: 20;">
+
+      <!-- Status pill -->
+      <div id="srv-status" class="srv-status-pill" style="opacity:0;">
+        <span class="pulse-dot" aria-hidden="true"></span>
+        <span>12 SERVICE AREAS &bull; ALL ACTIVE</span>
+      </div>
+
+      <!-- Eyebrow -->
+      <div id="srv-eyebrow" style="opacity:0; margin-bottom: 20px;">
+        <span class="glass-pill">SERVICES</span>
+      </div>
+
+      <!-- Headline -->
+      <h1 id="srv-h1" class="srv-h1" style="opacity:0;">
+        What We <span class="gradient-text"><em class="accent-italic">Do</em></span>
+      </h1>
+
+      <!-- Gradient divider -->
+      <div
+        id="srv-divider"
+        class="gradient-divider my-6"
+        style="opacity:0; transform:scaleX(0); transform-origin:center;"
+        aria-hidden="true"
+      ></div>
+
+      <!-- Lead text -->
+      <p id="srv-lead" class="srv-lead" style="opacity:0;">
+        From your first website to full operational transformation — every service, handled end&nbsp;to&nbsp;end.
       </p>
+
+    </div>
+
+    <!-- Scroll cue -->
+    <div id="srv-scroll" class="srv-scroll-cue" aria-hidden="true" style="opacity:0;">
+      <span>EXPLORE</span>
+      <div class="srv-scroll-line"></div>
     </div>
   </section>
 
-  <!-- Filter + Grid -->
-  <section class="py-12" aria-label="Service categories">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+  <!-- ─── Filter + Grid ───────────────────────────────────────────────────── -->
+  <section class="relative py-16 pb-28 overflow-hidden" aria-label="Service categories">
+
+    <!-- Ambient glow under grid -->
+    <div
+      class="absolute inset-0 pointer-events-none"
+      style="background: radial-gradient(ellipse 80% 50% at 50% 0%, rgba(124,58,237,0.07) 0%, transparent 70%); z-index: 0;"
+      aria-hidden="true"
+    ></div>
+
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" style="z-index: 1;">
       <h2 class="sr-only">All Services</h2>
 
-      <ServiceFilterTabs categories={categories} />
+      <!-- Filter tabs -->
+      <div class="mb-10">
+        <ServiceFilterTabs categories={categories} />
+      </div>
 
-      <!-- All cards — server-rendered for SEO crawlers -->
+      <!-- Mosaic card grid -->
       <ul
         id="services-panel"
         role="tabpanel"
         aria-label="Filtered services"
-        class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 list-none"
+        class="services-mosaic list-none"
       >
-        {services.map(service => (
-          <li>
+        {services.map((service, i) => (
+          <li
+            class="srv-card-item"
+            data-index={String(i)}
+          >
             <ServiceDetailCard
               title={service.data.title}
               slug={entrySlug(service.id)}
@@ -95,3 +151,204 @@ const breadcrumbItems = [
 
   <CtaBanner />
 </BaseLayout>
+
+<noscript>
+  <style>
+    #srv-status, #srv-eyebrow, #srv-h1, #srv-divider, #srv-lead, #srv-scroll,
+    .srv-card-item {
+      opacity: 1 !important;
+      transform: none !important;
+    }
+  </style>
+</noscript>
+
+<style>
+  /* ── Hero surface ── */
+  .srv-hero {
+    background: var(--color-bg-deep);
+  }
+
+  /* ── Status pill ── */
+  .srv-status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 16px;
+    border-radius: 40px;
+    background: rgba(34, 197, 94, 0.07);
+    border: 1px solid rgba(34, 197, 94, 0.22);
+    font-family: 'Orbitron', monospace;
+    font-size: 9px;
+    font-weight: 400;
+    letter-spacing: 0.22em;
+    color: rgba(34, 197, 94, 0.85);
+    text-transform: uppercase;
+    margin-bottom: 24px;
+  }
+
+  /* ── Headline ── */
+  .srv-h1 {
+    font-family: 'Exo 2', sans-serif;
+    font-weight: 900;
+    font-size: clamp(40px, 5.5vw, 64px);
+    line-height: 1.08;
+    letter-spacing: -0.03em;
+    color: var(--text-primary-aurora);
+    margin-bottom: 0;
+  }
+
+  /* ── Lead ── */
+  .srv-lead {
+    font-family: 'Exo 2', sans-serif;
+    font-weight: 300;
+    font-size: clamp(15px, 1.8vw, 18px);
+    line-height: 1.75;
+    color: var(--text-muted-aurora);
+    max-width: 500px;
+    margin: 0 auto;
+  }
+
+  /* ── Scroll cue ── */
+  .srv-scroll-cue {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 20;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    font-family: 'Orbitron', monospace;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    color: var(--text-dim-aurora);
+  }
+  .srv-scroll-line {
+    width: 1px;
+    height: 40px;
+    background: linear-gradient(to bottom, rgba(168, 85, 247, 0.55), transparent);
+    animation: srv-line-pulse 2s ease-in-out infinite;
+  }
+  @keyframes srv-line-pulse {
+    0%, 100% { opacity: 0.35; }
+    50% { opacity: 1; }
+  }
+
+  /* ── Mosaic grid ── */
+  .services-mosaic {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: 16px;
+  }
+
+  @media (min-width: 640px) {
+    .services-mosaic {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .services-mosaic {
+      grid-template-columns: repeat(3, 1fr);
+    }
+    /* AI Integration card (first item alphabetically by default order) gets featured treatment */
+    .services-mosaic li:first-child {
+      grid-column: span 2;
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .services-mosaic {
+      grid-template-columns: repeat(4, 1fr);
+    }
+    .services-mosaic li:first-child {
+      grid-column: span 2;
+    }
+  }
+
+  /* ── Card entrance state ── */
+  .srv-card-item {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .srv-scroll-line { animation: none; }
+    .srv-card-item {
+      opacity: 1 !important;
+      transform: none !important;
+    }
+  }
+</style>
+
+<script>
+  import { gsap } from 'gsap'
+  import { ScrollTrigger } from 'gsap/ScrollTrigger'
+  gsap.registerPlugin(ScrollTrigger)
+
+  let tl: gsap.core.Timeline | null = null
+
+  function initAnimations() {
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
+    const status  = document.getElementById('srv-status')
+    const eyebrow = document.getElementById('srv-eyebrow')
+    const h1      = document.getElementById('srv-h1')
+    const divider = document.getElementById('srv-divider')
+    const lead    = document.getElementById('srv-lead')
+    const scroll  = document.getElementById('srv-scroll')
+    const cards   = document.querySelectorAll<HTMLElement>('.srv-card-item')
+
+    if (reduced) {
+      ;[status, eyebrow, h1, divider, lead, scroll].forEach(el => {
+        if (!el) return
+        el.style.opacity = '1'
+        el.style.transform = 'none'
+      })
+      cards.forEach(card => {
+        card.style.opacity = '1'
+        card.style.transform = 'none'
+      })
+      return
+    }
+
+    // Hero entrance
+    tl = gsap.timeline({ defaults: { ease: 'power3.out' } })
+    tl
+      .fromTo(status,  { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.5 })
+      .fromTo(eyebrow, { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 0.55 }, '-=0.2')
+      .fromTo(h1,      { opacity: 0, y: 28, scale: 0.97 }, { opacity: 1, y: 0, scale: 1, duration: 0.8 }, '-=0.25')
+      .fromTo(divider, { opacity: 0, scaleX: 0 }, { opacity: 1, scaleX: 1, duration: 0.45, ease: 'power2.out' }, '-=0.35')
+      .fromTo(lead,    { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 0.55 }, '-=0.3')
+      .fromTo(scroll,  { opacity: 0 }, { opacity: 1, duration: 0.5 }, '-=0.2')
+
+    // Card scroll-reveal: alternate left/right entry direction per card
+    cards.forEach((card, i) => {
+      const xOffset = i % 2 === 0 ? -24 : 24
+      gsap.fromTo(
+        card,
+        { opacity: 0, x: xOffset, y: 14 },
+        {
+          opacity: 1, x: 0, y: 0,
+          duration: 0.5,
+          ease: 'power2.out',
+          delay: (i % 4) * 0.055,
+          scrollTrigger: {
+            trigger: card,
+            start: 'top 93%',
+            once: true,
+          },
+        }
+      )
+    })
+  }
+
+  document.addEventListener('astro:before-swap', () => {
+    tl?.kill()
+    tl = null
+    ScrollTrigger.getAll().forEach(t => t.kill())
+  })
+
+  document.addEventListener('astro:page-load', initAnimations)
+</script>

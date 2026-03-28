@@ -1,0 +1,406 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro'
+import CtaBanner from '@/components/sections/CtaBanner.astro'
+import AuroraBackground from '@/components/ui/AuroraBackground.astro'
+import { getCollection } from 'astro:content'
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog')
+  return posts.map(post => ({
+    params: { slug: post.id.replace(/\.mdx?$/, '') },
+    props: { entry: post },
+  }))
+}
+
+const { entry } = Astro.props
+const { Content } = await entry.render()
+
+function formatDate(date: Date): string {
+  return date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
+}
+---
+
+<BaseLayout
+  title={`${entry.data.title} | Nightious Blog`}
+  description={entry.data.description}
+  ogType="article"
+>
+  <!-- ── Hero ───────────────────────────────────────────────────────────────── -->
+  <section
+    class="relative pt-32 pb-12 overflow-hidden"
+    aria-label="Post hero"
+    id="post-hero"
+  >
+    <AuroraBackground variant="minimal" colors="purple-emerald" />
+
+    <!-- Subtle grid texture -->
+    <div
+      class="absolute inset-0 bg-grid pointer-events-none"
+      style="opacity: 0.025; z-index: 1;"
+      aria-hidden="true"
+    ></div>
+
+    <div class="relative max-w-3xl mx-auto px-4 sm:px-6 lg:px-8" style="z-index: 10;">
+
+      <!-- Back link -->
+      <a
+        href="/blog"
+        id="post-back"
+        class="post-back-link"
+        style="opacity:0;"
+      >
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+          <path d="M13 8H3M7 4l-4 4 4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Back to Blog
+      </a>
+
+      <!-- Date + author pill -->
+      <div id="post-meta" class="mb-5 mt-6" style="opacity:0;">
+        <span class="glass-pill">
+          {formatDate(entry.data.date)} &middot; {entry.data.author}
+        </span>
+      </div>
+
+      <!-- Title -->
+      <h1
+        id="post-title"
+        class="post-title text-glow"
+        style="opacity:0;"
+      >
+        {entry.data.title}
+      </h1>
+
+      <!-- Description -->
+      <p id="post-desc" class="post-desc" style="opacity:0;">
+        {entry.data.description}
+      </p>
+
+      <!-- Tags -->
+      {entry.data.tags.length > 0 && (
+        <div id="post-tags" class="flex flex-wrap gap-2 mt-4" style="opacity:0;">
+          {entry.data.tags.map((tag: string) => (
+            <span class="post-tag-pill">{tag}</span>
+          ))}
+        </div>
+      )}
+
+    </div>
+  </section>
+
+  <!-- Gradient divider -->
+  <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 mb-10">
+    <div id="post-divider" class="gradient-divider" style="opacity:0; transform: scaleX(0); transform-origin: center; margin: 0;"></div>
+  </div>
+
+  <!-- ── Article body ─────────────────────────────────────────────────────── -->
+  <section class="pb-20 relative" aria-label="Post content" id="post-content">
+
+    <!-- Very subtle grid texture behind article -->
+    <div
+      class="absolute inset-0 bg-grid pointer-events-none"
+      style="opacity: 0.02; z-index: 0;"
+      aria-hidden="true"
+    ></div>
+
+    <div class="relative max-w-3xl mx-auto px-4 sm:px-6 lg:px-8" style="z-index: 5;">
+      <article class="blog-prose">
+        <Content />
+      </article>
+
+      <!-- Back link footer -->
+      <div class="mt-16 pt-8" style="border-top: 1px solid rgba(168,85,247,0.12);">
+        <a href="/blog" class="post-back-link">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <path d="M13 8H3M7 4l-4 4 4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Back to all posts
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Back to top button (appears after scroll) -->
+  <button
+    id="back-to-top"
+    class="back-to-top glass-pill"
+    aria-label="Back to top"
+    style="opacity:0; pointer-events:none;"
+  >
+    <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+      <path d="M8 13V3M4 7l4-4 4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    Top
+  </button>
+
+  <CtaBanner />
+</BaseLayout>
+
+<noscript>
+  <style>
+    #post-back, #post-meta, #post-title, #post-desc, #post-tags, #post-divider,
+    #back-to-top {
+      opacity: 1 !important;
+      transform: none !important;
+      pointer-events: auto !important;
+    }
+  </style>
+</noscript>
+
+<style>
+  /* ── Back link ── */
+  .post-back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: 'Exo 2', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-muted-aurora);
+    text-decoration: none;
+    transition: color 0.2s ease, gap 0.2s ease;
+  }
+  .post-back-link:hover {
+    color: var(--text-primary-aurora);
+    gap: 10px;
+  }
+
+  /* ── Title ── */
+  .post-title {
+    font-family: 'Exo 2', sans-serif;
+    font-weight: 900;
+    font-size: clamp(26px, 4vw, 42px);
+    line-height: 1.1;
+    letter-spacing: -0.025em;
+    color: var(--text-primary-aurora);
+    margin-bottom: 1rem;
+  }
+
+  /* ── Description ── */
+  .post-desc {
+    font-family: 'Exo 2', sans-serif;
+    font-weight: 300;
+    font-size: 1rem;
+    line-height: 1.7;
+    color: var(--text-muted-aurora);
+  }
+
+  /* ── Tag pills ── */
+  .post-tag-pill {
+    display: inline-block;
+    font-family: 'Exo 2', sans-serif;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    padding: 3px 10px;
+    border-radius: 999px;
+    background: rgba(168, 85, 247, 0.12);
+    color: var(--color-purple-light);
+    border: 1px solid rgba(168, 85, 247, 0.2);
+    text-transform: uppercase;
+  }
+
+  /* ── Back to top button ── */
+  .back-to-top {
+    position: fixed;
+    bottom: 32px;
+    right: 32px;
+    z-index: 50;
+    cursor: pointer;
+    font-family: 'Orbitron', monospace;
+    font-size: 9px;
+    font-weight: 400;
+    letter-spacing: 0.15em;
+    gap: 6px;
+    transition: opacity 0.3s ease, transform 0.2s ease;
+    border: none;
+    background: rgba(168, 85, 247, 0.10);
+    color: rgba(168, 85, 247, 0.75);
+    border-color: rgba(168, 85, 247, 0.15);
+  }
+  .back-to-top:hover {
+    background: rgba(168, 85, 247, 0.18);
+    color: var(--color-purple-light);
+    transform: translateY(-2px);
+  }
+
+  /* ── Prose styles ── */
+  .blog-prose :global(h2) {
+    font-family: 'Exo 2', sans-serif;
+    font-weight: 700;
+    font-size: 1.5rem;
+    margin-top: 2.5rem;
+    margin-bottom: 1rem;
+    color: var(--color-text-primary);
+    padding-left: 0.75rem;
+    border-left: 2px solid;
+    border-image: linear-gradient(to bottom, rgba(168, 85, 247, 0.8), rgba(34, 197, 94, 0.4)) 1;
+  }
+  .blog-prose :global(h3) {
+    font-family: 'Exo 2', sans-serif;
+    font-weight: 600;
+    font-size: 1.25rem;
+    margin-top: 2rem;
+    margin-bottom: 0.75rem;
+    color: var(--color-text-primary);
+  }
+  .blog-prose :global(p) {
+    font-size: 1rem;
+    line-height: 1.8;
+    color: var(--text-primary-aurora);
+    margin-bottom: 1.25rem;
+  }
+  .blog-prose :global(ul),
+  .blog-prose :global(ol) {
+    padding-left: 1.5rem;
+    margin-bottom: 1.25rem;
+    color: var(--text-primary-aurora);
+  }
+  .blog-prose :global(li) {
+    margin-bottom: 0.5rem;
+    line-height: 1.7;
+  }
+  .blog-prose :global(a) {
+    color: var(--color-purple-mid);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    transition: color 0.2s;
+  }
+  .blog-prose :global(a:hover) {
+    color: var(--color-purple-light);
+  }
+  .blog-prose :global(code) {
+    background: rgba(168, 85, 247, 0.1);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.875em;
+    color: var(--color-purple-light);
+    border: 1px solid rgba(168, 85, 247, 0.15);
+  }
+  .blog-prose :global(pre) {
+    /* glass-strong treatment */
+    background: rgba(255, 255, 255, 0.06);
+    backdrop-filter: blur(32px);
+    -webkit-backdrop-filter: blur(32px);
+    border: 1px solid rgba(168, 85, 247, 0.2);
+    border-top: 1px solid rgba(168, 85, 247, 0.4);
+    border-radius: 12px;
+    padding: 1.5rem;
+    overflow-x: auto;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 0 40px rgba(168, 85, 247, 0.08);
+  }
+  .blog-prose :global(pre code) {
+    background: none;
+    border: none;
+    padding: 0;
+    font-size: 0.875rem;
+    color: var(--text-primary-aurora);
+  }
+  .blog-prose :global(blockquote) {
+    position: relative;
+    padding: 1rem 1.25rem;
+    margin: 1.75rem 0;
+    background: rgba(168, 85, 247, 0.04);
+    border-radius: 0 8px 8px 0;
+    font-style: italic;
+    color: var(--color-text-muted);
+    border-left: none;
+    overflow: hidden;
+  }
+  .blog-prose :global(blockquote::before) {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: linear-gradient(to bottom, rgba(168, 85, 247, 0.8), rgba(34, 197, 94, 0.4));
+    border-radius: 999px;
+  }
+  .blog-prose :global(img) {
+    border-radius: 12px;
+    margin: 2rem 0;
+    border: 1px solid rgba(168, 85, 247, 0.1);
+  }
+  .blog-prose :global(strong) {
+    color: var(--color-text-primary);
+    font-weight: 600;
+  }
+  .blog-prose :global(hr) {
+    border: none;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(168, 85, 247, 0.35), transparent);
+    margin: 2.5rem 0;
+  }
+</style>
+
+<script>
+  import { gsap } from 'gsap'
+  import { ScrollTrigger } from 'gsap/ScrollTrigger'
+  gsap.registerPlugin(ScrollTrigger)
+
+  let postTl: gsap.core.Timeline | null = null
+  let bttTrigger: ScrollTrigger | null = null
+
+  function initPostAnimations() {
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
+    const back    = document.getElementById('post-back')
+    const meta    = document.getElementById('post-meta')
+    const title   = document.getElementById('post-title')
+    const desc    = document.getElementById('post-desc')
+    const tags    = document.getElementById('post-tags')
+    const divider = document.getElementById('post-divider')
+    const btt     = document.getElementById('back-to-top') as HTMLButtonElement | null
+
+    if (reduced) {
+      ;[back, meta, title, desc, tags, divider].forEach(el => {
+        if (el) { el.style.opacity = '1'; el.style.transform = 'none' }
+      })
+      // Show back-to-top button for reduced-motion users
+      if (btt) {
+        btt.style.opacity = '1'
+        btt.style.pointerEvents = 'auto'
+      }
+      return
+    }
+
+    postTl = gsap.timeline({ defaults: { ease: 'power3.out' } })
+    if (back)    postTl.fromTo(back,    { opacity: 0, x: -12 }, { opacity: 1, x: 0, duration: 0.4 })
+    if (meta)    postTl.fromTo(meta,    { opacity: 0, y: 14 },  { opacity: 1, y: 0, duration: 0.45 }, '-=0.15')
+    if (title)   postTl.fromTo(title,   { opacity: 0, y: 26, scale: 0.98 }, { opacity: 1, y: 0, scale: 1, duration: 0.7 }, '-=0.2')
+    if (desc)    postTl.fromTo(desc,    { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.5 }, '-=0.3')
+    if (tags)    postTl.fromTo(tags,    { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.4 }, '-=0.25')
+    if (divider) postTl.fromTo(divider, { opacity: 0, scaleX: 0 }, { opacity: 1, scaleX: 1, duration: 0.5, ease: 'power2.out' }, '-=0.3')
+
+    // Back to top button appears after 500px scroll
+    if (btt) {
+      bttTrigger = ScrollTrigger.create({
+        start: '500px top',
+        onEnter: () => {
+          btt.style.pointerEvents = 'auto'
+          gsap.to(btt, { opacity: 1, duration: 0.3 })
+        },
+        onLeaveBack: () => {
+          btt.style.pointerEvents = 'none'
+          gsap.to(btt, { opacity: 0, duration: 0.3 })
+        },
+      })
+
+      btt.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+      })
+    }
+  }
+
+  document.addEventListener('astro:before-swap', () => {
+    postTl?.kill()
+    postTl = null
+    bttTrigger?.kill()
+    bttTrigger = null
+    ScrollTrigger.getAll().forEach(t => t.kill())
+  })
+
+  document.addEventListener('astro:page-load', initPostAnimations)
+</script>

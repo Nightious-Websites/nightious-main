@@ -36,6 +36,7 @@ const navLinks = [
   { href: '/for-businesses',  label: 'Businesses'  },
   { href: '/for-individuals', label: 'Individuals' },
   { href: '/for-creators',    label: 'Creators'    },
+  { href: '/blog',            label: 'Blog'        },
 ]
 ---
 
@@ -472,6 +473,22 @@ const navLinks = [
     onScroll()
 
     // ── Mobile overlay ───────────────────────────────────────────────────
+    // Focus trap for mobile overlay
+    function trapFocus(e: KeyboardEvent) {
+      if (e.key !== 'Tab') return;
+      const focusableEls = overlay!.querySelectorAll<HTMLElement>(
+        'a[href]:not([tabindex="-1"]), button:not([disabled]):not([tabindex="-1"]), [tabindex="0"]'
+      );
+      if (focusableEls.length === 0) return;
+      const first = focusableEls[0];
+      const last = focusableEls[focusableEls.length - 1];
+      if (e.shiftKey) {
+        if (document.activeElement === first) { e.preventDefault(); last.focus(); }
+      } else {
+        if (document.activeElement === last) { e.preventDefault(); first.focus(); }
+      }
+    }
+
     function openOverlay(): void {
       if (!overlay || !hamburger) return
       overlay.classList.add('is-open')
@@ -488,6 +505,7 @@ const navLinks = [
       }
 
       overlayClose?.focus()
+      overlay.addEventListener('keydown', trapFocus)
     }
 
     function closeOverlay(): void {
@@ -496,6 +514,7 @@ const navLinks = [
       overlay.setAttribute('aria-hidden', 'true')
       hamburger.setAttribute('aria-expanded', 'false')
       document.body.style.overflow = ''
+      overlay.removeEventListener('keydown', trapFocus)
       hamburger.focus()
     }
 

@@ -50,12 +50,21 @@
     </p>
 
   </div>
+
+  <noscript>
+    <style>
+      .cta-eyebrow, .cta-headline, .cta-sub, .cta-buttons, .cta-proof {
+        opacity: 1 !important;
+        transform: none !important;
+      }
+    </style>
+  </noscript>
 </section>
 
 <style>
   .cta-section {
     position: relative;
-    min-height: 80vh;
+    min-height: clamp(520px, 65vh, 780px);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -101,7 +110,7 @@
     font-family: 'Exo 2', sans-serif;
     font-weight: 900;
     font-size: clamp(36px, 5.5vw, 64px);
-    line-height: 1.0;
+    line-height: 1.08;
     letter-spacing: -0.04em;
     color: var(--text-primary-aurora);
     margin-bottom: 20px;
@@ -110,6 +119,7 @@
   .cta-grad {
     background: linear-gradient(120deg, #c084fc 0%, #86efac 100%);
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
     filter: drop-shadow(0 0 20px rgba(168, 85, 247, 0.45));
   }
@@ -117,10 +127,10 @@
   /* Subtext */
   .cta-sub {
     font-family: 'Exo 2', sans-serif;
-    font-weight: 200;
+    font-weight: 300;
     font-size: 18px;
     line-height: 1.6;
-    color: rgba(233, 213, 255, 0.45);
+    color: rgba(233, 213, 255, 0.55);
     margin-bottom: 40px;
     opacity: 0;
   }
@@ -176,7 +186,7 @@
     padding: 16px 34px;
     border-radius: 12px;
     border: 1px solid rgba(255, 255, 255, 0.1);
-    color: rgba(233, 213, 255, 0.5);
+    color: rgba(233, 213, 255, 0.60);
     font-family: 'Exo 2', sans-serif;
     font-size: 15px;
     font-weight: 500;
@@ -193,8 +203,8 @@
   .cta-proof {
     font-family: 'Exo 2', sans-serif;
     font-size: 13px;
-    font-weight: 300;
-    color: rgba(233, 213, 255, 0.28);
+    font-weight: 400;
+    color: rgba(233, 213, 255, 0.55);
     opacity: 0;
   }
 

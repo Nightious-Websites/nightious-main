@@ -1,17 +1,12 @@
 ---
 import BundleLayout from '@/layouts/BundleLayout.astro'
 import BundleHero from '@/components/sections/BundleHero.astro'
-import BundleWalkthrough, { type WalkthroughSection } from '@/components/sections/BundleWalkthrough.astro'
+import { type WalkthroughSection } from '@/components/sections/BundleWalkthrough.astro'
+import ServiceTour, { type TourStep } from '@/components/sections/ServiceTour.astro'
 import CrossSell from '@/components/sections/CrossSell.astro'
 
 const accentRgb = '59, 130, 246'
 const accentColor = '#3b82f6'
-
-const painIntro = [
-  "You're losing hours every week to tasks that shouldn't need a human.",
-  "Your tech breaks at the worst possible time and nobody's there to fix it.",
-  "Your competitors show up online. You don't.",
-]
 
 // 7 sections covering all 10 services
 const sections: WalkthroughSection[] = [
@@ -37,7 +32,7 @@ const sections: WalkthroughSection[] = [
         image: '/images/photos/service-ai-integration-1.webp',
         solutionTagline:
           'We build custom AI agents, phone triage systems, and workflow automation — designed around how your business actually runs, not a generic off-the-shelf template.',
-        features: ['Custom AI agents & builds', '24/7 phone & chat triage', 'Support automation', 'Smart reporting & analytics'],
+        features: ['Custom AI agents & builds', 'Phone & chat triage', 'Support automation', 'Smart reporting & analytics'],
       },
     ],
   },
@@ -193,7 +188,7 @@ const sections: WalkthroughSection[] = [
         icon: '<path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18a8.967 8.967 0 0 0-6 2.292m0-14.25v14.25" />',
         image: '/images/photos/service-training-documentation-1.webp',
         solutionTagline:
-          "Hands-on training and custom documentation tailored to how your team actually works — so the tools you've invested in deliver on their promise.",
+          "Hands-on training and custom documentation built around how your team actually works — so the tools you've invested in deliver on their promise.",
         features: ['Custom training', 'SOP creation', 'Onboarding materials'],
       },
     ],
@@ -226,6 +221,18 @@ const sections: WalkthroughSection[] = [
   },
 ]
 
+// Flatten sections into tour steps
+const tourSteps: TourStep[] = sections.flatMap(section =>
+  section.services.map(service => ({
+    slug: service.slug,
+    title: service.title,
+    icon: service.icon,
+    image: service.image,
+    tagline: service.solutionTagline,
+    features: service.features,
+  }))
+)
+
 const crossSellBundles = [
   { href: '/for-creators', label: 'For Creators', accentRgb: '236, 72, 153', count: 9 },
   { href: '/for-individuals', label: 'For Individuals', accentRgb: '34, 197, 94', count: 5 },
@@ -234,7 +241,7 @@ const crossSellBundles = [
 
 <BundleLayout
   title="IT & Digital Solutions for Businesses | Nightious"
-  description="10 services tailored to run, grow, and protect your business. AI integration, web development, marketing, IT support, and more."
+  description="10 services built to run, grow, and protect your business. AI integration, web development, marketing, IT support, and more."
   audience="Businesses"
   accentColor={accentColor}
   accentRgb={accentRgb}
@@ -244,15 +251,10 @@ const crossSellBundles = [
     slot="hero"
     audience="Businesses"
     headline="Your complete tech stack"
-    tagline="tailored to run, grow, and protect your business."
+    tagline="built to run, grow, and protect your business."
     accentRgb={accentRgb}
     serviceCount={10}
   />
-  <BundleWalkthrough
-    slot="grid"
-    sections={sections}
-    painIntro={painIntro}
-    accentRgb={accentRgb}
-  />
+  <ServiceTour slot="grid" steps={tourSteps} accentRgb={accentRgb} />
   <CrossSell slot="crosssell" bundles={crossSellBundles} />
 </BundleLayout>
