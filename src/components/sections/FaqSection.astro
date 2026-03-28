@@ -37,7 +37,7 @@ const faqs = [
 
       <!-- Left sticky label -->
       <div class="flex-shrink-0 lg:w-52">
-        <div class="faq-eyebrow">FAQ</div>
+        <span class="glass-pill">FAQ</span>
         <h2 class="faq-headline">
           Common <span class="faq-grad">questions.</span>
         </h2>
@@ -89,27 +89,6 @@ const faqs = [
   .faq-section {
     background-color: var(--color-bg-section);
     position: relative;
-  }
-
-  /* Eyebrow */
-  .faq-eyebrow {
-    font-family: 'Orbitron', monospace;
-    font-size: 9px;
-    font-weight: 400;
-    letter-spacing: 0.32em;
-    text-transform: uppercase;
-    color: rgba(168, 85, 247, 0.6);
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 14px;
-  }
-  .faq-eyebrow::before {
-    content: '';
-    display: block;
-    width: 20px;
-    height: 1px;
-    background: rgba(168, 85, 247, 0.4);
   }
 
   /* Headline */

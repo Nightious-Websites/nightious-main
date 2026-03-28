@@ -15,12 +15,14 @@
   <div class="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center" style="z-index: 2;">
 
     <!-- Eyebrow -->
-    <div class="cta-eyebrow" aria-hidden="true">Ready when you are</div>
+    <span class="glass-pill cta-eyebrow" style="opacity:0;" aria-hidden="true">
+      <span class="glass-pill-dot"></span> Ready When You Are
+    </span>
 
     <!-- Headline -->
     <h2 class="cta-headline" id="cta-content">
       Done dealing with tech<br class="hidden sm:block" />
-      <span class="cta-grad">problems on your own?</span>
+      <span class="cta-grad">problems on your <span class="accent-italic">own?</span></span>
     </h2>
 
     <!-- Subtext -->
@@ -51,7 +53,13 @@
 </section>
 
 <style>
-  .cta-section { position: relative; }
+  .cta-section {
+    position: relative;
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 
   /* Aurora blobs */
   .cta-aurora {
@@ -83,28 +91,9 @@
     50% { opacity: 1; transform: scale(1.1); }
   }
 
-  /* Eyebrow */
+  /* Eyebrow (glass-pill from global.css, class kept for GSAP targeting) */
   .cta-eyebrow {
-    font-family: 'Orbitron', monospace;
-    font-size: 9px;
-    font-weight: 400;
-    letter-spacing: 0.32em;
-    text-transform: uppercase;
-    color: rgba(168, 85, 247, 0.6);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
     margin-bottom: 20px;
-    opacity: 0;
-  }
-  .cta-eyebrow::before,
-  .cta-eyebrow::after {
-    content: '';
-    display: block;
-    width: 20px;
-    height: 1px;
-    background: rgba(168, 85, 247, 0.4);
   }
 
   /* Headline */

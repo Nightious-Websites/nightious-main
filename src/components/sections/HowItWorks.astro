@@ -2,143 +2,116 @@
 const steps = [
   {
     number: '01',
-    heading: 'Tell us what you need',
-    bodyHtml: 'Fill out the contact form or give us a call. No questionnaires, no runaround. Just tell us what\'s not working. <strong>We respond as soon as possible.</strong>',
+    title: 'Discovery Call',
+    bodyHtml: "Tell us what's broken. We listen, ask the right questions, and figure out the real problem — not just the symptoms. <strong>Fast response, every time.</strong>",
   },
   {
     number: '02',
-    heading: 'We send you a clear plan',
-    bodyHtml: 'We look at your situation and put together a proposal. What we\'ll do, what it costs, how long it takes. <strong>No hidden fees. No long-term lock-in.</strong>',
+    title: 'Strategy & Blueprint',
+    bodyHtml: "We map out the solution — what we'll build, the timeline, and exact costs. You see the full picture before anything starts. <strong>No hidden fees. No lock-in.</strong>",
   },
   {
     number: '03',
-    heading: 'We get it done',
-    bodyHtml: 'We handle the work end-to-end and keep you posted along the way. When it\'s finished, we make sure you know how everything works. <strong>Ongoing support if you need it.</strong>',
+    title: 'Build & Ship',
+    bodyHtml: 'We handle the work end-to-end and keep you in the loop. You get progress updates, not radio silence. <strong>We ship when we say we will.</strong>',
+  },
+  {
+    number: '04',
+    title: 'Launch & Evolve',
+    bodyHtml: "Go live with confidence. We make sure everything works, train your team, and stay on for support as things grow. <strong>Your success is our success.</strong>",
   },
 ]
 ---
 
-<section class="hiw-section py-24 relative overflow-hidden" aria-label="How it works">
-  <!-- Ghost background numbers -->
-  <div class="hiw-bg-nums" aria-hidden="true">
-    {steps.map(s => <span class="hiw-bg-num">{s.number}</span>)}
+<section class="hiw-section" aria-label="How we work" id="hiw-section">
+
+  <!-- Header -->
+  <div class="hiw-header">
+    <span class="glass-pill" aria-hidden="true">
+      <span class="glass-pill-dot"></span>
+      The Process
+    </span>
+    <h2 class="hiw-headline">
+      How <span class="accent-italic">we</span> <span class="hiw-grad">work.</span>
+    </h2>
   </div>
 
-  <div class="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8" style="z-index: 2;">
+  <!-- Sticky Split -->
+  <div class="hiw-split" id="hiw-split">
 
-    <!-- Heading -->
-    <div class="text-center mb-16">
-      <div class="hiw-eyebrow" aria-hidden="true">The process</div>
-      <h2 class="hiw-headline">
-        How it <span class="hiw-grad">works.</span>
-      </h2>
-    </div>
+    <!-- LEFT: Sticky Spine Column -->
+    <div class="hiw-spine-col" id="hiw-spine-col" aria-hidden="true">
+      <div class="spine-wrap">
+        <!-- Track (background line) -->
+        <div class="spine-track"></div>
+        <!-- Fill (animated progress) -->
+        <div class="spine-fill" id="spine-fill"></div>
+        <!-- Traveling particle -->
+        <div class="spine-particle" id="spine-particle"></div>
 
-    <!-- Steps -->
-    <div class="relative">
-
-      <!-- Desktop connector line -->
-      <div
-        id="hiw-line"
-        class="hiw-connector-line"
-        aria-hidden="true"
-      >
-        <div class="hiw-shimmer"></div>
+        <!-- 4 Nodes -->
+        {steps.map((step, i) => (
+          <div class={`spine-node ${i === 0 ? 'active' : ''}`} data-node={i}>
+            <div class="spine-node-ring">
+              <div class="spine-node-dot"></div>
+            </div>
+            <span class="spine-node-num">{step.number}</span>
+            <div class="spine-node-arm"></div>
+          </div>
+        ))}
       </div>
 
-      <ol class="hiw-steps list-none">
-        {steps.map((step, i) => (
-          <li class="hiw-step process-step" style="opacity:0;">
-
-            <!-- Orb -->
-            <div class="hiw-orb-wrap">
-              <div class="hiw-orb">
-                <span class="hiw-orb-num">{step.number}</span>
-              </div>
-            </div>
-
-            <!-- Mobile connector (vertical) -->
-            {i < steps.length - 1 && (
-              <div class="hiw-mobile-connector lg:hidden" aria-hidden="true">
-                <div class="hiw-mobile-shimmer"></div>
-              </div>
-            )}
-
-            <!-- Card -->
-            <div class="hiw-step-card">
-              <h3 class="hiw-step-title">{step.heading}</h3>
-              {/* SECURITY: bodyHtml is compile-time static only. Never accept from CMS, DB, or user input without sanitization. */}
-              <p class="hiw-step-desc" set:html={step.bodyHtml} />
-            </div>
-
-          </li>
-        ))}
-      </ol>
+      <!-- Progress label -->
+      <div class="spine-label-wrap">
+        <span class="spine-label" id="spine-label">Step 1 of 4</span>
+      </div>
     </div>
 
-    <div class="text-center mt-14">
-      <a href="/contact" class="hiw-cta">
-        Get started
-        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-          <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-      </a>
-    </div>
+    <!-- RIGHT: Step Cards -->
+    <ol class="hiw-steps-col" role="list">
+      {steps.map((step) => (
+        <li class="hiw-step-card" data-step={step.number}>
+          <div class="step-num" aria-hidden="true">{step.number}</div>
+          <h3 class="step-title">{step.title}</h3>
+          {/* SECURITY: bodyHtml is compile-time static only. Never accept from CMS, DB, or user input without sanitization. */}
+          <p class="step-body" set:html={step.bodyHtml} />
+        </li>
+      ))}
+    </ol>
+
   </div>
+
+  <!-- CTA -->
+  <div class="hiw-cta-wrap">
+    <a href="/contact" class="hiw-cta">
+      Start your project
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+        <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </a>
+  </div>
+
 </section>
 
 <style>
+  /* ── Section ── */
   .hiw-section {
-    background-color: var(--color-bg-deep);
     position: relative;
+    background-color: var(--color-bg-deep);
+    padding: 100px 0 0;
   }
 
-  /* Ghost numbers */
-  .hiw-bg-nums {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
+  /* ── Header ── */
+  .hiw-header {
+    text-align: center;
+    margin-bottom: 64px;
+    padding: 0 24px;
     display: flex;
-    justify-content: space-around;
-    pointer-events: none;
-    z-index: 0;
-    overflow: hidden;
-  }
-  .hiw-bg-num {
-    font-family: 'Exo 2', sans-serif;
-    font-weight: 900;
-    font-size: clamp(80px, 14vw, 140px);
-    line-height: 1;
-    color: rgba(168, 85, 247, 0.03);
-    letter-spacing: -0.05em;
-    user-select: none;
-  }
-
-  /* Eyebrow */
-  .hiw-eyebrow {
-    font-family: 'Orbitron', monospace;
-    font-size: 9px;
-    font-weight: 400;
-    letter-spacing: 0.32em;
-    text-transform: uppercase;
-    color: rgba(168, 85, 247, 0.6);
-    display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: center;
-    gap: 10px;
-    margin-bottom: 14px;
-  }
-  .hiw-eyebrow::before,
-  .hiw-eyebrow::after {
-    content: '';
-    display: block;
-    width: 20px;
-    height: 1px;
-    background: rgba(168, 85, 247, 0.4);
+    gap: 20px;
   }
 
-  /* Headline */
   .hiw-headline {
     font-family: 'Exo 2', sans-serif;
     font-weight: 900;
@@ -146,175 +119,331 @@ const steps = [
     line-height: 0.95;
     letter-spacing: -0.035em;
     color: var(--text-primary-aurora);
+    margin: 0;
   }
+
   .hiw-grad {
     background: linear-gradient(120deg, #c084fc 0%, #86efac 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+    background-clip: text;
     filter: drop-shadow(0 0 14px rgba(168, 85, 247, 0.4));
   }
 
-  /* Steps row */
-  .hiw-steps {
+  /* ── Sticky split layout ── */
+  .hiw-split {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 24px;
-  }
-  @media (max-width: 767px) {
-    .hiw-steps { grid-template-columns: 1fr; }
+    grid-template-columns: 120px 1fr;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 24px;
+    gap: 40px;
+    align-items: start;
   }
 
-  .hiw-step {
+  /* ── Left: Spine column (sticky via GSAP pin) ── */
+  .hiw-spine-col {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 0;
-    text-align: center;
-    position: relative;
+    gap: 16px;
   }
 
-  /* Desktop horizontal connector */
-  .hiw-connector-line {
-    display: none;
-    position: absolute;
-    top: 26px; /* orb center */
-    left: calc(100% / 6);
-    right: calc(100% / 6);
-    height: 1px;
-    background: linear-gradient(90deg, rgba(168, 85, 247, 0.5), rgba(34, 197, 94, 0.4));
-    overflow: hidden;
-    transform-origin: left center;
-    transform: scaleX(0);
-    z-index: 1;
-  }
-  @media (min-width: 768px) {
-    .hiw-connector-line { display: block; }
-  }
-  .hiw-shimmer {
-    position: absolute;
-    top: 0;
-    left: -60%;
-    width: 60%;
+  /* ── Spine wrapper (holds track + nodes) ── */
+  .spine-wrap {
+    position: relative;
+    width: 60px;
     height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
-    animation: hiw-flow 2.5s ease-in-out infinite;
-  }
-  @keyframes hiw-flow {
-    from { left: -60%; }
-    to   { left: 100%; }
+    min-height: 480px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 
-  /* Mobile vertical connector */
-  .hiw-mobile-connector {
-    width: 1px;
-    height: 28px;
-    background: linear-gradient(180deg, rgba(168,85,247,0.5), rgba(168,85,247,0.1));
-    margin: 12px 0;
-    position: relative;
-    overflow: hidden;
-  }
-  .hiw-mobile-shimmer {
+  /* ── Track (vertical background line) ── */
+  .spine-track {
     position: absolute;
-    left: 0;
-    top: -100%;
-    width: 100%;
-    height: 40%;
-    background: linear-gradient(180deg, transparent, rgba(255,255,255,0.5), transparent);
-    animation: hiw-flow-v 2s ease-in-out infinite;
-  }
-  @keyframes hiw-flow-v {
-    from { top: -40%; }
-    to   { top: 100%; }
+    top: 24px;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 2px;
+    background: rgba(255, 255, 255, 0.06);
+    border-radius: 1px;
   }
 
-  /* Orb */
-  .hiw-orb-wrap {
-    position: relative;
-    z-index: 2;
-    margin-bottom: 20px;
+  /* ── Fill (glowing progress line) ── */
+  .spine-fill {
+    position: absolute;
+    top: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 2px;
+    height: 0%;
+    background: linear-gradient(180deg, rgba(168, 85, 247, 0.7), rgba(34, 197, 94, 0.5));
+    border-radius: 1px;
+    box-shadow: 0 0 12px rgba(168, 85, 247, 0.3);
+    transition: height 0.6s ease-out;
   }
-  .hiw-orb {
-    position: relative;
-    width: 52px;
-    height: 52px;
+
+  /* ── Traveling particle ── */
+  .spine-particle {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 6px;
+    height: 6px;
     border-radius: 50%;
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(168, 85, 247, 0.4);
-    backdrop-filter: blur(16px);
-    box-shadow: 0 0 22px rgba(168, 85, 247, 0.28), inset 0 0 10px rgba(168, 85, 247, 0.06);
+    background: rgba(168, 85, 247, 0.8);
+    box-shadow: 0 0 16px rgba(168, 85, 247, 0.6), 0 0 6px rgba(168, 85, 247, 0.4);
+    top: 24px;
+    transition: top 0.6s ease-out;
+    z-index: 3;
+  }
+
+  /* ── Nodes (4 positioned along the spine) ── */
+  .spine-node {
+    position: relative;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+    min-height: 100px;
+  }
+
+  /* Node ring */
+  .spine-node-ring {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(255, 255, 255, 0.08);
+    background: var(--color-bg-deep);
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 1;
-  }
-  .hiw-orb::after {
-    content: '';
-    position: absolute;
-    inset: -4px;
-    border-radius: 50%;
-    background: conic-gradient(rgba(168, 85, 247, 0.5) 0deg, rgba(34, 197, 94, 0.3) 180deg, transparent 360deg);
-    z-index: -1;
-    animation: hiw-orb-spin 5s linear infinite;
-  }
-  @keyframes hiw-orb-spin {
-    from { transform: rotate(0deg); }
-    to   { transform: rotate(360deg); }
-  }
-  .hiw-orb-num {
-    font-family: 'Orbitron', monospace;
-    font-size: 12px;
-    font-weight: 400;
-    color: rgba(233, 213, 255, 0.9);
-    letter-spacing: 0.05em;
+    transition: border-color 0.5s ease, box-shadow 0.5s ease, background 0.5s ease;
     position: relative;
-    z-index: 1;
   }
 
-  /* Step card */
+  /* Inner dot */
+  .spine-node-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.06);
+    transition: background 0.5s ease, box-shadow 0.5s ease, transform 0.5s ease;
+  }
+
+  /* Node number (beside the ring) */
+  .spine-node-num {
+    position: absolute;
+    left: calc(100% + 8px);
+    font-family: 'Orbitron', monospace;
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    color: rgba(233, 213, 255, 0.15);
+    white-space: nowrap;
+    transition: color 0.5s ease;
+  }
+
+  /* Connecting arm (horizontal line toward cards) */
+  .spine-node-arm {
+    position: absolute;
+    left: calc(50% + 22px);
+    top: 50%;
+    width: 20px;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.04);
+    transform: translateY(-50%);
+    transition: background 0.5s ease, width 0.5s ease;
+  }
+
+  /* ── Active node state ── */
+  .spine-node.active .spine-node-ring {
+    border-color: rgba(168, 85, 247, 0.5);
+    box-shadow: 0 0 24px rgba(168, 85, 247, 0.2), inset 0 0 12px rgba(168, 85, 247, 0.06);
+    background: rgba(168, 85, 247, 0.06);
+  }
+
+  .spine-node.active .spine-node-dot {
+    background: rgba(168, 85, 247, 0.7);
+    box-shadow: 0 0 12px rgba(168, 85, 247, 0.5);
+    transform: scale(1.2);
+  }
+
+  .spine-node.active .spine-node-num {
+    color: rgba(168, 85, 247, 0.7);
+  }
+
+  .spine-node.active .spine-node-arm {
+    background: linear-gradient(90deg, rgba(168, 85, 247, 0.3), transparent);
+    width: 32px;
+  }
+
+  /* ── Completed node (before active) ── */
+  .spine-node.completed .spine-node-ring {
+    border-color: rgba(34, 197, 94, 0.3);
+    background: rgba(34, 197, 94, 0.04);
+  }
+
+  .spine-node.completed .spine-node-dot {
+    background: rgba(34, 197, 94, 0.5);
+    box-shadow: 0 0 8px rgba(34, 197, 94, 0.3);
+  }
+
+  .spine-node.completed .spine-node-num {
+    color: rgba(34, 197, 94, 0.4);
+  }
+
+  .spine-node.completed .spine-node-arm {
+    background: rgba(34, 197, 94, 0.12);
+  }
+
+  /* Pulse on active node ring */
+  .spine-node.active .spine-node-ring::after {
+    content: '';
+    position: absolute;
+    inset: -6px;
+    border-radius: 50%;
+    border: 1px solid rgba(168, 85, 247, 0.15);
+    animation: node-pulse 2.5s ease-in-out infinite;
+  }
+
+  @keyframes node-pulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50%      { transform: scale(1.15); opacity: 0; }
+  }
+
+  /* ── Progress label ── */
+  .spine-label-wrap {
+    text-align: center;
+  }
+
+  .spine-label {
+    font-family: 'Orbitron', monospace;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    color: rgba(233, 213, 255, 0.35);
+    text-transform: uppercase;
+  }
+
+  /* ── Right: Step cards column ── */
+  .hiw-steps-col {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    padding: 40px 0 120px;
+    list-style: none;
+    margin: 0;
+  }
+
+  /* ── Step card ── */
   .hiw-step-card {
     position: relative;
     background: rgba(255, 255, 255, 0.03);
     backdrop-filter: blur(20px);
-    border-radius: 14px;
-    padding: 20px;
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: 16px;
+    padding: 28px 24px;
     border: 1px solid rgba(255, 255, 255, 0.06);
-    box-shadow: 0 0 24px rgba(168, 85, 247, 0.06);
-    width: 100%;
+    opacity: 0.35;
+    transform: translateY(8px);
+    transition:
+      opacity 0.5s ease,
+      transform 0.5s ease,
+      background 0.5s ease,
+      border-color 0.5s ease,
+      box-shadow 0.5s ease;
   }
+
+  /* Inactive gradient border */
   .hiw-step-card::before {
     content: '';
     position: absolute;
     inset: 0;
-    border-radius: 14px;
-    padding: 1px;
-    background: linear-gradient(160deg, rgba(168, 85, 247, 0.25) 0%, rgba(255,255,255,0.04) 50%, rgba(34,197,94,0.12) 100%);
+    border-radius: 16px;
+    padding: 1.4px;
+    background: linear-gradient(160deg, rgba(168, 85, 247, 0.08) 0%, transparent 50%, rgba(34, 197, 94, 0.04) 100%);
     -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
     -webkit-mask-composite: xor;
     mask-composite: exclude;
     pointer-events: none;
+    transition: background 0.5s ease;
   }
-  .hiw-step-title {
+
+  /* Active state */
+  .hiw-step-card.active {
+    opacity: 1;
+    transform: translateY(0);
+    background: rgba(168, 85, 247, 0.04);
+    border-color: rgba(168, 85, 247, 0.15);
+    box-shadow: 0 0 40px rgba(168, 85, 247, 0.14);
+  }
+
+  .hiw-step-card.active::before {
+    background: linear-gradient(160deg, rgba(168, 85, 247, 0.3) 0%, rgba(255, 255, 255, 0.06) 50%, rgba(34, 197, 94, 0.15) 100%);
+  }
+
+  /* Energy accent bar on active card */
+  .hiw-step-card.active::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 20%;
+    bottom: 20%;
+    width: 2px;
+    background: linear-gradient(180deg, rgba(168, 85, 247, 0.6), rgba(34, 197, 94, 0.4));
+    border-radius: 1px;
+    box-shadow: 0 0 8px rgba(168, 85, 247, 0.3);
+  }
+
+  /* Step number label */
+  .step-num {
+    font-family: 'Orbitron', monospace;
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    color: rgba(168, 85, 247, 0.4);
+    margin-bottom: 8px;
+    transition: color 0.5s ease;
+  }
+
+  .hiw-step-card.active .step-num {
+    color: rgba(168, 85, 247, 0.8);
+  }
+
+  /* Step title */
+  .step-title {
     font-family: 'Exo 2', sans-serif;
     font-weight: 700;
-    font-size: 14px;
+    font-size: 18px;
     color: var(--text-primary-aurora);
-    margin-bottom: 8px;
+    margin: 0 0 8px;
     letter-spacing: -0.01em;
   }
-  .hiw-step-desc {
+
+  /* Step body */
+  .step-body {
     font-family: 'Exo 2', sans-serif;
     font-weight: 300;
-    font-size: 12px;
-    line-height: 1.65;
-    color: var(--text-muted-aurora);
+    font-size: 14px;
+    line-height: 1.7;
+    color: rgba(233, 213, 255, 0.5);
     margin: 0;
   }
-  .hiw-step-desc strong {
+
+  .step-body strong {
     font-weight: 600;
     color: rgba(192, 132, 252, 0.85);
   }
 
-  /* CTA */
+  /* ── CTA ── */
+  .hiw-cta-wrap {
+    text-align: center;
+    padding: 40px 24px 100px;
+  }
+
   .hiw-cta {
     position: relative;
     display: inline-flex;
@@ -329,8 +458,9 @@ const steps = [
     font-weight: 600;
     letter-spacing: 0.03em;
     text-decoration: none;
-    transition: background 0.25s, gap 0.2s, box-shadow 0.25s;
+    transition: background 0.25s ease, gap 0.2s ease, box-shadow 0.25s ease;
   }
+
   .hiw-cta::before {
     content: '';
     position: absolute;
@@ -343,15 +473,51 @@ const steps = [
     mask-composite: exclude;
     pointer-events: none;
   }
+
   .hiw-cta:hover {
     background: rgba(168, 85, 247, 0.18);
     box-shadow: 0 0 24px rgba(168, 85, 247, 0.25);
     gap: 12px;
   }
 
+  /* ── Mobile (< 768px): spine hidden, single column ── */
+  @media (max-width: 767px) {
+    .hiw-split {
+      grid-template-columns: 1fr;
+      gap: 0;
+    }
+
+    .hiw-spine-col {
+      display: none;
+    }
+
+    .hiw-steps-col {
+      padding: 0 0 60px;
+    }
+
+    /* All cards visible on mobile */
+    .hiw-step-card {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  /* ── Reduced motion ── */
   @media (prefers-reduced-motion: reduce) {
-    .hiw-shimmer, .hiw-mobile-shimmer { animation: none; }
-    .hiw-orb::after { animation: none; }
+    .spine-node.active .spine-node-ring::after {
+      animation: none;
+    }
+
+    .spine-fill,
+    .spine-particle {
+      transition: none;
+    }
+
+    .hiw-step-card {
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
   }
 </style>
 
@@ -360,40 +526,139 @@ const steps = [
   import { ScrollTrigger } from 'gsap/ScrollTrigger'
   gsap.registerPlugin(ScrollTrigger)
 
-  let processTl: gsap.core.Timeline | null = null
+  let pinInstance: ScrollTrigger | null = null
+  let stepTriggers: ScrollTrigger[] = []
 
-  function initProcess() {
-    const steps = document.querySelectorAll<HTMLElement>('.process-step')
-    const line = document.getElementById('hiw-line')
-    if (!steps.length) return
+  const STEP_LABELS = ['Step 1 of 4', 'Step 2 of 4', 'Step 3 of 4', 'Step 4 of 4']
 
-    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    if (reduced) {
-      steps.forEach(s => { s.style.opacity = '1'; s.style.transform = '' })
-      if (line) { line.style.transform = 'scaleX(1)' }
-      return
-    }
+  function activateStep(index: number) {
+    const cards = document.querySelectorAll<HTMLElement>('.hiw-step-card')
+    const nodes = document.querySelectorAll<HTMLElement>('.spine-node')
+    const spineFill = document.getElementById('spine-fill')
+    const spineParticle = document.getElementById('spine-particle')
+    const spineLabel = document.getElementById('spine-label')
+    const spineWrap = document.querySelector<HTMLElement>('.spine-wrap')
 
-    processTl = gsap.timeline({
-      scrollTrigger: { trigger: steps[0], start: 'top 80%', once: true },
+    // Toggle .active on cards
+    cards.forEach((card, i) => {
+      card.classList.toggle('active', i === index)
     })
 
-    processTl.fromTo(
-      steps,
-      { opacity: 0, y: 30 },
-      { opacity: 1, y: 0, stagger: 0.18, duration: 0.65, ease: 'power2.out' }
-    )
+    // Toggle node states: completed / active / inactive
+    nodes.forEach((node, i) => {
+      node.classList.remove('active', 'completed')
+      if (i < index) node.classList.add('completed')
+      else if (i === index) node.classList.add('active')
+    })
 
-    if (line) {
-      processTl.fromTo(
-        line,
-        { scaleX: 0 },
-        { scaleX: 1, duration: 0.7, ease: 'power2.out' },
-        '<'
-      )
+    // Animate spine fill height and particle position
+    if (spineFill && spineWrap && spineParticle) {
+      const wrapH = spineWrap.offsetHeight
+      const trackTop = 24
+      const trackBottom = 24
+      const trackH = wrapH - trackTop - trackBottom
+      // Position fill to reach the center of the active node
+      // Nodes are evenly distributed: node center = trackTop + (index + 0.5) * (trackH / 4)
+      const targetH = trackTop + ((index + 0.5) / 4) * trackH
+      const fillPct = ((targetH - trackTop) / trackH) * 100
+
+      gsap.to(spineFill, {
+        height: `${fillPct}%`,
+        duration: 0.6,
+        ease: 'power2.out',
+      })
+
+      gsap.to(spineParticle, {
+        top: targetH,
+        duration: 0.6,
+        ease: 'power2.out',
+      })
+    }
+
+    // Update label
+    if (spineLabel) {
+      spineLabel.textContent = STEP_LABELS[index]
     }
   }
 
-  document.addEventListener('astro:before-swap', () => { processTl?.kill(); processTl = null })
-  document.addEventListener('astro:page-load', initProcess)
+  function initHowWeWork() {
+    const cards = document.querySelectorAll<HTMLElement>('.hiw-step-card')
+    const spineCol = document.getElementById('hiw-spine-col')
+    const split = document.getElementById('hiw-split')
+    if (!cards.length || !spineCol || !split) return
+
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    if (reduced) {
+      cards.forEach(card => {
+        card.style.opacity = '1'
+        card.style.transform = 'none'
+      })
+      // Show all nodes as completed/active
+      const nodes = document.querySelectorAll<HTMLElement>('.spine-node')
+      nodes.forEach((node, i) => {
+        if (i < 3) node.classList.add('completed')
+        else node.classList.add('active')
+      })
+      const fill = document.getElementById('spine-fill')
+      if (fill) fill.style.height = '100%'
+      return
+    }
+
+    const isMobile = window.innerWidth < 768
+
+    if (!isMobile) {
+      // Pin the spine column for the full scroll of the steps
+      pinInstance = ScrollTrigger.create({
+        trigger: split,
+        start: 'top top',
+        end: 'bottom bottom',
+        pin: spineCol,
+        pinType: 'transform',
+        anticipatePin: 1,
+      })
+    } else {
+      // Mobile: stagger-reveal cards (spine is hidden via CSS)
+      gsap.fromTo(
+        cards,
+        { opacity: 0, y: 20 },
+        {
+          opacity: 1,
+          y: 0,
+          stagger: 0.15,
+          duration: 0.55,
+          ease: 'power2.out',
+          scrollTrigger: {
+            trigger: split,
+            start: 'top 80%',
+            once: true,
+          },
+        }
+      )
+      return
+    }
+
+    // Activate first step
+    activateStep(0)
+
+    // Per-card ScrollTriggers
+    cards.forEach((card, i) => {
+      const trigger = ScrollTrigger.create({
+        trigger: card,
+        start: 'top 60%',
+        end: 'bottom 40%',
+        onEnter: () => activateStep(i),
+        onEnterBack: () => activateStep(i),
+      })
+      stepTriggers.push(trigger)
+    })
+  }
+
+  document.addEventListener('astro:before-swap', () => {
+    pinInstance?.kill()
+    stepTriggers.forEach(t => t.kill())
+    pinInstance = null
+    stepTriggers = []
+  })
+
+  document.addEventListener('astro:page-load', initHowWeWork)
 </script>
