@@ -23,9 +23,12 @@ const blog = defineCollection({
     title: z.string(),
     description: z.string().max(160),
     date: z.coerce.date(),
+    updatedDate: z.coerce.date().optional(),
     author: z.string().default('Nightious Team'),
     tags: z.array(z.string()).default([]),
+    canonical: z.string().url().optional(),
     image: z.string().optional(),
+    ogImage: z.string().optional(),
     draft: z.boolean().default(false),
   }),
 })

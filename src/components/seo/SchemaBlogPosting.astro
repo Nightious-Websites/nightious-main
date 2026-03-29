@@ -1,0 +1,52 @@
+---
+interface Props {
+  title: string
+  description: string
+  slug: string
+  datePublished: Date
+  dateModified?: Date
+  image?: string
+  author?: string
+}
+
+const {
+  title,
+  description,
+  slug,
+  datePublished,
+  dateModified,
+  image = '/images/og/og-home.png',
+  author = 'Nightious Team',
+} = Astro.props
+
+const canonical = `https://nightious.com/blog/${slug}`
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: title,
+  description,
+  datePublished: datePublished.toISOString(),
+  dateModified: (dateModified ?? datePublished).toISOString(),
+  author: {
+    '@type': 'Person',
+    name: author,
+  },
+  image: [new URL(image, Astro.site).toString()],
+  mainEntityOfPage: {
+    '@type': 'WebPage',
+    '@id': canonical,
+  },
+  publisher: {
+    '@type': 'Organization',
+    '@id': 'https://nightious.com/#organization',
+    name: 'Nightious',
+    logo: {
+      '@type': 'ImageObject',
+      url: 'https://nightious.com/images/logos/icon-color.png',
+    },
+  },
+}
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(schema)} />
