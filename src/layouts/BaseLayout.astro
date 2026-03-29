@@ -25,10 +25,6 @@ const { title, description, ogImage, ogType, noindex } = Astro.props
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <!-- Security meta tags -->
-    <meta
-      http-equiv="Content-Security-Policy"
-      content="default-src 'self'; script-src 'self' 'unsafe-inline' https://va.vercel-scripts.com; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; media-src 'self'; connect-src 'self' https://formspree.io https://va.vercel-scripts.com https://vitals.vercel-insights.com; frame-src 'self'; object-src 'none'; form-action 'self' https://formspree.io; base-uri 'self'; upgrade-insecure-requests;"
-    />
     <meta http-equiv="X-Content-Type-Options" content="nosniff" />
     <meta name="referrer" content="strict-origin-when-cross-origin" />
 
@@ -85,14 +81,10 @@ const { title, description, ogImage, ogType, noindex } = Astro.props
 </style>
 
 <script>
-  // Re-trigger autoplay on every page-load event (covers View Transitions swaps
-  // and hard refreshes). The autoplay HTML attribute is only honoured on the
-  // initial parser pass; dynamically-swapped DOM nodes (View Transitions) need
-  // an explicit .play() call to autoplay reliably across all browsers.
+  import { initManagedAutoplayVideos, initVideoUpgrades } from '@/utils/media'
+
   document.addEventListener('astro:page-load', () => {
-    document.querySelectorAll<HTMLVideoElement>('video[autoplay]').forEach(v => {
-      v.load()
-      v.play().catch(() => {})
-    })
+    initVideoUpgrades()
+    initManagedAutoplayVideos()
   })
 </script>
