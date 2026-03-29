@@ -6,7 +6,7 @@ export function shouldDisableAutoplay(): boolean {
 }
 
 export function initManagedAutoplayVideos(): void {
-  if (shouldDisableAutoplay()) return
+  if (typeof window === 'undefined' || shouldDisableAutoplay()) return
 
   const video = document.querySelector<HTMLVideoElement>('video[data-autoplay-managed="true"]')
   if (!video) return
@@ -15,6 +15,8 @@ export function initManagedAutoplayVideos(): void {
 }
 
 export function initVideoUpgrades(): void {
+  if (typeof window === 'undefined') return
+
   const targets = document.querySelectorAll<HTMLVideoElement>('video[data-video-upgrade="true"]')
   if (!targets.length) return
 
@@ -22,6 +24,16 @@ export function initVideoUpgrades(): void {
     targets.forEach((video) => {
       video.removeAttribute('autoplay')
       video.pause()
+    })
+    return
+  }
+
+  // Fallback for older browsers
+  if (!('IntersectionObserver' in window)) {
+    targets.forEach((video) => {
+      if (video.dataset.videoInitialized === 'true') return
+      video.dataset.videoInitialized = 'true'
+      video.play().catch(() => {})
     })
     return
   }
