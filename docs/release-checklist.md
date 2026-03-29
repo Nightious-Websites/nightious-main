@@ -19,6 +19,8 @@
 ## Quality gates
 - [ ] `npm run build` passes.
 - [ ] `npm run check:media` passes.
+- [ ] `npm run lhci:local` passes for every configured route in `lighthouserc.json`.
+- [ ] Lighthouse `errors-in-console` audit reports `0` for every audited route.
 - [ ] GitHub Actions quality workflow passes.
 
 ## Security headers
