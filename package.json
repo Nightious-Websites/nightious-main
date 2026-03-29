@@ -8,7 +8,10 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "lhci": "lhci autorun"
+    "lhci": "lhci autorun",
+    "check:media": "node scripts/check-media-budget.mjs",
+    "lhci:local": "bash scripts/ensure-chrome.sh && npm run build && lhci autorun",
+    "check:a11y": "node scripts/check-a11y.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.2.0",
@@ -22,7 +25,9 @@
     "tailwindcss": "^4.0.0"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.11.1",
     "@lhci/cli": "^0.15.1",
+    "@playwright/test": "^1.58.2",
     "@types/node": "^20.0.0",
     "typescript": "^5.4.0"
   }
