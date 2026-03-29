@@ -4,7 +4,6 @@ import BaseLayout from '@/layouts/BaseLayout.astro'
 import AuroraBackground from '@/components/ui/AuroraBackground.astro'
 import ConstellationParticles from '@/components/ui/ConstellationParticles.astro'
 import HudBrackets from '@/components/ui/HudBrackets.astro'
-import cityNight from '@/assets/images/photos/city-night.jpg'
 import logoCompleteColor from '@/assets/images/logos/logo-complete-color.png'
 ---
 
@@ -13,21 +12,26 @@ import logoCompleteColor from '@/assets/images/logos/logo-complete-color.png'
   description="This page doesn't exist — but your IT solution does. Return to Nightious to find what you're looking for."
   noindex={true}
 >
+  <!-- CRT noise canvas -->
+  <canvas id="noise-canvas" aria-hidden="true" style="position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:3;opacity:0.03;mix-blend-mode:screen;"></canvas>
+
   <section
     class="e404-section relative min-h-dvh flex items-center justify-center overflow-hidden pt-16"
     aria-label="404 error"
     id="e404-section"
   >
-    <!-- Background photo -->
+    <!-- Background video -->
     <div class="absolute inset-0 z-0" aria-hidden="true">
-      <Image
-        src={cityNight}
-        alt=""
-        class="w-full h-full object-cover object-center"
-        loading="eager"
-        widths={[800, 1200, 1920]}
-        sizes="100vw"
-      />
+      <video
+        class="w-full h-full object-cover object-center pointer-events-none"
+        autoplay muted loop playsinline
+        aria-hidden="true"
+        tabindex="-1"
+        preload="none"
+      >
+        <source src="/videos/hero-404.webm" type="video/webm" />
+        <source src="/videos/hero-404.mp4" type="video/mp4" />
+      </video>
       <!-- Deep dark overlay -->
       <div
         class="absolute inset-0"
@@ -269,6 +273,55 @@ import logoCompleteColor from '@/assets/images/logos/logo-complete-color.png'
 
   let tl: gsap.core.Timeline | null = null
   let mouseMoveController: AbortController | null = null
+  let noiseStop: (() => void) | null = null
+
+  function startNoise() {
+    const canvas = document.getElementById('noise-canvas') as HTMLCanvasElement | null
+    if (!canvas) return null
+
+    const ctx = canvas.getContext('2d')
+    if (!ctx) return null
+
+    // Size to viewport
+    function resize() {
+      canvas.width  = window.innerWidth
+      canvas.height = window.innerHeight
+    }
+    resize()
+    window.addEventListener('resize', resize)
+
+    let lastNoise = 0
+    let rafId: number | null = null
+
+    function loop(t: number) {
+      rafId = requestAnimationFrame(loop)
+
+      // ~8fps — intentionally choppy for CRT aesthetic, saves perf
+      if (t - lastNoise < 125) return
+      lastNoise = t
+
+      const w = canvas.width
+      const h = canvas.height
+      const img = ctx.createImageData(w, h)
+      const data = img.data
+      for (let i = 0; i < data.length; i += 4) {
+        const v = Math.random() * 255
+        data[i]     = v
+        data[i + 1] = v
+        data[i + 2] = v
+        data[i + 3] = 255
+      }
+      ctx.putImageData(img, 0, 0)
+    }
+
+    rafId = requestAnimationFrame(loop)
+
+    return function stop() {
+      if (rafId !== null) cancelAnimationFrame(rafId)
+      window.removeEventListener('resize', resize)
+      ctx.clearRect(0, 0, canvas.width, canvas.height)
+    }
+  }
 
   function initAnimations() {
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -291,6 +344,8 @@ import logoCompleteColor from '@/assets/images/logos/logo-complete-color.png'
       })
       return
     }
+
+    noiseStop = startNoise()
 
     // Entrance timeline
     tl = gsap.timeline({ defaults: { ease: 'power3.out' } })
@@ -330,6 +385,8 @@ import logoCompleteColor from '@/assets/images/logos/logo-complete-color.png'
     tl = null
     mouseMoveController?.abort()
     mouseMoveController = null
+    noiseStop?.()
+    noiseStop = null
   })
 
   document.addEventListener('astro:page-load', initAnimations)

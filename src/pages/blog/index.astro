@@ -34,9 +34,27 @@ const remainingPosts = posts.slice(1)
     aria-label="Blog hero"
     id="blog-hero"
   >
+    <!-- Video background -->
+    <video
+      class="absolute inset-0 w-full h-full object-cover pointer-events-none"
+      style="z-index: 0;"
+      autoplay muted loop playsinline
+      aria-hidden="true"
+      tabindex="-1"
+      preload="none"
+    >
+      <source src="/videos/hero-blog.webm" type="video/webm" />
+      <source src="/videos/hero-blog.mp4" type="video/mp4" />
+    </video>
+    <!-- Video overlay -->
+    <div class="absolute inset-0 pointer-events-none" style="background: rgba(2,0,10,0.6); z-index: 0;" aria-hidden="true"></div>
+
     <AuroraBackground variant="subtle" colors="purple-emerald" />
     <ConstellationParticles density="low" colors="purple-emerald" />
     <HudBrackets size={28} inset={20} color="rgba(168,85,247,0.35)" />
+
+    <!-- Floating editorial words canvas -->
+    <canvas id="blog-words-canvas" aria-hidden="true" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:2;"></canvas>
 
     <!-- Scan line -->
     <div class="scan-line" aria-hidden="true"></div>
@@ -311,6 +329,7 @@ const remainingPosts = posts.slice(1)
     position: relative;
     overflow: hidden;
     min-height: 280px;
+    height: 100%;
   }
   @media (max-width: 768px) {
     .featured-img-wrap {
@@ -318,9 +337,12 @@ const remainingPosts = posts.slice(1)
     }
   }
   .featured-img {
+    position: absolute;
+    inset: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
+    object-position: center;
     transition: transform 0.5s ease;
   }
   .featured-card:hover .featured-img {
@@ -512,6 +534,78 @@ const remainingPosts = posts.slice(1)
   gsap.registerPlugin(ScrollTrigger)
 
   let blogTl: gsap.core.Timeline | null = null
+  let blogWordsStop: (() => void) | null = null
+
+  function startBlogWords() {
+    const canvas = document.getElementById('blog-words-canvas') as HTMLCanvasElement | null
+    if (!canvas) return null
+
+    const ctx = canvas.getContext('2d')
+    if (!ctx) return null
+
+    const dpr = Math.min(window.devicePixelRatio || 1, 2)
+
+    function resize() {
+      canvas.width  = canvas.offsetWidth  * dpr
+      canvas.height = canvas.offsetHeight * dpr
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
+    }
+    resize()
+    const ro = new ResizeObserver(resize)
+    ro.observe(canvas)
+
+    const WORDS = ['insight', 'clarity', 'signal', 'design', 'motion', 'build', 'craft', 'scale', 'growth', 'protect', 'data', 'optimize']
+
+    const particles = Array.from({ length: 11 }, () => ({
+      word:    WORDS[Math.floor(Math.random() * WORDS.length)],
+      x:       Math.random(),
+      y:       Math.random(),
+      vy:      0.000055 + Math.random() * 0.000075,
+      size:    34 + Math.random() * 38,
+      opacity: 0.034 + Math.random() * 0.028,
+      rot:     (Math.random() - 0.5) * 0.18,
+    }))
+
+    let lastT = 0
+    let rafId: number | null = null
+
+    function loop(t: number) {
+      const dt = lastT === 0 ? 16 : t - lastT
+      lastT = t
+
+      const w = canvas.offsetWidth
+      const h = canvas.offsetHeight
+      ctx.clearRect(0, 0, w, h)
+
+      for (const p of particles) {
+        p.y -= p.vy * dt
+        if (p.y < -0.15) {
+          p.y = 1.12
+          p.x = Math.random()
+          p.word = WORDS[Math.floor(Math.random() * WORDS.length)]
+        }
+
+        ctx.save()
+        ctx.globalAlpha = p.opacity
+        ctx.fillStyle = 'rgba(168, 85, 247, 1)'
+        ctx.font = `900 ${p.size}px Orbitron, monospace`
+        ctx.translate(p.x * w, p.y * h)
+        ctx.rotate(p.rot)
+        ctx.fillText(p.word, 0, 0)
+        ctx.restore()
+      }
+
+      rafId = requestAnimationFrame(loop)
+    }
+
+    rafId = requestAnimationFrame(loop)
+
+    return function stop() {
+      if (rafId !== null) cancelAnimationFrame(rafId)
+      ro.disconnect()
+      ctx.clearRect(0, 0, canvas.width, canvas.height)
+    }
+  }
 
   function initBlogAnimations() {
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -524,6 +618,10 @@ const remainingPosts = posts.slice(1)
     const featured = document.getElementById('blog-featured')
     const gridItems = document.querySelectorAll<HTMLElement>('.post-item')
     const empty    = document.getElementById('blog-empty')
+
+    if (!reduced) {
+      blogWordsStop = startBlogWords()
+    }
 
     if (reduced) {
       ;[status, eyebrow, h1, divider, lead, featured, empty].forEach(el => {
@@ -585,6 +683,8 @@ const remainingPosts = posts.slice(1)
     blogTl?.kill()
     blogTl = null
     ScrollTrigger.getAll().forEach(t => t.kill())
+    blogWordsStop?.()
+    blogWordsStop = null
   })
 
   document.addEventListener('astro:page-load', initBlogAnimations)

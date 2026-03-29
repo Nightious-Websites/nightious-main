@@ -46,6 +46,21 @@ const breadcrumbItems = [
     aria-label="Services hero"
     id="services-hero-section"
   >
+    <!-- Video background -->
+    <video
+      class="absolute inset-0 w-full h-full object-cover pointer-events-none"
+      style="z-index: 0;"
+      autoplay muted loop playsinline
+      aria-hidden="true"
+      tabindex="-1"
+      preload="none"
+    >
+      <source src="/videos/hero-inner.webm" type="video/webm" />
+      <source src="/videos/hero-inner.mp4" type="video/mp4" />
+    </video>
+    <!-- Video overlay -->
+    <div class="absolute inset-0 pointer-events-none" style="background: rgba(2,0,10,0.6); z-index: 0;" aria-hidden="true"></div>
+
     <!-- Aurora blobs -->
     <AuroraBackground variant="subtle" colors="purple-emerald" />
 
@@ -64,6 +79,27 @@ const breadcrumbItems = [
       style="z-index: 1; opacity: 0.35;"
       aria-hidden="true"
     ></div>
+
+    <!-- Radar overlay — rotating sweep + concentric rings -->
+    <div class="radar-wrap" aria-hidden="true">
+      <svg class="radar-svg" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+        <!-- Concentric rings -->
+        <circle class="radar-ring" r="13" cx="50" cy="50"/>
+        <circle class="radar-ring" r="22" cx="50" cy="50"/>
+        <circle class="radar-ring" r="31" cx="50" cy="50"/>
+        <circle class="radar-ring" r="40" cx="50" cy="50"/>
+        <!-- Rotating sweep -->
+        <g class="radar-sweep-g">
+          <line class="radar-sweep-line" x1="50" y1="50" x2="50" y2="10"/>
+        </g>
+        <!-- Blip dots -->
+        <circle class="radar-blip" style="animation-delay: 0.3s;" cx="62" cy="35" r="0.8"/>
+        <circle class="radar-blip" style="animation-delay: 1.9s;" cx="39" cy="61" r="0.6"/>
+        <circle class="radar-blip" style="animation-delay: 3.2s;" cx="59" cy="57" r="1"/>
+        <circle class="radar-blip" style="animation-delay: 0.8s;" cx="32" cy="43" r="0.5"/>
+        <circle class="radar-blip" style="animation-delay: 2.5s;" cx="66" cy="63" r="0.7"/>
+      </svg>
+    </div>
 
     <!-- Content -->
     <div class="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center" style="z-index: 20;">
@@ -279,6 +315,54 @@ const breadcrumbItems = [
       opacity: 1 !important;
       transform: none !important;
     }
+  }
+
+  /* ── Radar overlay ── */
+  .radar-wrap {
+    position: absolute;
+    inset: 0;
+    z-index: 4;
+    pointer-events: none;
+    overflow: hidden;
+  }
+  .radar-svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+  .radar-ring {
+    fill: none;
+    stroke: rgba(168, 85, 247, 0.1);
+    stroke-width: 0.3;
+    vector-effect: non-scaling-stroke;
+  }
+  .radar-sweep-g {
+    transform-origin: 50px 50px;
+    animation: radar-rotate 8s linear infinite;
+  }
+  .radar-sweep-line {
+    stroke: rgba(168, 85, 247, 0.55);
+    stroke-width: 0.4;
+    vector-effect: non-scaling-stroke;
+  }
+  .radar-blip {
+    fill: rgba(34, 197, 94, 0.75);
+    animation: radar-blip-pulse 4s ease-in-out infinite;
+  }
+
+  @keyframes radar-rotate {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+  }
+  @keyframes radar-blip-pulse {
+    0%, 100% { opacity: 0.1; }
+    50%      { opacity: 0.9; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .radar-sweep-g { animation: none; }
+    .radar-blip    { animation: none; opacity: 0.3; }
   }
 </style>
 

@@ -9,9 +9,11 @@ interface Props {
   tagline: string
   accentRgb: string
   serviceCount: number
+  animStyle?: 'network' | 'waveform' | 'orbs'
+  bgVideo?: string
 }
 
-const { audience, headline, tagline, accentRgb, serviceCount } = Astro.props
+const { audience, headline, tagline, accentRgb, serviceCount, animStyle, bgVideo } = Astro.props
 ---
 
 <section
@@ -19,11 +21,39 @@ const { audience, headline, tagline, accentRgb, serviceCount } = Astro.props
   aria-label={`Services for ${audience}`}
   id="bundle-hero-section"
 >
+  {/* Video background */}
+  {bgVideo && (
+    <>
+      <video
+        class="absolute inset-0 w-full h-full object-cover pointer-events-none"
+        style="z-index: 0;"
+        autoplay muted loop playsinline
+        aria-hidden="true"
+        tabindex="-1"
+        preload="none"
+      >
+        <source src={bgVideo} type="video/webm" />
+        <source src={bgVideo.replace('.webm', '.mp4')} type="video/mp4" />
+      </video>
+      <div class="absolute inset-0 pointer-events-none" style="background: rgba(2,0,10,0.62); z-index: 1;" aria-hidden="true"></div>
+    </>
+  )}
+
   <!-- Aurora background: accent-colored per bundle -->
   <AuroraBackground variant="subtle" colors="accent" accentRgb={accentRgb} zIndex={2} />
 
-  <!-- Constellation particles -->
-  <ConstellationParticles density="medium" colors="purple-emerald" zIndex={3} />
+  <!-- Constellation particles or canvas animation -->
+  {animStyle ? (
+    <canvas
+      class="bh-canvas"
+      data-anim-style={animStyle}
+      data-accent-rgb={accentRgb}
+      aria-hidden="true"
+      style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:3;"
+    ></canvas>
+  ) : (
+    <ConstellationParticles density="medium" colors="purple-emerald" zIndex={3} />
+  )}
 
   <!-- Grid texture overlay -->
   <div class="absolute inset-0 bg-grid pointer-events-none" style="z-index: 4;" aria-hidden="true"></div>
@@ -97,6 +127,15 @@ const { audience, headline, tagline, accentRgb, serviceCount } = Astro.props
     padding-top: 9rem;
     padding-bottom: 5rem;
     background-color: var(--color-bg-deep);
+  }
+
+  /* ── Canvas ── */
+  .bh-canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
   }
 
   /* ── Status pill ── */
@@ -200,7 +239,256 @@ const { audience, headline, tagline, accentRgb, serviceCount } = Astro.props
   import { gsap } from 'gsap'
 
   let bundleHeroTl: gsap.core.Timeline | null = null
+  let bhStop: (() => void) | null = null
 
+  // ── Canvas: Network (For Businesses) ───────────────────────────────────────
+  function startNetwork(canvas: HTMLCanvasElement, rgb: string) {
+    const ctx = canvas.getContext('2d')
+    if (!ctx) return null
+
+    const dpr = Math.min(window.devicePixelRatio || 1, 2)
+
+    function resize() {
+      canvas.width  = canvas.offsetWidth  * dpr
+      canvas.height = canvas.offsetHeight * dpr
+      ctx!.setTransform(dpr, 0, 0, dpr, 0, 0)
+    }
+    resize()
+    const ro = new ResizeObserver(resize)
+    ro.observe(canvas)
+
+    const N = 14
+    const nodes = Array.from({ length: N }, () => ({
+      x: 0.05 + Math.random() * 0.9,
+      y: 0.05 + Math.random() * 0.9,
+      vx: (Math.random() - 0.5) * 0.000025,
+      vy: (Math.random() - 0.5) * 0.000025,
+      phase: Math.random() * Math.PI * 2,
+      speed: 0.0003 + Math.random() * 0.0002,
+    }))
+
+    const packets: { a: number; b: number; t: number; speed: number }[] = []
+    let lastPacket = 0
+
+    function spawnPacket() {
+      const a = Math.floor(Math.random() * N)
+      let b = Math.floor(Math.random() * N)
+      while (b === a) b = Math.floor(Math.random() * N)
+      packets.push({ a, b, t: 0, speed: 0.0008 + Math.random() * 0.0004 })
+    }
+
+    let lastT = 0
+    let rafId: number | null = null
+
+    function loop(t: number) {
+      const dt = lastT === 0 ? 16 : t - lastT
+      lastT = t
+
+      const w = canvas.offsetWidth
+      const h = canvas.offsetHeight
+      ctx!.clearRect(0, 0, w, h)
+
+      // Update node positions (slow sine drift)
+      for (const n of nodes) {
+        n.phase += n.speed * dt
+        n.x += Math.sin(n.phase * 0.7) * 0.00015
+        n.y += Math.cos(n.phase * 0.5) * 0.00012
+        if (n.x < 0.02) n.x = 0.02
+        if (n.x > 0.98) n.x = 0.98
+        if (n.y < 0.02) n.y = 0.02
+        if (n.y > 0.98) n.y = 0.98
+      }
+
+      // Draw edges between nearby nodes
+      ctx!.lineWidth = 0.6
+      for (let i = 0; i < N; i++) {
+        for (let j = i + 1; j < N; j++) {
+          const dx = (nodes[i].x - nodes[j].x) * w
+          const dy = (nodes[i].y - nodes[j].y) * h
+          const dist = Math.sqrt(dx * dx + dy * dy)
+          if (dist < 180) {
+            const alpha = (1 - dist / 180) * 0.35
+            ctx!.strokeStyle = `rgba(${rgb}, ${alpha})`
+            ctx!.beginPath()
+            ctx!.moveTo(nodes[i].x * w, nodes[i].y * h)
+            ctx!.lineTo(nodes[j].x * w, nodes[j].y * h)
+            ctx!.stroke()
+          }
+        }
+      }
+
+      // Draw nodes
+      for (const n of nodes) {
+        ctx!.beginPath()
+        ctx!.arc(n.x * w, n.y * h, 2, 0, Math.PI * 2)
+        ctx!.fillStyle = `rgba(${rgb}, 0.6)`
+        ctx!.fill()
+      }
+
+      // Spawn data packet every 2.5s
+      if (t - lastPacket > 2500) {
+        spawnPacket()
+        lastPacket = t
+      }
+
+      // Draw + advance packets
+      for (let i = packets.length - 1; i >= 0; i--) {
+        const p = packets[i]
+        p.t += p.speed * dt
+        if (p.t >= 1) { packets.splice(i, 1); continue }
+        const ax = nodes[p.a].x * w
+        const ay = nodes[p.a].y * h
+        const bx = nodes[p.b].x * w
+        const by = nodes[p.b].y * h
+        const px = ax + (bx - ax) * p.t
+        const py = ay + (by - ay) * p.t
+        ctx!.beginPath()
+        ctx!.arc(px, py, 3, 0, Math.PI * 2)
+        ctx!.fillStyle = `rgba(${rgb}, 0.95)`
+        ctx!.shadowColor = `rgba(${rgb}, 0.8)`
+        ctx!.shadowBlur = 8
+        ctx!.fill()
+        ctx!.shadowBlur = 0
+      }
+
+      rafId = requestAnimationFrame(loop)
+    }
+
+    rafId = requestAnimationFrame(loop)
+
+    return function stop() {
+      if (rafId) cancelAnimationFrame(rafId)
+      ro.disconnect()
+      ctx!.clearRect(0, 0, canvas.width, canvas.height)
+    }
+  }
+
+  // ── Canvas: Waveform (For Creators) ────────────────────────────────────────
+  function startWaveform(canvas: HTMLCanvasElement, rgb: string) {
+    const ctx = canvas.getContext('2d')
+    if (!ctx) return null
+
+    const dpr = Math.min(window.devicePixelRatio || 1, 2)
+    function resize() {
+      canvas.width  = canvas.offsetWidth  * dpr
+      canvas.height = canvas.offsetHeight * dpr
+      ctx!.setTransform(dpr, 0, 0, dpr, 0, 0)
+    }
+    resize()
+    const ro = new ResizeObserver(resize)
+    ro.observe(canvas)
+
+    const waves = [
+      { amp: 45, freq: 0.004, phaseSpeed: 0.0012, yFrac: 0.28, opacity: 0.22 },
+      { amp: 28, freq: 0.007, phaseSpeed: 0.0019, yFrac: 0.42, opacity: 0.18 },
+      { amp: 55, freq: 0.003, phaseSpeed: 0.0008, yFrac: 0.56, opacity: 0.14 },
+      { amp: 20, freq: 0.009, phaseSpeed: 0.0025, yFrac: 0.70, opacity: 0.10 },
+    ].map(w => ({ ...w, phase: Math.random() * Math.PI * 2 }))
+
+    let lastT = 0
+    let rafId: number | null = null
+
+    function loop(t: number) {
+      const dt = lastT === 0 ? 16 : t - lastT
+      lastT = t
+
+      const w = canvas.offsetWidth
+      const h = canvas.offsetHeight
+      ctx!.clearRect(0, 0, w, h)
+
+      for (const wave of waves) {
+        wave.phase += wave.phaseSpeed * dt
+        ctx!.beginPath()
+        ctx!.strokeStyle = `rgba(${rgb}, ${wave.opacity})`
+        ctx!.lineWidth = 1.5
+        for (let x = 0; x <= w; x += 2) {
+          const y = wave.yFrac * h + Math.sin(x * wave.freq + wave.phase) * wave.amp
+          if (x === 0) ctx!.moveTo(x, y)
+          else ctx!.lineTo(x, y)
+        }
+        ctx!.stroke()
+      }
+
+      rafId = requestAnimationFrame(loop)
+    }
+
+    rafId = requestAnimationFrame(loop)
+
+    return function stop() {
+      if (rafId) cancelAnimationFrame(rafId)
+      ro.disconnect()
+      ctx!.clearRect(0, 0, canvas.width, canvas.height)
+    }
+  }
+
+  // ── Canvas: Orbs (For Individuals) ─────────────────────────────────────────
+  function startOrbs(canvas: HTMLCanvasElement, rgb: string) {
+    const ctx = canvas.getContext('2d')
+    if (!ctx) return null
+
+    const dpr = Math.min(window.devicePixelRatio || 1, 2)
+    function resize() {
+      canvas.width  = canvas.offsetWidth  * dpr
+      canvas.height = canvas.offsetHeight * dpr
+      ctx!.setTransform(dpr, 0, 0, dpr, 0, 0)
+    }
+    resize()
+    const ro = new ResizeObserver(resize)
+    ro.observe(canvas)
+
+    const orbs = Array.from({ length: 7 }, () => ({
+      bx: 0.1 + Math.random() * 0.8,
+      by: 0.1 + Math.random() * 0.8,
+      r:  35 + Math.random() * 55,
+      px: Math.random() * Math.PI * 2,
+      py: Math.random() * Math.PI * 2,
+      sx: 0.00008 + Math.random() * 0.00008,
+      sy: 0.00006 + Math.random() * 0.00008,
+      ax: 0.06 + Math.random() * 0.08,
+      ay: 0.05 + Math.random() * 0.07,
+    }))
+
+    let lastT = 0
+    let rafId: number | null = null
+
+    function loop(t: number) {
+      const dt = lastT === 0 ? 16 : t - lastT
+      lastT = t
+
+      const w = canvas.offsetWidth
+      const h = canvas.offsetHeight
+      ctx!.clearRect(0, 0, w, h)
+
+      for (const o of orbs) {
+        o.px += o.sx * dt
+        o.py += o.sy * dt
+        const x = (o.bx + Math.sin(o.px) * o.ax) * w
+        const y = (o.by + Math.cos(o.py) * o.ay) * h
+
+        const g = ctx!.createRadialGradient(x, y, 0, x, y, o.r)
+        g.addColorStop(0,   `rgba(${rgb}, 0.28)`)
+        g.addColorStop(0.5, `rgba(${rgb}, 0.08)`)
+        g.addColorStop(1,   `rgba(${rgb}, 0)`)
+
+        ctx!.beginPath()
+        ctx!.arc(x, y, o.r, 0, Math.PI * 2)
+        ctx!.fillStyle = g
+        ctx!.fill()
+      }
+
+      rafId = requestAnimationFrame(loop)
+    }
+
+    rafId = requestAnimationFrame(loop)
+
+    return function stop() {
+      if (rafId) cancelAnimationFrame(rafId)
+      ro.disconnect()
+      ctx!.clearRect(0, 0, canvas.width, canvas.height)
+    }
+  }
+
+  // ── Init ───────────────────────────────────────────────────────────────────
   function initBundleHero() {
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
@@ -227,11 +515,23 @@ const { audience, headline, tagline, accentRgb, serviceCount } = Astro.props
       .fromTo(h1,      { opacity: 0, y: 30, scale: 0.97 }, { opacity: 1, y: 0, scale: 1, duration: 0.85 }, '-=0.3')
       .fromTo(divider, { opacity: 0, scaleX: 0 }, { opacity: 1, scaleX: 1, duration: 0.5, ease: 'power2.out' }, '-=0.4')
       .fromTo(scroll,  { opacity: 0 }, { opacity: 1, duration: 0.5 }, '-=0.2')
+
+    // Start canvas animation if canvas element exists
+    const canvas = document.querySelector('.bh-canvas') as HTMLCanvasElement | null
+    if (canvas) {
+      const style = canvas.dataset.animStyle
+      const rgb   = canvas.dataset.accentRgb || '168, 85, 247'
+      if (style === 'network')  bhStop = startNetwork(canvas, rgb)
+      if (style === 'waveform') bhStop = startWaveform(canvas, rgb)
+      if (style === 'orbs')     bhStop = startOrbs(canvas, rgb)
+    }
   }
 
   document.addEventListener('astro:before-swap', () => {
     bundleHeroTl?.kill()
     bundleHeroTl = null
+    bhStop?.()
+    bhStop = null
   })
 
   document.addEventListener('astro:page-load', initBundleHero)

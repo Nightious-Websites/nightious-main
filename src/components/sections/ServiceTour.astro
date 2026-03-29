@@ -511,13 +511,14 @@ const count = steps.length
   .st-viewport {
     position: relative;
     overflow: hidden;
+    aspect-ratio: 800 / 480;
   }
   .st-img {
     width: 100%;
-    height: auto;
+    height: 100%;
     display: block;
     object-fit: cover;
-    max-height: 400px;
+    object-position: center;
   }
   .st-img-glow {
     position: absolute;

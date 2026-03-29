@@ -84,3 +84,16 @@ const { title, description, ogImage, ogType, noindex } = Astro.props
     top: 0;
   }
 </style>
+
+<script>
+  // Re-trigger autoplay on every page-load event (covers View Transitions swaps
+  // and hard refreshes). The autoplay HTML attribute is only honoured on the
+  // initial parser pass; dynamically-swapped DOM nodes (View Transitions) need
+  // an explicit .play() call to autoplay reliably across all browsers.
+  document.addEventListener('astro:page-load', () => {
+    document.querySelectorAll<HTMLVideoElement>('video[autoplay]').forEach(v => {
+      v.load()
+      v.play().catch(() => {})
+    })
+  })
+</script>

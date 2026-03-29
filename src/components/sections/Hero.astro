@@ -32,10 +32,14 @@
   <div class="video-fade-top" aria-hidden="true"></div>
   <div class="video-fade-bottom" aria-hidden="true"></div>
 
-  <!-- Aurora blobs -->
+  <!-- Aurora blobs — outer wrapper receives GSAP parallax, inner keeps CSS drift -->
   <div class="hero-aurora" aria-hidden="true">
-    <div class="aurora-blob aurora-purple"></div>
-    <div class="aurora-blob aurora-emerald"></div>
+    <div data-parallax-a style="position:absolute; width:700px; height:500px; top:-100px; left:-100px; pointer-events:none;">
+      <div class="aurora-blob aurora-purple" style="position:absolute; inset:0; width:100%; height:100%;"></div>
+    </div>
+    <div data-parallax-b style="position:absolute; width:500px; height:400px; bottom:-80px; right:-80px; pointer-events:none;">
+      <div class="aurora-blob aurora-emerald" style="position:absolute; inset:0; width:100%; height:100%;"></div>
+    </div>
   </div>
 
   <!-- Constellation particles (JS-populated) -->
@@ -151,16 +155,12 @@
     width: 700px;
     height: 500px;
     background: radial-gradient(ellipse, rgba(168, 85, 247, 0.18) 0%, transparent 65%);
-    top: -100px;
-    left: -100px;
     animation: aurora-drift-a 10s ease-in-out infinite;
   }
   .aurora-emerald {
     width: 500px;
     height: 400px;
     background: radial-gradient(ellipse, rgba(34, 197, 94, 0.1) 0%, transparent 65%);
-    bottom: -80px;
-    right: -80px;
     animation: aurora-drift-b 12s ease-in-out infinite;
   }
   @keyframes aurora-drift-a {
@@ -404,6 +404,7 @@
   import { gsap } from 'gsap'
 
   let heroTl: gsap.core.Timeline | null = null
+  let abortCtrl: AbortController | null = null
 
   function spawnParticles() {
     const container = document.getElementById('hero-particles')
@@ -465,11 +466,26 @@
       .fromTo(cta,     { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5 }, '-=0.3')
       .fromTo(proof,   { opacity: 0 }, { opacity: 1, duration: 0.5 }, '-=0.2')
       .fromTo(scroll,  { opacity: 0 }, { opacity: 1, duration: 0.5 }, '-=0.2')
+
+    // Cursor-tracking parallax on aurora wrappers
+    const wA = document.querySelector('[data-parallax-a]')
+    const wB = document.querySelector('[data-parallax-b]')
+    if (wA && wB) {
+      abortCtrl = new AbortController()
+      document.addEventListener('mousemove', (e) => {
+        const nx = (e.clientX / window.innerWidth - 0.5) * 80
+        const ny = (e.clientY / window.innerHeight - 0.5) * 60
+        gsap.to(wA, { x: nx, y: ny, duration: 2, ease: 'power2.out', overwrite: 'auto' })
+        gsap.to(wB, { x: -nx * 0.6, y: -ny * 0.6, duration: 2.5, ease: 'power2.out', overwrite: 'auto' })
+      }, { signal: abortCtrl.signal })
+    }
   }
 
   document.addEventListener('astro:before-swap', () => {
     heroTl?.kill()
     heroTl = null
+    abortCtrl?.abort()
+    abortCtrl = null
   })
 
   document.addEventListener('astro:page-load', initHero)
