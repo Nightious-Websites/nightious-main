@@ -11,7 +11,8 @@
     "lhci": "lhci autorun",
     "check:media": "node scripts/check-media-budget.mjs",
     "lhci:local": "bash scripts/ensure-chrome.sh && npm run build && lhci autorun",
-    "check:a11y": "node scripts/check-a11y.mjs"
+    "check:a11y": "node scripts/check-a11y.mjs",
+    "screenshot:capture": "node scripts/capture-screenshot.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.2.0",
