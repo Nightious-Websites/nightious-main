@@ -60,12 +60,6 @@ import logoCompleteColor from '@/assets/images/logos/logo-complete-color.png'
       aria-hidden="true"
     ></div>
 
-    <!-- Status pill — route error (amber) -->
-    <div id="e404-status" class="e404-status-pill" style="opacity:0; z-index: 22;">
-      <span class="e404-error-dot" aria-hidden="true"></span>
-      <span>ROUTE NOT FOUND</span>
-    </div>
-
     <!-- Main content -->
     <div class="relative max-w-lg mx-auto px-4 sm:px-6 text-center" style="z-index: 22;">
 
@@ -117,7 +111,7 @@ import logoCompleteColor from '@/assets/images/logos/logo-complete-color.png'
 
 <noscript>
   <style>
-    #e404-status, #e404-logo, #e404-number, #e404-heading, #e404-sub, #e404-btns {
+    #e404-logo, #e404-number, #e404-heading, #e404-sub, #e404-btns {
       opacity: 1 !important;
       transform: none !important;
     }
@@ -128,41 +122,6 @@ import logoCompleteColor from '@/assets/images/logos/logo-complete-color.png'
   /* ── Section ── */
   .e404-section {
     background: var(--color-bg-deep);
-  }
-
-  /* ── Status pill — amber/error variant ── */
-  .e404-status-pill {
-    position: absolute;
-    top: 88px;
-    left: 50%;
-    transform: translateX(-50%);
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 6px 16px;
-    border-radius: 40px;
-    background: rgba(251, 146, 60, 0.08);
-    border: 1px solid rgba(251, 146, 60, 0.28);
-    font-family: 'Orbitron', monospace;
-    font-size: 9px;
-    font-weight: 400;
-    letter-spacing: 0.22em;
-    color: rgba(251, 146, 60, 0.9);
-    text-transform: uppercase;
-    white-space: nowrap;
-  }
-
-  .e404-error-dot {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: rgba(251, 146, 60, 0.95);
-    box-shadow: 0 0 8px rgba(251, 146, 60, 0.7);
-    animation: e404-dot-pulse 1.6s ease-in-out infinite;
-  }
-  @keyframes e404-dot-pulse {
-    0%, 100% { opacity: 0.5; box-shadow: 0 0 4px rgba(251, 146, 60, 0.5); }
-    50%       { opacity: 1;   box-shadow: 0 0 12px rgba(251, 146, 60, 0.9); }
   }
 
   /* ── Glitch 404 ── */
@@ -257,8 +216,7 @@ import logoCompleteColor from '@/assets/images/logos/logo-complete-color.png'
   @media (prefers-reduced-motion: reduce) {
     .e404-glitch,
     .e404-glitch::before,
-    .e404-glitch::after,
-    .e404-error-dot {
+    .e404-glitch::after {
       animation: none;
     }
     .e404-glitch::before,
@@ -326,7 +284,6 @@ import logoCompleteColor from '@/assets/images/logos/logo-complete-color.png'
   function initAnimations() {
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
-    const status  = document.getElementById('e404-status')
     const logo    = document.getElementById('e404-logo')
     const number  = document.getElementById('e404-number')
     const heading = document.getElementById('e404-heading')
@@ -337,7 +294,7 @@ import logoCompleteColor from '@/assets/images/logos/logo-complete-color.png'
     const particles = document.querySelector<HTMLElement>('.constellation-particles')
 
     if (reduced) {
-      ;[status, logo, number, heading, sub, btns].forEach(el => {
+      ;[logo, number, heading, sub, btns].forEach(el => {
         if (!el) return
         el.style.opacity = '1'
         el.style.transform = 'none'
@@ -350,7 +307,6 @@ import logoCompleteColor from '@/assets/images/logos/logo-complete-color.png'
     // Entrance timeline
     tl = gsap.timeline({ defaults: { ease: 'power3.out' } })
     tl
-      .fromTo(status,  { opacity: 0, y: -8 }, { opacity: 1, y: 0, duration: 0.45 }, 0.1)
       .fromTo(logo,    { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.5 }, 0.2)
       .fromTo(number,  { opacity: 0, scale: 0.88, y: 20 }, { opacity: 1, scale: 1, y: 0, duration: 0.75 }, 0.35)
       .fromTo(heading, { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 0.55 }, '-=0.3')

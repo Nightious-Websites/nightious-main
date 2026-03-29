@@ -183,6 +183,7 @@ const navLinks = [
   aria-label="Navigation menu"
   aria-modal="true"
   aria-hidden="true"
+  inert
   class="fixed inset-0 z-[60] md:hidden flex flex-col"
   style="background: rgba(2, 0, 10, 0.97); backdrop-filter: blur(32px); -webkit-backdrop-filter: blur(32px);"
 >
@@ -493,6 +494,7 @@ const navLinks = [
       if (!overlay || !hamburger) return
       overlay.classList.add('is-open')
       overlay.removeAttribute('aria-hidden')
+      overlay.removeAttribute('inert')
       hamburger.setAttribute('aria-expanded', 'true')
       document.body.style.overflow = 'hidden'
 
@@ -512,6 +514,7 @@ const navLinks = [
       if (!overlay || !hamburger) return
       overlay.classList.remove('is-open')
       overlay.setAttribute('aria-hidden', 'true')
+      overlay.setAttribute('inert', '')
       hamburger.setAttribute('aria-expanded', 'false')
       document.body.style.overflow = ''
       overlay.removeEventListener('keydown', trapFocus)

@@ -13,12 +13,6 @@ function formatDate(date: Date): string {
   return date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
 }
 
-// Status pill label — dynamic if we have posts
-const newestPost = posts[0]
-const statusLabel = newestPost
-  ? `LATEST \u2022 ${formatDate(newestPost.data.date)}`
-  : 'INSIGHTS \u2022 LIVE'
-
 const featuredPost = posts[0]
 const remainingPosts = posts.slice(1)
 ---
@@ -61,17 +55,6 @@ const remainingPosts = posts.slice(1)
 
     <div class="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center" style="z-index: 20;">
 
-      <!-- Status pill -->
-      <div id="blog-status" class="blog-status-pill">
-        <span class="pulse-dot" aria-hidden="true"></span>
-        <span>{statusLabel}</span>
-      </div>
-
-      <!-- Eyebrow -->
-      <div id="blog-eyebrow" class="mb-5" style="opacity:0;">
-        <span class="glass-pill">BLOG</span>
-      </div>
-
       <!-- Headline -->
       <h1 id="blog-h1" class="blog-h1" style="opacity:0;">
         Where ideas<br />
@@ -97,7 +80,7 @@ const remainingPosts = posts.slice(1)
         <!-- Empty state -->
         <div class="empty-state glass-strong neon-top" id="blog-empty">
           <div class="empty-state-inner">
-            <span class="glass-pill glass-pill--emerald mb-6">COMING SOON</span>
+            <span class="empty-soon-label">COMING SOON</span>
             <h2 class="empty-title">Something worth reading<br /><span class="accent-italic gradient-text">is on its way.</span></h2>
             <p class="empty-sub">We're writing something that actually helps — not filler. Check back soon.</p>
           </div>
@@ -114,7 +97,7 @@ const remainingPosts = posts.slice(1)
                 id="blog-featured"
                 style="opacity:0;"
               >
-                <a href={`/blog/${slug}`} class="featured-link" aria-label={`Read: ${featuredPost.data.title}`}>
+                <a href={`/blog/${slug}`} class="featured-link">
                   {featuredPost.data.image && (
                     <div class="featured-img-wrap">
                       <img
@@ -128,10 +111,6 @@ const remainingPosts = posts.slice(1)
                   )}
                   <div class="featured-body">
                     <div class="featured-meta">
-                      <span class="glass-pill glass-pill--emerald featured-badge">
-                        <span class="pulse-dot" aria-hidden="true"></span>
-                        FEATURED
-                      </span>
                       <span class="featured-date font-display">{formatDate(featuredPost.data.date)}</span>
                     </div>
                     <h2 class="featured-title">{featuredPost.data.title}</h2>
@@ -210,7 +189,7 @@ const remainingPosts = posts.slice(1)
 
 <noscript>
   <style>
-    #blog-status, #blog-eyebrow, #blog-h1, #blog-divider, #blog-lead,
+    #blog-h1, #blog-divider, #blog-lead,
     #blog-featured, #blog-empty, .post-item {
       opacity: 1 !important;
       transform: none !important;
@@ -219,25 +198,6 @@ const remainingPosts = posts.slice(1)
 </noscript>
 
 <style>
-  /* ── Status pill ── */
-  .blog-status-pill {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 6px 16px;
-    border-radius: 40px;
-    background: rgba(34, 197, 94, 0.07);
-    border: 1px solid rgba(34, 197, 94, 0.2);
-    font-family: 'Orbitron', monospace;
-    font-size: 9px;
-    font-weight: 400;
-    letter-spacing: 0.22em;
-    color: rgba(34, 197, 94, 0.8);
-    text-transform: uppercase;
-    margin-bottom: 20px;
-    opacity: 0;
-  }
-
   /* ── Headline ── */
   .blog-h1 {
     font-family: 'Exo 2', sans-serif;
@@ -290,6 +250,15 @@ const remainingPosts = posts.slice(1)
     font-size: 0.95rem;
     color: var(--text-muted-aurora);
     max-width: 380px;
+  }
+  .empty-soon-label {
+    font-family: 'Orbitron', monospace;
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    color: rgba(34, 197, 94, 0.8);
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+    display: block;
   }
 
   /* ── Tag pills ── */
@@ -374,11 +343,6 @@ const remainingPosts = posts.slice(1)
     gap: 12px;
     margin-bottom: 1rem;
     flex-wrap: wrap;
-  }
-  .featured-badge {
-    font-size: 8px;
-    padding: 4px 12px;
-    gap: 6px;
   }
   .featured-date {
     font-family: 'Orbitron', monospace;
@@ -610,8 +574,6 @@ const remainingPosts = posts.slice(1)
   function initBlogAnimations() {
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
-    const status   = document.getElementById('blog-status')
-    const eyebrow  = document.getElementById('blog-eyebrow')
     const h1       = document.getElementById('blog-h1')
     const divider  = document.getElementById('blog-divider')
     const lead     = document.getElementById('blog-lead')
@@ -624,7 +586,7 @@ const remainingPosts = posts.slice(1)
     }
 
     if (reduced) {
-      ;[status, eyebrow, h1, divider, lead, featured, empty].forEach(el => {
+      ;[h1, divider, lead, featured, empty].forEach(el => {
         if (el) { el.style.opacity = '1'; el.style.transform = 'none' }
       })
       gridItems.forEach(el => { el.style.opacity = '1'; el.style.transform = 'none' })
@@ -633,9 +595,7 @@ const remainingPosts = posts.slice(1)
 
     // Hero entrance
     blogTl = gsap.timeline({ defaults: { ease: 'power3.out' } })
-    if (status)  blogTl.fromTo(status,  { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.45 })
-    if (eyebrow) blogTl.fromTo(eyebrow, { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 0.5 }, '-=0.2')
-    if (h1)      blogTl.fromTo(h1,      { opacity: 0, y: 30, scale: 0.97 }, { opacity: 1, y: 0, scale: 1, duration: 0.8 }, '-=0.25')
+    if (h1)      blogTl.fromTo(h1,      { opacity: 0, y: 30, scale: 0.97 }, { opacity: 1, y: 0, scale: 1, duration: 0.8 })
     if (divider) blogTl.fromTo(divider, { opacity: 0, scaleX: 0 }, { opacity: 1, scaleX: 1, duration: 0.5, ease: 'power2.out' }, '-=0.4')
     if (lead)    blogTl.fromTo(lead,    { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.5 }, '-=0.3')
 

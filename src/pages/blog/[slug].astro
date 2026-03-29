@@ -24,6 +24,7 @@ function formatDate(date: Date): string {
   title={`${entry.data.title} | Nightious Blog`}
   description={entry.data.description}
   ogType="article"
+  ogImage={entry.data.image ?? '/images/og/og-home.png'}
 >
   <!-- ── Hero ───────────────────────────────────────────────────────────────── -->
   <section
@@ -55,9 +56,9 @@ function formatDate(date: Date): string {
         Back to Blog
       </a>
 
-      <!-- Date + author pill -->
+      <!-- Date + author -->
       <div id="post-meta" class="mb-5 mt-6" style="opacity:0;">
-        <span class="glass-pill">
+        <span class="post-meta-label">
           {formatDate(entry.data.date)} &middot; {entry.data.author}
         </span>
       </div>
@@ -123,7 +124,7 @@ function formatDate(date: Date): string {
   <!-- Back to top button (appears after scroll) -->
   <button
     id="back-to-top"
-    class="back-to-top glass-pill"
+    class="back-to-top"
     aria-label="Back to top"
     style="opacity:0; pointer-events:none;"
   >
@@ -163,6 +164,15 @@ function formatDate(date: Date): string {
   .post-back-link:hover {
     color: var(--text-primary-aurora);
     gap: 10px;
+  }
+
+  /* ── Meta ── */
+  .post-meta-label {
+    font-family: 'Orbitron', monospace;
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-dim-aurora);
   }
 
   /* ── Title ── */
@@ -206,17 +216,20 @@ function formatDate(date: Date): string {
     bottom: 32px;
     right: 32px;
     z-index: 50;
+    display: inline-flex;
+    align-items: center;
     cursor: pointer;
     font-family: 'Orbitron', monospace;
     font-size: 9px;
     font-weight: 400;
     letter-spacing: 0.15em;
     gap: 6px;
+    padding: 6px 14px;
+    border-radius: 999px;
     transition: opacity 0.3s ease, transform 0.2s ease;
-    border: none;
+    border: 1px solid rgba(168, 85, 247, 0.15);
     background: rgba(168, 85, 247, 0.10);
     color: rgba(168, 85, 247, 0.75);
-    border-color: rgba(168, 85, 247, 0.15);
   }
   .back-to-top:hover {
     background: rgba(168, 85, 247, 0.18);

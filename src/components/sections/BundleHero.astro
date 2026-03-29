@@ -67,26 +67,6 @@ const { audience, headline, tagline, accentRgb, serviceCount, animStyle, bgVideo
   <!-- Main content -->
   <div class="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center" style="z-index: 20;">
 
-    <!-- Status pill -->
-    <div id="bh-status" class="bh-status-pill" style={`opacity:0; background: rgba(${accentRgb}, 0.07); border-color: rgba(${accentRgb}, 0.2); color: rgba(${accentRgb}, 0.8);`}>
-      <span
-        class="bh-pulse-dot"
-        style={`background: rgba(${accentRgb}, 0.9); box-shadow: 0 0 6px rgba(${accentRgb}, 0.8);`}
-        aria-hidden="true"
-      ></span>
-      <span>FOR {audience.toUpperCase()} &bull; {serviceCount} SERVICES</span>
-    </div>
-
-    <!-- Eyebrow glass-pill -->
-    <span
-      id="bh-eyebrow"
-      class="glass-pill bh-eyebrow"
-      style={`opacity:0; color: rgba(${accentRgb}, 0.75); background: rgba(${accentRgb}, 0.10); border-color: rgba(${accentRgb}, 0.15);`}
-      aria-hidden="true"
-    >
-      FOR {audience.toUpperCase()}
-    </span>
-
     <!-- Headline -->
     <h1 id="bh-h1" class="bh-h1">
       <span class="bh-h1-main gradient-text">{headline}</span><br />
@@ -111,7 +91,7 @@ const { audience, headline, tagline, accentRgb, serviceCount, animStyle, bgVideo
 
   <noscript>
     <style>
-      #bh-status, #bh-eyebrow, #bh-h1, #bh-divider, #bh-scroll {
+      #bh-h1, #bh-divider, #bh-scroll {
         opacity: 1 !important;
         transform: none !important;
       }
@@ -136,41 +116,6 @@ const { audience, headline, tagline, accentRgb, serviceCount, animStyle, bgVideo
     width: 100%;
     height: 100%;
     pointer-events: none;
-  }
-
-  /* ── Status pill ── */
-  .bh-status-pill {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 6px 16px;
-    border-radius: 40px;
-    border: 1px solid transparent;
-    font-family: 'Orbitron', monospace;
-    font-size: 9px;
-    font-weight: 400;
-    letter-spacing: 0.22em;
-    text-transform: uppercase;
-    margin-bottom: 24px;
-  }
-
-  .bh-pulse-dot {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    flex-shrink: 0;
-    animation: bh-dot-pulse 2s ease-in-out infinite;
-  }
-  @keyframes bh-dot-pulse {
-    0%, 100% { opacity: 0.4; }
-    50%       { opacity: 1; }
-  }
-
-  /* ── Eyebrow ── */
-  .bh-eyebrow {
-    display: block;
-    width: fit-content;
-    margin: 0 auto 20px;
   }
 
   /* ── Headline ── */
@@ -231,7 +176,6 @@ const { audience, headline, tagline, accentRgb, serviceCount, animStyle, bgVideo
 
   /* ── Reduced motion ── */
   @media (prefers-reduced-motion: reduce) {
-    .bh-pulse-dot { animation: none; }
   }
 </style>
 
@@ -492,7 +436,7 @@ const { audience, headline, tagline, accentRgb, serviceCount, animStyle, bgVideo
   function initBundleHero() {
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
-    const ids = ['bh-status', 'bh-eyebrow', 'bh-h1', 'bh-divider', 'bh-scroll']
+    const ids = ['bh-h1', 'bh-divider', 'bh-scroll']
     const els = ids.map(id => document.getElementById(id))
 
     if (reduced) {
@@ -505,14 +449,12 @@ const { audience, headline, tagline, accentRgb, serviceCount, animStyle, bgVideo
       return
     }
 
-    const [status, eyebrow, h1, divider, scroll] = els
-    if (!status) return // not on a bundle page
+    const [h1, divider, scroll] = els
+    if (!h1) return // not on a bundle page
 
     bundleHeroTl = gsap.timeline({ defaults: { ease: 'power3.out' } })
     bundleHeroTl
-      .fromTo(status,  { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.5 })
-      .fromTo(eyebrow, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.6 }, '-=0.2')
-      .fromTo(h1,      { opacity: 0, y: 30, scale: 0.97 }, { opacity: 1, y: 0, scale: 1, duration: 0.85 }, '-=0.3')
+      .fromTo(h1,      { opacity: 0, y: 30, scale: 0.97 }, { opacity: 1, y: 0, scale: 1, duration: 0.85 })
       .fromTo(divider, { opacity: 0, scaleX: 0 }, { opacity: 1, scaleX: 1, duration: 0.5, ease: 'power2.out' }, '-=0.4')
       .fromTo(scroll,  { opacity: 0 }, { opacity: 1, duration: 0.5 }, '-=0.2')
 

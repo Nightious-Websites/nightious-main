@@ -56,17 +56,6 @@
   <!-- Main content -->
   <div class="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center" style="z-index: 20;">
 
-    <!-- Status pill -->
-    <div id="hero-status" class="hero-status-pill">
-      <span class="hero-live-dot" aria-hidden="true"></span>
-      <span>SYSTEM OPERATIONAL</span>
-    </div>
-
-    <!-- Eyebrow -->
-    <span id="hero-eyebrow" class="glass-pill hero-eyebrow" style="opacity:0;" aria-hidden="true">
-      IT &amp; Digital Solutions
-    </span>
-
     <!-- Headline -->
     <h1 id="hero-h1" class="hero-h1">
       Technology made simple.<br />
@@ -116,7 +105,7 @@
 
   <noscript>
     <style>
-      .hero-status-pill, .hero-eyebrow, .hero-h1, .hero-divider,
+      .hero-h1, .hero-divider,
       .hero-sub, .hero-cta-row, .hero-proof, .hero-scroll-cue {
         opacity: 1 !important;
         transform: none !important;
@@ -192,41 +181,6 @@
   .hud-tr { top: 24px; right: 24px; border-top: 1px solid rgba(168,85,247,0.45); border-right: 1px solid rgba(168,85,247,0.45); }
   .hud-bl { bottom: 24px; left: 24px; border-bottom: 1px solid rgba(168,85,247,0.45); border-left: 1px solid rgba(168,85,247,0.45); }
   .hud-br { bottom: 24px; right: 24px; border-bottom: 1px solid rgba(168,85,247,0.45); border-right: 1px solid rgba(168,85,247,0.45); }
-
-  /* ── Status pill ── */
-  .hero-status-pill {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 6px 16px;
-    border-radius: 40px;
-    background: rgba(34, 197, 94, 0.07);
-    border: 1px solid rgba(34, 197, 94, 0.2);
-    font-family: 'Orbitron', monospace;
-    font-size: 9px;
-    font-weight: 400;
-    letter-spacing: 0.22em;
-    color: rgba(34, 197, 94, 0.8);
-    text-transform: uppercase;
-    margin-bottom: 24px;
-    opacity: 0;
-  }
-  .hero-live-dot {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: rgba(34, 197, 94, 0.9);
-    animation: hero-live-pulse 2s ease-in-out infinite;
-  }
-  @keyframes hero-live-pulse {
-    0%, 100% { opacity: 0.4; box-shadow: none; }
-    50% { opacity: 1; box-shadow: 0 0 8px rgba(34, 197, 94, 0.7); }
-  }
-
-  /* ── Eyebrow (glass-pill from global.css, class kept for GSAP targeting) ── */
-  .hero-eyebrow {
-    margin-bottom: 20px;
-  }
 
   /* ── H1 ── */
   .hero-h1 {
@@ -393,8 +347,7 @@
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .aurora-purple, .aurora-emerald,
-    .hero-live-dot {
+    .aurora-purple, .aurora-emerald {
       animation: none;
     }
   }
@@ -441,7 +394,7 @@
 
     spawnParticles()
 
-    const ids = ['hero-status', 'hero-eyebrow', 'hero-h1', 'hero-divider', 'hero-sub', 'hero-cta', 'hero-proof', 'hero-scroll']
+    const ids = ['hero-h1', 'hero-divider', 'hero-sub', 'hero-cta', 'hero-proof', 'hero-scroll']
     const els = ids.map(id => document.getElementById(id))
 
     if (reduced) {
@@ -454,13 +407,11 @@
       return
     }
 
-    const [status, eyebrow, h1, divider, sub, cta, proof, scroll] = els
+    const [h1, divider, sub, cta, proof, scroll] = els
 
     heroTl = gsap.timeline({ defaults: { ease: 'power3.out' } })
     heroTl
-      .fromTo(status,  { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.5 })
-      .fromTo(eyebrow, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.6 }, '-=0.2')
-      .fromTo(h1,      { opacity: 0, y: 30, scale: 0.97 }, { opacity: 1, y: 0, scale: 1, duration: 0.85 }, '-=0.3')
+      .fromTo(h1,      { opacity: 0, y: 30, scale: 0.97 }, { opacity: 1, y: 0, scale: 1, duration: 0.85 })
       .fromTo(divider, { opacity: 0, scaleX: 0 }, { opacity: 1, scaleX: 1, duration: 0.5, ease: 'power2.out' }, '-=0.4')
       .fromTo(sub,     { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.6 }, '-=0.3')
       .fromTo(cta,     { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5 }, '-=0.3')

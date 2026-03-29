@@ -33,11 +33,6 @@ import AuroraBackground from '@/components/ui/AuroraBackground.astro'
 
     <div class="relative max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center" style="z-index: 10;">
 
-      <!-- Eyebrow -->
-      <div id="privacy-eyebrow" class="mb-4" style="opacity:0;">
-        <span class="glass-pill">LEGAL</span>
-      </div>
-
       <!-- Title -->
       <h1 id="privacy-title" class="legal-title text-glow" style="opacity:0;">
         Privacy Policy
@@ -60,7 +55,7 @@ import AuroraBackground from '@/components/ui/AuroraBackground.astro'
 
     <noscript>
       <style>
-        #privacy-eyebrow, #privacy-title, #privacy-date,
+        #privacy-title, #privacy-date,
         #privacy-divider, #privacy-body {
           opacity: 1 !important;
           transform: none !important;
@@ -255,22 +250,20 @@ import AuroraBackground from '@/components/ui/AuroraBackground.astro'
   function initPrivacyAnimations() {
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
-    const eyebrow = document.getElementById('privacy-eyebrow')
     const title   = document.getElementById('privacy-title')
     const date    = document.getElementById('privacy-date')
     const divider = document.getElementById('privacy-divider')
     const body    = document.getElementById('privacy-body')
 
     if (reduced) {
-      ;[eyebrow, title, date, divider, body].forEach(el => {
+      ;[title, date, divider, body].forEach(el => {
         if (el) { el.style.opacity = '1'; el.style.transform = 'none' }
       })
       return
     }
 
     privacyTl = gsap.timeline({ defaults: { ease: 'power3.out' } })
-    if (eyebrow) privacyTl.fromTo(eyebrow, { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.45 })
-    if (title)   privacyTl.fromTo(title,   { opacity: 0, y: 22, scale: 0.98 }, { opacity: 1, y: 0, scale: 1, duration: 0.65 }, '-=0.2')
+    if (title)   privacyTl.fromTo(title,   { opacity: 0, y: 22, scale: 0.98 }, { opacity: 1, y: 0, scale: 1, duration: 0.65 })
     if (date)    privacyTl.fromTo(date,    { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.4 }, '-=0.25')
     if (divider) privacyTl.fromTo(divider, { opacity: 0, scaleX: 0 }, { opacity: 1, scaleX: 1, duration: 0.5, ease: 'power2.out' }, '-=0.3')
     if (body)    privacyTl.fromTo(body,    { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.6 }, '-=0.2')

@@ -375,7 +375,7 @@ body {
   font-weight: 400;
   letter-spacing: 0.3em;
   text-transform: uppercase;
-  color: rgba(168, 85, 247, 0.75);
+  color: rgba(168, 85, 247, 1);
   background: rgba(168, 85, 247, 0.10);
   border: 1px solid rgba(168, 85, 247, 0.15);
   border-radius: 999px;
@@ -384,7 +384,7 @@ body {
   -webkit-backdrop-filter: blur(8px);
 }
 .glass-pill--emerald {
-  color: rgba(34, 197, 94, 0.75);
+  color: rgba(34, 197, 94, 1);
   background: rgba(34, 197, 94, 0.10);
   border-color: rgba(34, 197, 94, 0.15);
 }

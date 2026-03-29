@@ -14,11 +14,6 @@
 
   <div class="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center" style="z-index: 2;">
 
-    <!-- Eyebrow -->
-    <span class="glass-pill cta-eyebrow" style="opacity:0;" aria-hidden="true">
-      <span class="glass-pill-dot"></span> Ready When You Are
-    </span>
-
     <!-- Headline -->
     <h2 class="cta-headline" id="cta-content">
       Done dealing with tech<br class="hidden sm:block" />
@@ -53,7 +48,7 @@
 
   <noscript>
     <style>
-      .cta-eyebrow, .cta-headline, .cta-sub, .cta-buttons, .cta-proof {
+      .cta-headline, .cta-sub, .cta-buttons, .cta-proof {
         opacity: 1 !important;
         transform: none !important;
       }
@@ -98,11 +93,6 @@
   @keyframes cta-pulse {
     0%, 100% { opacity: 0.6; transform: scale(1); }
     50% { opacity: 1; transform: scale(1.1); }
-  }
-
-  /* Eyebrow (glass-pill from global.css, class kept for GSAP targeting) */
-  .cta-eyebrow {
-    margin-bottom: 20px;
   }
 
   /* Headline */
@@ -226,13 +216,12 @@
 
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
-    const eyebrow = section.querySelector<HTMLElement>('.cta-eyebrow')
     const headline = section.querySelector<HTMLElement>('.cta-headline')
     const sub      = section.querySelector<HTMLElement>('.cta-sub')
     const buttons  = section.querySelector<HTMLElement>('.cta-buttons')
     const proof    = section.querySelector<HTMLElement>('.cta-proof')
 
-    const els = [eyebrow, headline, sub, buttons, proof]
+    const els = [headline, sub, buttons, proof]
 
     if (reduced) {
       els.forEach(el => { if (el) el.style.opacity = '1' })
@@ -244,8 +233,7 @@
     })
 
     ctaTl
-      .fromTo(eyebrow,  { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' })
-      .fromTo(headline, { opacity: 0, y: 28 }, { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out' }, '-=0.2')
+      .fromTo(headline, { opacity: 0, y: 28 }, { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out' })
       .fromTo(sub,      { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 0.55, ease: 'power2.out' }, '-=0.3')
       .fromTo(buttons,  { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' }, '-=0.25')
       .fromTo(proof,    { opacity: 0 }, { opacity: 1, duration: 0.4 }, '-=0.1')
