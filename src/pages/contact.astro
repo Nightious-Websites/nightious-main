@@ -29,6 +29,13 @@ const serviceOptions = [
   'Training & Documentation',
   "Not sure yet",
 ]
+
+const FORMSPREE_ID = import.meta.env.PUBLIC_FORMSPREE_ID
+const formAction = FORMSPREE_ID ? `https://formspree.io/f/${FORMSPREE_ID}` : ''
+
+if (import.meta.env.PROD && process.env.VERCEL_ENV === 'production' && !FORMSPREE_ID) {
+  throw new Error('Missing PUBLIC_FORMSPREE_ID. Configure it in Vercel environment variables before production deploys.')
+}
 ---
 
 <BaseLayout
@@ -49,6 +56,8 @@ const serviceOptions = [
       class="absolute inset-0 w-full h-full object-cover object-center pointer-events-none"
       style="z-index: 0;"
       autoplay muted loop playsinline
+        data-autoplay-managed="true"
+        data-video-upgrade="true"
       aria-hidden="true"
       tabindex="-1"
       preload="none"
@@ -144,10 +153,16 @@ const serviceOptions = [
               <a href="/" class="btn-ghost text-sm">Back to Home</a>
             </div>
 
+            { !formAction && (
+              <p class="text-sm" style="color: #f87171;">
+                Contact form is not configured yet. Set <code>PUBLIC_FORMSPREE_ID</code> in your environment variables.
+              </p>
+            ) }
+
             <!-- Form -->
             <form
               id="contact-form"
-              action="https://formspree.io/f/[FORM_ID]"
+              action={formAction}
               method="POST"
               novalidate
               class="flex flex-col gap-5"
@@ -237,7 +252,7 @@ const serviceOptions = [
                 aria-live="polite"
               ></p>
 
-              <button type="submit" id="form-submit" class="btn-primary justify-center">
+              <button type="submit" id="form-submit" class="btn-primary justify-center" disabled={!formAction} aria-disabled={!formAction}>
                 Send My Message
               </button>
             </form>

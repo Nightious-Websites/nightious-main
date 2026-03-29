@@ -1,5 +1,4 @@
 ---
-import { ViewTransitions } from 'astro:transitions'
 import Analytics from '@vercel/analytics/astro'
 import SpeedInsights from '@vercel/speed-insights/astro'
 import SEO from '@/components/seo/SEO.astro'
@@ -16,6 +15,8 @@ interface Props {
 }
 
 const { title, description, ogImage, ogType, noindex } = Astro.props
+const isProductionDeploy = process.env.VERCEL_ENV === 'production'
+const hasVercelRuntime = process.env.VERCEL === '1'
 ---
 
 <!doctype html>
@@ -25,20 +26,14 @@ const { title, description, ogImage, ogType, noindex } = Astro.props
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <!-- Security meta tags -->
-    <meta
-      http-equiv="Content-Security-Policy"
-      content="default-src 'self'; script-src 'self' 'unsafe-inline' https://va.vercel-scripts.com; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; media-src 'self'; connect-src 'self' https://formspree.io https://va.vercel-scripts.com https://vitals.vercel-insights.com; frame-src 'self'; object-src 'none'; form-action 'self' https://formspree.io; base-uri 'self'; upgrade-insecure-requests;"
-    />
     <meta http-equiv="X-Content-Type-Options" content="nosniff" />
     <meta name="referrer" content="strict-origin-when-cross-origin" />
 
-    <link rel="preload" href="/fonts/Exo2-Variable.woff2" as="font" type="font/woff2" crossorigin />
-    <link rel="preload" href="/fonts/Orbitron-Bold.woff2" as="font" type="font/woff2" crossorigin />
 
     <link rel="icon" type="image/svg+xml" href={`${import.meta.env.BASE_URL}favicon.svg`} />
     <link rel="icon" type="image/x-icon" sizes="32x32" href={`${import.meta.env.BASE_URL}favicon.ico`} />
     <link rel="apple-touch-icon" sizes="180x180" href={`${import.meta.env.BASE_URL}apple-touch-icon.png`} />
-    <link rel="manifest" href={`${import.meta.env.BASE_URL}site.webmanifest`} />
+    {isProductionDeploy && <link rel="manifest" href={`${import.meta.env.BASE_URL}site.webmanifest`} />}
 
     <SEO
       title={title}
@@ -48,9 +43,8 @@ const { title, description, ogImage, ogType, noindex } = Astro.props
       noindex={noindex}
     />
 
-    <Analytics />
-    <SpeedInsights />
-    <ViewTransitions />
+    {hasVercelRuntime && <Analytics />}
+    {hasVercelRuntime && <SpeedInsights />}
   </head>
   <body>
     <a href="#main-content" class="skip-link">Skip to main content</a>
@@ -85,14 +79,18 @@ const { title, description, ogImage, ogType, noindex } = Astro.props
 </style>
 
 <script>
-  // Re-trigger autoplay on every page-load event (covers View Transitions swaps
-  // and hard refreshes). The autoplay HTML attribute is only honoured on the
-  // initial parser pass; dynamically-swapped DOM nodes (View Transitions) need
-  // an explicit .play() call to autoplay reliably across all browsers.
-  document.addEventListener('astro:page-load', () => {
-    document.querySelectorAll<HTMLVideoElement>('video[autoplay]').forEach(v => {
-      v.load()
-      v.play().catch(() => {})
-    })
-  })
+  import { initManagedAutoplayVideos, initVideoUpgrades } from '@/utils/media'
+
+  function runPageInit() {
+    initVideoUpgrades()
+    initManagedAutoplayVideos()
+  }
+
+  // Media runtime hooks
+  document.addEventListener('astro:page-load', runPageInit)
+
+  // Ensure component scripts listening to `astro:page-load` fire on full loads
+  window.addEventListener('load', () => {
+    document.dispatchEvent(new Event('astro:page-load'))
+  }, { once: true })
 </script>

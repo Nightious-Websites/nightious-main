@@ -8,7 +8,9 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "lhci": "lhci autorun"
+    "lhci": "lhci autorun",
+    "check:media": "node scripts/check-media-budget.mjs",
+    "lhci:local": "bash scripts/ensure-chrome.sh && npm run build && lhci autorun"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.2.0",
