@@ -16,6 +16,7 @@ interface Props {
 
 const { title, description, ogImage, ogType, noindex } = Astro.props
 const isProductionDeploy = process.env.VERCEL_ENV === 'production'
+const hasVercelRuntime = process.env.VERCEL === '1'
 ---
 
 <!doctype html>
@@ -42,8 +43,8 @@ const isProductionDeploy = process.env.VERCEL_ENV === 'production'
       noindex={noindex}
     />
 
-    <Analytics />
-    <SpeedInsights />
+    {hasVercelRuntime && <Analytics />}
+    {hasVercelRuntime && <SpeedInsights />}
   </head>
   <body>
     <a href="#main-content" class="skip-link">Skip to main content</a>
@@ -80,8 +81,20 @@ const isProductionDeploy = process.env.VERCEL_ENV === 'production'
 <script>
   import { initManagedAutoplayVideos, initVideoUpgrades } from '@/utils/media'
 
-  document.addEventListener('astro:page-load', () => {
+  function runPageInit() {
     initVideoUpgrades()
     initManagedAutoplayVideos()
-  })
+  }
+
+  // Astro client-router event (when available)
+  document.addEventListener('astro:page-load', runPageInit)
+
+  // Full page-load fallback (when ViewTransitions/client-router is disabled)
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+      document.dispatchEvent(new Event('astro:page-load'))
+    }, { once: true })
+  } else {
+    runPageInit()
+  }
 </script>
