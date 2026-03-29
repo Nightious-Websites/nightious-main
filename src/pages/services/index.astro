@@ -3,7 +3,6 @@ import BaseLayout from '@/layouts/BaseLayout.astro'
 import SchemaBreadcrumb from '@/components/seo/SchemaBreadcrumb.astro'
 import ServiceFilterTabs from '@/components/services/ServiceFilterTabs.astro'
 import ServiceDetailCard from '@/components/services/ServiceDetailCard.astro'
-import CtaBanner from '@/components/sections/CtaBanner.astro'
 import AuroraBackground from '@/components/ui/AuroraBackground.astro'
 import ConstellationParticles from '@/components/ui/ConstellationParticles.astro'
 import HudBrackets from '@/components/ui/HudBrackets.astro'
@@ -106,7 +105,7 @@ const breadcrumbItems = [
 
       <!-- Headline -->
       <h1 id="srv-h1" class="srv-h1" style="opacity:0;">
-        What We <span class="gradient-text"><em class="accent-italic">Do</em></span>
+        What <span class="accent-italic">We</span> <span class="gradient-text">Do</span>
       </h1>
 
       <!-- Gradient divider -->
@@ -174,7 +173,6 @@ const breadcrumbItems = [
     </div>
   </section>
 
-  <CtaBanner />
 </BaseLayout>
 
 <noscript>

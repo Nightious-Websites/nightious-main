@@ -69,8 +69,8 @@ const { audience, headline, tagline, accentRgb, serviceCount, animStyle, bgVideo
 
     <!-- Headline -->
     <h1 id="bh-h1" class="bh-h1">
-      <span class="bh-h1-main gradient-text">{headline}</span><br />
-      <span class="bh-h1-sub accent-italic">{tagline}</span>
+      <span class="bh-h1-main gradient-text" set:html={headline} /><br />
+      <span class="bh-h1-sub" set:html={tagline} />
     </h1>
 
     <!-- Gradient divider: accent-colored -->
@@ -135,7 +135,6 @@ const { audience, headline, tagline, accentRgb, serviceCount, animStyle, bgVideo
   }
 
   .bh-h1-sub {
-    /* accent-italic from global.css: Instrument Serif italic */
     font-size: 0.88em;
     color: var(--text-muted-aurora);
     -webkit-text-fill-color: var(--text-muted-aurora);
