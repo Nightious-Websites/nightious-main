@@ -93,7 +93,7 @@ const count = steps.length
                   aria-hidden="true"
                 >
                   <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke={`rgba(${accentRgb}, 0.9)`} stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
-                    <path d={step.icon} />
+                    <Fragment set:html={step.icon} />
                   </svg>
                 </div>
                 <h3 class="st-step-title">{step.title}</h3>
