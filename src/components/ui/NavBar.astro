@@ -556,6 +556,9 @@ const navLinks = [
       }
     }
 
+    const getDesktopServiceLinks = () =>
+      Array.from(servicesDropdown?.querySelectorAll<HTMLAnchorElement>('.svc-card') ?? [])
+
     const scheduleClose = () => {
       closeTimer = setTimeout(() => {
         closeTimer = null
@@ -576,6 +579,42 @@ const navLinks = [
       const isOpen = servicesDropdown?.classList.contains('is-open')
       if (isOpen) scheduleClose()
       else openDropdown()
+    }, { signal })
+
+    servicesBtn?.addEventListener('keydown', (e) => {
+      if (e.key !== 'ArrowDown') return
+      e.preventDefault()
+      openDropdown()
+      const firstCard = getDesktopServiceLinks()[0]
+      firstCard?.focus()
+    }, { signal })
+
+    servicesDropdown?.addEventListener('keydown', (e) => {
+      const cards = getDesktopServiceLinks()
+      if (!cards.length) return
+
+      const currentIndex = cards.indexOf(document.activeElement as HTMLAnchorElement)
+      if (currentIndex < 0) return
+
+      if (e.key === 'ArrowRight') {
+        e.preventDefault()
+        cards[(currentIndex + 1) % cards.length]?.focus()
+      } else if (e.key === 'ArrowLeft') {
+        e.preventDefault()
+        cards[(currentIndex - 1 + cards.length) % cards.length]?.focus()
+      } else if (e.key === 'ArrowDown') {
+        e.preventDefault()
+        cards[(currentIndex + 3) % cards.length]?.focus()
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault()
+        cards[(currentIndex - 3 + cards.length) % cards.length]?.focus()
+      } else if (e.key === 'Home') {
+        e.preventDefault()
+        cards[0]?.focus()
+      } else if (e.key === 'End') {
+        e.preventDefault()
+        cards[cards.length - 1]?.focus()
+      }
     }, { signal })
 
     // Click-outside: exclude both the trigger AND the dropdown panel (now siblings)

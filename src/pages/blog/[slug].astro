@@ -1,7 +1,9 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro'
 import AuroraBackground from '@/components/ui/AuroraBackground.astro'
+import SchemaBlogPosting from '@/components/seo/SchemaBlogPosting.astro'
 import { getCollection } from 'astro:content'
+import { getAllServices, entrySlug } from '@/utils/services'
 
 export async function getStaticPaths() {
   const posts = await getCollection('blog')
@@ -13,6 +15,28 @@ export async function getStaticPaths() {
 
 const { entry } = Astro.props
 const { Content } = await entry.render()
+const slug = entry.id.replace(/\.mdx?$/, '')
+const allServices = await getAllServices()
+
+const tagToServiceMap: Record<string, string[]> = {
+  ai: ['ai-integration', 'software-services'],
+  automation: ['ai-integration', 'software-services'],
+  marketing: ['digital-marketing', 'website-solutions'],
+  seo: ['digital-marketing', 'website-solutions'],
+  privacy: ['online-privacy', 'computer-services'],
+  security: ['online-privacy', 'computer-services'],
+  website: ['website-solutions', 'domain-solutions'],
+  business: ['organizational-effectiveness', 'software-services'],
+}
+
+const normalizedTags = (entry.data.tags ?? []).map(tag => tag.toLowerCase())
+const mappedServiceSlugs = normalizedTags.flatMap(tag => tagToServiceMap[tag] ?? [])
+const fallbackServiceSlugs = ['website-solutions', 'ai-integration']
+const relatedServiceSlugs = [...new Set([...mappedServiceSlugs, ...fallbackServiceSlugs])].slice(0, 2)
+
+const relatedServices = relatedServiceSlugs
+  .map(slug => allServices.find(service => entrySlug(service.id) === slug))
+  .filter((service): service is (typeof allServices)[number] => Boolean(service))
 
 function formatDate(date: Date): string {
   return date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
@@ -25,6 +49,17 @@ function formatDate(date: Date): string {
   ogType="article"
   ogImage={entry.data.image ?? '/images/og/og-home.png'}
 >
+
+  <SchemaBlogPosting
+    title={entry.data.title}
+    description={entry.data.description}
+    slug={slug}
+    datePublished={entry.data.date}
+    dateModified={entry.data.updatedDate}
+    image={entry.data.ogImage ?? entry.data.image}
+    author={entry.data.author}
+  />
+
   <!-- ── Hero ───────────────────────────────────────────────────────────────── -->
   <section
     class="relative pt-32 pb-12 overflow-hidden"
@@ -117,6 +152,21 @@ function formatDate(date: Date): string {
           Back to all posts
         </a>
       </div>
+
+      {relatedServices.length > 0 && (
+        <div class="mt-10 related-services">
+          <p class="related-title">Related services</p>
+          <ul class="related-list list-none">
+            {relatedServices.map((service) => (
+              <li>
+                <a class="related-link" href={`/services/${entrySlug(service.id)}`}>
+                  {service.data.title}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
     </div>
   </section>
 
@@ -206,6 +256,32 @@ function formatDate(date: Date): string {
     color: var(--color-purple-light);
     border: 1px solid rgba(168, 85, 247, 0.2);
     text-transform: uppercase;
+  }
+
+  .related-services {
+    padding: 16px;
+    border: 1px solid rgba(168, 85, 247, 0.2);
+    border-radius: 16px;
+    background: rgba(24, 8, 40, 0.35);
+  }
+  .related-title {
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-dim-aurora);
+    margin-bottom: 10px;
+  }
+  .related-list {
+    display: grid;
+    gap: 10px;
+    padding: 0;
+    margin: 0;
+  }
+  .related-link {
+    color: var(--color-purple-light);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    font-weight: 600;
   }
 
   /* ── Back to top button ── */
