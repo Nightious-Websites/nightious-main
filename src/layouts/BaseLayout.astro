@@ -86,15 +86,11 @@ const hasVercelRuntime = process.env.VERCEL === '1'
     initManagedAutoplayVideos()
   }
 
-  // Astro client-router event (when available)
+  // Media runtime hooks
   document.addEventListener('astro:page-load', runPageInit)
 
-  // Full page-load fallback (when ViewTransitions/client-router is disabled)
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => {
-      document.dispatchEvent(new Event('astro:page-load'))
-    }, { once: true })
-  } else {
-    runPageInit()
-  }
+  // Ensure component scripts listening to `astro:page-load` fire on full loads
+  window.addEventListener('load', () => {
+    document.dispatchEvent(new Event('astro:page-load'))
+  }, { once: true })
 </script>
