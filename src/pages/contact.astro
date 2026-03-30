@@ -374,6 +374,8 @@ const breadcrumbItems = [
   let tl: gsap.core.Timeline | null = null
 
   function initAnimations() {
+    if (!document.getElementById('ctc-h1')) return
+
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
     const h1       = document.getElementById('ctc-h1')

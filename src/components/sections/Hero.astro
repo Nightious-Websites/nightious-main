@@ -392,6 +392,7 @@
   }
 
   function initHero() {
+    if (!document.getElementById('hero-h1')) return
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
     spawnParticles()
