@@ -1,4 +1,5 @@
 ---
+import { ViewTransitions } from 'astro:transitions'
 import Analytics from '@vercel/analytics/astro'
 import SpeedInsights from '@vercel/speed-insights/astro'
 import SEO from '@/components/seo/SEO.astro'
@@ -26,6 +27,10 @@ const hasVercelRuntime = process.env.VERCEL === '1'
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <!-- Security meta tags -->
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self' 'unsafe-inline' https://va.vercel-scripts.com https://vercel.live; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; media-src 'self'; connect-src 'self' https://va.vercel-scripts.com https://vitals.vercel-insights.com https://vercel.live; frame-src 'self' https://vercel.live; object-src 'none'; form-action 'self'; base-uri 'self'; upgrade-insecure-requests;"
+    />
     <meta http-equiv="X-Content-Type-Options" content="nosniff" />
     <meta name="referrer" content="strict-origin-when-cross-origin" />
 
@@ -45,6 +50,7 @@ const hasVercelRuntime = process.env.VERCEL === '1'
 
     {hasVercelRuntime && <Analytics />}
     {hasVercelRuntime && <SpeedInsights />}
+    <ViewTransitions />
   </head>
   <body>
     <a href="#main-content" class="skip-link">Skip to main content</a>
@@ -86,11 +92,5 @@ const hasVercelRuntime = process.env.VERCEL === '1'
     initManagedAutoplayVideos()
   }
 
-  // Media runtime hooks
   document.addEventListener('astro:page-load', runPageInit)
-
-  // Ensure component scripts listening to `astro:page-load` fire on full loads
-  window.addEventListener('load', () => {
-    document.dispatchEvent(new Event('astro:page-load'))
-  }, { once: true })
 </script>
