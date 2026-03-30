@@ -570,6 +570,8 @@ const remainingPosts = posts.slice(1)
   }
 
   function initBlogAnimations() {
+    if (!document.getElementById('blog-h1')) return
+
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
     const h1       = document.getElementById('blog-h1')
