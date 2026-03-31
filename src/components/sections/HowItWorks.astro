@@ -703,10 +703,59 @@ const steps = [
   import { ScrollTrigger } from 'gsap/ScrollTrigger'
   gsap.registerPlugin(ScrollTrigger)
 
+  import { startCanvasLoop } from '@/utils/canvasAnimation'
+
+  let stopAurora: (() => void) | null = null
+
   let pinInstance: ScrollTrigger | null = null
   let stepTriggers: ScrollTrigger[] = []
 
   const STEP_LABELS = ['Step 1 of 4', 'Step 2 of 4', 'Step 3 of 4', 'Step 4 of 4']
+
+  const AURORA_BLOBS = [
+    { cx: 0.2, cy: 0.3, rx: 0.28, ry: 0.3, r: 168, g: 85, b: 247, a: 0.15, speed: 0.0003, amp: 30 },
+    { cx: 0.8, cy: 0.7, rx: 0.25, ry: 0.28, r: 34, g: 197, b: 94, a: 0.10, speed: 0.00025, amp: 25 },
+    { cx: 0.45, cy: 0.5, rx: 0.23, ry: 0.25, r: 139, g: 92, b: 246, a: 0.08, speed: 0.0002, amp: 20 },
+    { cx: 0.65, cy: 0.4, rx: 0.18, ry: 0.2, r: 45, g: 212, b: 191, a: 0.06, speed: 0.00015, amp: 15 },
+  ]
+
+  const FPS_INTERVAL = 1000 / 15
+  let auroraElapsed = 0
+  let auroraSinceLast = 0
+
+  function drawAurora(ctx: CanvasRenderingContext2D, w: number, h: number, dt: number) {
+    auroraSinceLast += dt
+    if (auroraSinceLast < FPS_INTERVAL) return
+    auroraSinceLast = 0
+    auroraElapsed += dt
+
+    ctx.clearRect(0, 0, w, h)
+    ctx.globalCompositeOperation = 'lighter'
+
+    for (const blob of AURORA_BLOBS) {
+      const cx = blob.cx * w + Math.sin(auroraElapsed * blob.speed) * blob.amp
+      const cy = blob.cy * h + Math.cos(auroraElapsed * blob.speed * 0.7) * blob.amp
+      const r = Math.max(blob.rx * w, blob.ry * h)
+
+      const grad = ctx.createRadialGradient(cx, cy, 0, cx, cy, r)
+      grad.addColorStop(0, `rgba(${blob.r}, ${blob.g}, ${blob.b}, ${blob.a})`)
+      grad.addColorStop(1, `rgba(${blob.r}, ${blob.g}, ${blob.b}, 0)`)
+
+      ctx.beginPath()
+      ctx.ellipse(cx, cy, blob.rx * w, blob.ry * h, 0, 0, Math.PI * 2)
+      ctx.fillStyle = grad
+      ctx.fill()
+    }
+
+    ctx.globalCompositeOperation = 'source-over'
+  }
+
+  const GLOW_COLORS = [
+    '168, 85, 247',
+    '129, 140, 248',
+    '94, 168, 247',
+    '34, 197, 94',
+  ]
 
   function activateStep(index: number) {
     const cards = document.querySelectorAll<HTMLElement>('.hiw-step-card')
@@ -756,6 +805,19 @@ const steps = [
     if (spineLabel) {
       spineLabel.textContent = STEP_LABELS[index]
     }
+
+    // Reposition glow zone behind active card
+    const glowZone = document.getElementById('hiw-glow-zone')
+    if (glowZone && cards[index]) {
+      const card = cards[index] as HTMLElement
+      const targetTop = card.offsetTop + card.offsetHeight / 2 - 125
+      gsap.to(glowZone, {
+        top: targetTop,
+        duration: 0.6,
+        ease: 'power2.out',
+      })
+      glowZone.style.setProperty('--glow-color', GLOW_COLORS[index])
+    }
   }
 
   function initHowWeWork() {
@@ -779,6 +841,14 @@ const steps = [
       const fill = document.getElementById('spine-fill')
       if (fill) fill.style.height = '100%'
       return
+    }
+
+    // Init aurora canvas (desktop only)
+    const auroraCanvas = document.getElementById('hiw-aurora') as HTMLCanvasElement | null
+    if (auroraCanvas && window.innerWidth >= 768) {
+      auroraElapsed = 0
+      auroraSinceLast = 0
+      stopAurora = startCanvasLoop(auroraCanvas, drawAurora)
     }
 
     const isMobile = window.innerWidth < 768
@@ -831,6 +901,8 @@ const steps = [
   }
 
   document.addEventListener('astro:before-swap', () => {
+    stopAurora?.()
+    stopAurora = null
     pinInstance?.kill()
     stepTriggers.forEach(t => t.kill())
     pinInstance = null
