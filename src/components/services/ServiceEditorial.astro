@@ -1,0 +1,141 @@
+---
+import WhyItMattersSection from '@/components/services/WhyItMattersSection.astro'
+import WhatWeDoSection from '@/components/services/WhatWeDoSection.astro'
+import WhatYouGetSection from '@/components/services/WhatYouGetSection.astro'
+import RelatedServicesSection from '@/components/services/RelatedServicesSection.astro'
+import type { CollectionEntry } from 'astro:content'
+
+interface SectionData {
+  whyItMatters?: {
+    body: string
+    stats: Array<{ value: string; unit: string; short?: string; label: string }>
+  }
+  whatWeDo?: {
+    wideCard: {
+      label: string
+      headline: string
+      description: string
+      chips?: string[]
+    }
+    features?: Array<{ icon: string; title: string; description: string }>
+  }
+  whatYouGet?: {
+    banner: { label: string; headline: string; description: string }
+    outcomes: Array<{ icon: string; title: string; description: string }>
+  }
+}
+
+interface Props {
+  accentRgb: string
+  sections?: SectionData
+  images?: { img1?: string; img2?: string }
+  relatedServices: CollectionEntry<'services'>[]
+}
+
+const { accentRgb, sections, images, relatedServices } = Astro.props
+---
+
+<div class="editorial-section" style={`--svc-accent: ${accentRgb};`}>
+  <div class="editorial-grid">
+    <div class="stage">
+      {sections?.whyItMatters && (
+        <WhyItMattersSection
+          data={sections.whyItMatters}
+          imagePath={images?.img1}
+          accentRgb={accentRgb}
+        />
+      )}
+
+      {sections?.whatWeDo && (
+        <WhatWeDoSection
+          data={sections.whatWeDo}
+          accentRgb={accentRgb}
+        />
+      )}
+
+      {sections?.whatYouGet && (
+        <WhatYouGetSection
+          data={sections.whatYouGet}
+          accentRgb={accentRgb}
+        />
+      )}
+
+      {/* Mid-page CTA — peak intent after "What you walk away with" */}
+      <div class="mid-cta">
+        <p class="mid-cta-text">Ready to get started?</p>
+        <a href="/contact" class="btn-primary">
+          Get a Free Quote
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </div>
+
+      <RelatedServicesSection
+        relatedServices={relatedServices}
+        accentRgb={accentRgb}
+      />
+    </div>
+  </div>
+</div>
+
+<style>
+  .editorial-section {
+    background: var(--color-bg-section, #05000f);
+    padding: 0 0 6rem;
+    width: 100%;
+    position: relative;
+  }
+
+  .editorial-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(var(--svc-accent), 0.25), transparent);
+  }
+
+  .editorial-grid {
+    width: 100%;
+  }
+
+  .stage {
+    padding: 5rem clamp(2rem, 5vw, 5rem) 2rem clamp(2rem, 5vw, 5rem);
+  }
+
+  @media (max-width: 768px) {
+    .stage {
+      padding: 3rem 1.25rem 2rem;
+    }
+  }
+</style>
+
+<style is:global>
+  /* Section wrapper spacing */
+  .csec {
+    padding: 3.5rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  .csec:last-child {
+    border-bottom: none;
+  }
+
+  .mid-cta {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.25rem;
+    padding: 2.5rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  .mid-cta-text {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--color-text-primary);
+    margin: 0;
+  }
+
+
+</style>

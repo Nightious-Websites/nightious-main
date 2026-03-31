@@ -14,6 +14,49 @@ const services = defineCollection({
     color: z.string(),
     icon: z.string(),
     relatedSlugs: z.array(z.string()).max(3),
+    images: z.object({
+      img1: z.string().optional(),
+      img2: z.string().optional(),
+    }).optional(),
+    sections: z.object({
+      hero: z.object({
+        hook: z.string(),
+      }).optional(),
+      whyItMatters: z.object({
+        body: z.string(),
+        stats: z.array(z.object({
+          value: z.string(),
+          unit: z.string(),
+          short: z.string().optional(),
+          label: z.string(),
+        })).length(3),
+      }).optional(),
+      whatWeDo: z.object({
+        wideCard: z.object({
+          label: z.string(),
+          headline: z.string(),
+          description: z.string(),
+          chips: z.array(z.string()).optional(),
+        }),
+        features: z.array(z.object({
+          icon: z.string(),
+          title: z.string(),
+          description: z.string(),
+        })).optional(),
+      }).optional(),
+      whatYouGet: z.object({
+        banner: z.object({
+          label: z.string(),
+          headline: z.string(),
+          description: z.string(),
+        }),
+        outcomes: z.array(z.object({
+          icon: z.string(),
+          title: z.string(),
+          description: z.string(),
+        })).length(4),
+      }).optional(),
+    }).optional(),
   }),
 })
 

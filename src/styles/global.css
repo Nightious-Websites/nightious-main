@@ -137,7 +137,7 @@ body {
 
 /* ─── Gradient button ───────────────────────────────────────────────────────── */
 .btn-primary {
-  background: linear-gradient(135deg, var(--color-purple-base), var(--color-pink-deep));
+  background: linear-gradient(135deg, var(--btn-from, var(--color-purple-base)), var(--btn-to, var(--color-pink-deep)));
   color: #fff;
   font-family: 'Exo 2', sans-serif;
   font-weight: 600;
@@ -178,8 +178,8 @@ body {
 }
 
 .btn-ghost:hover {
-  background: rgba(168, 85, 247, 0.1);
-  border-color: var(--color-purple-mid);
+  background: var(--btn-ghost-hover-bg, rgba(168, 85, 247, 0.1));
+  border-color: var(--btn-ghost-hover-border, var(--color-purple-mid));
   transform: translateY(-2px);
 }
 
@@ -337,7 +337,7 @@ body {
   left: 0;
   right: 0;
   height: 1px;
-  background: linear-gradient(90deg, transparent 0%, rgba(168, 85, 247, 0.4) 30%, rgba(232, 121, 249, 0.4) 70%, transparent 100%);
+  background: linear-gradient(90deg, transparent 0%, var(--scan-color-mid, rgba(168, 85, 247, 0.4)) 30%, var(--scan-color-end, rgba(232, 121, 249, 0.4)) 70%, transparent 100%);
   animation: scan 10s linear infinite;
   pointer-events: none;
   z-index: 15;

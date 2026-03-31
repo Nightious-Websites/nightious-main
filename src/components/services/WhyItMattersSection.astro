@@ -1,0 +1,262 @@
+---
+interface Stat {
+  value: string
+  unit: string
+  short?: string
+  label: string
+}
+
+interface Props {
+  data: {
+    body: string
+    stats: Stat[]
+  }
+  imagePath?: string
+  accentRgb: string
+}
+
+const { data, imagePath, accentRgb } = Astro.props
+---
+
+<section
+  id="why-it-matters"
+  class="csec reveal-section"
+  aria-labelledby="why-it-matters-heading"
+  data-editorial
+>
+  <div class="why-card">
+    <!-- Background layers -->
+    {imagePath && (
+      <div
+        class="why-bg"
+        style={`background-image: url('${imagePath}')`}
+        role="presentation"
+        aria-hidden="true"
+      ></div>
+    )}
+    <div class="why-overlay-1" role="presentation" aria-hidden="true"></div>
+    <div class="why-overlay-2" role="presentation" aria-hidden="true"></div>
+    <!-- Scan sweep -->
+    <div class="scan-sweep" role="presentation" aria-hidden="true"></div>
+    <!-- HUD brackets -->
+    <div class="hud-tl" role="presentation" aria-hidden="true"></div>
+    <div class="hud-tr" role="presentation" aria-hidden="true"></div>
+    <div class="hud-bl" role="presentation" aria-hidden="true"></div>
+    <div class="hud-br" role="presentation" aria-hidden="true"></div>
+
+    <!-- Content grid -->
+    <div class="why-content">
+      <!-- Left col -->
+      <div class="why-left">
+        <h2 class="why-label" id="why-it-matters-heading">Why it matters</h2>
+        <p class="body-text" set:html={data.body}></p>
+      </div>
+
+      <!-- Right col (stats) -->
+      <div class="why-right">
+        <dl class="stats-list">
+          {data.stats.map(stat => (
+            <div class="stat-card">
+              <dt>
+                <span class="stat-value">{stat.value}</span>
+                <span class="stat-unit">{stat.unit}</span>
+              </dt>
+              <dd class="stat-label">{stat.label}</dd>
+            </div>
+          ))}
+        </dl>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .why-card {
+    position: relative;
+    overflow: hidden;
+    border-radius: 16px;
+    border: 1px solid rgba(var(--svc-accent), 0.20);
+    box-shadow: 0 0 50px rgba(var(--svc-accent), 0.15);
+  }
+
+  .why-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(var(--svc-accent), 0.60), transparent);
+    z-index: 2;
+  }
+
+  .why-bg {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center 30%;
+    filter: brightness(0.30) saturate(1.20);
+  }
+
+  .why-overlay-1 {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(2, 0, 10, 0.95), rgba(5, 0, 15, 0.80) 45%, rgba(2, 0, 10, 0.55));
+  }
+
+  .why-overlay-2 {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 80% 40%, rgba(var(--svc-accent), 0.22), transparent 60%);
+  }
+
+  .scan-sweep {
+    position: absolute;
+    top: 0;
+    left: -20%;
+    width: 60%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(var(--svc-accent), 0.04), transparent);
+    animation: scan 6s linear infinite;
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  @keyframes scan {
+    0% { left: -60%; }
+    100% { left: 110%; }
+  }
+
+  .hud-tl, .hud-tr, .hud-bl, .hud-br {
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    border: 1.5px solid rgba(var(--svc-accent), 0.50);
+    z-index: 3;
+    pointer-events: none;
+  }
+
+  .hud-tl { top: 14px; left: 14px; border-right: none; border-bottom: none; }
+  .hud-tr { top: 14px; right: 14px; border-left: none; border-bottom: none; }
+  .hud-bl { bottom: 14px; left: 14px; border-right: none; border-top: none; }
+  .hud-br { bottom: 14px; right: 14px; border-left: none; border-top: none; }
+
+  .why-content {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: 1.15fr 1fr;
+    min-height: 340px;
+  }
+
+  .why-left {
+    padding: 2.25rem 2.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .why-right {
+    padding: 2.25rem 2rem 2.25rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.75rem;
+    border-left: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  .why-label {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: rgba(var(--svc-accent), 0.70);
+    margin: 0 0 0.75rem;
+  }
+
+  .body-text {
+    font-size: 1.05rem;
+    line-height: 1.82;
+    color: var(--color-text-muted);
+  }
+
+  .stats-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin: 0;
+    padding: 0;
+  }
+
+  .stat-card {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(var(--svc-accent), 0.18);
+    border-radius: 12px;
+    padding: 0.85rem 1rem;
+    transition: all 0.2s ease;
+    cursor: default;
+  }
+
+  .stat-card:hover {
+    border-color: rgba(var(--svc-accent), 0.35);
+    background: rgba(var(--svc-accent), 0.07);
+  }
+
+  .stat-card dt {
+    display: flex;
+    align-items: baseline;
+    gap: 0.4rem;
+    margin-bottom: 0.35rem;
+  }
+
+  .stat-value {
+    font-size: 1.6rem;
+    font-weight: 900;
+    color: rgba(var(--svc-accent), 0.80);
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+
+  .stat-unit {
+    font-size: 0.70rem;
+    font-weight: 700;
+    color: rgba(var(--svc-accent), 0.60);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .stat-label {
+    font-size: 0.78rem;
+    color: var(--color-text-muted);
+    line-height: 1.4;
+    margin: 0;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .scan-sweep {
+      animation: none;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .why-content {
+      grid-template-columns: 1fr;
+    }
+    .why-right {
+      border-left: none;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      padding: 1.25rem 1.5rem;
+    }
+    .why-left {
+      padding: 1.5rem;
+    }
+  }
+</style>
+
+<style is:global>
+  .body-text strong {
+    color: var(--color-text-primary);
+    font-weight: 600;
+  }
+</style>
