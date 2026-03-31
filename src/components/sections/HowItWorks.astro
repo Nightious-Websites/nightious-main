@@ -138,12 +138,25 @@ const steps = [
   /* ── Section ── */
   .hiw-section {
     position: relative;
+    overflow: hidden;
     background-color: var(--color-bg-deep);
     padding: 100px 0 0;
   }
 
+  /* ── Aurora canvas ── */
+  .hiw-aurora {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    pointer-events: none;
+  }
+
   /* ── Header ── */
   .hiw-header {
+    position: relative;
+    z-index: 1;
     text-align: center;
     margin-bottom: 64px;
     padding: 0 24px;
@@ -173,6 +186,8 @@ const steps = [
 
   /* ── Sticky split layout ── */
   .hiw-split {
+    position: relative;
+    z-index: 1;
     display: grid;
     grid-template-columns: 120px 1fr;
     max-width: 900px;
@@ -180,6 +195,19 @@ const steps = [
     padding: 0 24px;
     gap: 40px;
     align-items: start;
+  }
+
+  /* ── Glow zone (tracks active card) ── */
+  .hiw-glow-zone {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 80%;
+    height: 250px;
+    background: radial-gradient(ellipse at center, rgba(var(--glow-color, 168, 85, 247), 0.18) 0%, transparent 70%);
+    filter: blur(40px);
+    pointer-events: none;
+    z-index: 0;
   }
 
   /* ── Left: Spine column (sticky via GSAP pin) ── */
@@ -383,6 +411,7 @@ const steps = [
   /* ── Step card ── */
   .hiw-step-card {
     position: relative;
+    overflow: hidden;
     background: rgba(255, 255, 255, 0.03);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
@@ -418,13 +447,13 @@ const steps = [
   .hiw-step-card.active {
     opacity: 1;
     transform: translateY(0);
-    background: rgba(168, 85, 247, 0.04);
-    border-color: rgba(168, 85, 247, 0.15);
-    box-shadow: 0 0 40px rgba(168, 85, 247, 0.14);
+    background: rgba(var(--accent), 0.04);
+    border-color: rgba(var(--accent), 0.15);
+    box-shadow: 0 0 40px rgba(var(--accent), 0.14);
   }
 
   .hiw-step-card.active::before {
-    background: linear-gradient(160deg, rgba(168, 85, 247, 0.3) 0%, rgba(255, 255, 255, 0.06) 50%, rgba(34, 197, 94, 0.15) 100%);
+    background: linear-gradient(160deg, rgba(var(--accent), 0.3) 0%, rgba(255, 255, 255, 0.06) 50%, rgba(34, 197, 94, 0.15) 100%);
   }
 
   /* Energy accent bar on active card */
@@ -435,9 +464,9 @@ const steps = [
     top: 20%;
     bottom: 20%;
     width: 2px;
-    background: linear-gradient(180deg, rgba(168, 85, 247, 0.6), rgba(34, 197, 94, 0.4));
+    background: linear-gradient(180deg, rgba(var(--accent), 0.6), rgba(34, 197, 94, 0.4));
     border-radius: 1px;
-    box-shadow: 0 0 8px rgba(168, 85, 247, 0.3);
+    box-shadow: 0 0 8px rgba(var(--accent), 0.3);
   }
 
   /* Step number label */
@@ -451,7 +480,7 @@ const steps = [
   }
 
   .hiw-step-card.active .step-num {
-    color: rgba(168, 85, 247, 0.8);
+    color: rgba(var(--accent), 0.8);
   }
 
   /* Step title */
@@ -479,8 +508,66 @@ const steps = [
     color: rgba(192, 132, 252, 0.85);
   }
 
+  /* ── SVG blob (decorative per-card graphic) ── */
+  .step-blob {
+    position: absolute;
+    top: -20px;
+    right: -15px;
+    width: 120px;
+    height: 120px;
+    opacity: 0;
+    transform: scale(0.9);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .hiw-step-card.active .step-blob {
+    opacity: 0.5;
+    transform: scale(1) rotate(3deg);
+  }
+
+  /* ── Duration indicator pill ── */
+  .step-duration {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 16px;
+    background: rgba(var(--accent), 0.08);
+    border: 1px solid rgba(var(--accent), 0.15);
+    border-radius: 20px;
+    padding: 5px 14px;
+  }
+
+  .step-duration-bar {
+    position: relative;
+    width: 40px;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.06);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .step-duration-fill {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    background: linear-gradient(90deg, rgba(var(--accent), 0.7), rgba(var(--accent), 0.4));
+    border-radius: 2px;
+  }
+
+  .step-duration-label {
+    font-family: 'Orbitron', monospace;
+    font-size: 10px;
+    letter-spacing: 0.05em;
+    color: rgba(var(--accent), 0.7);
+  }
+
   /* ── CTA ── */
   .hiw-cta-wrap {
+    position: relative;
+    z-index: 1;
     text-align: center;
     padding: 40px 24px 100px;
   }
@@ -541,6 +628,34 @@ const steps = [
       opacity: 1;
       transform: none;
     }
+
+    /* Aurora: hide canvas, use static CSS gradient fallback */
+    .hiw-aurora {
+      display: none;
+    }
+
+    .hiw-section {
+      background:
+        radial-gradient(ellipse at 20% 30%, rgba(168, 85, 247, 0.1) 0%, transparent 60%),
+        radial-gradient(ellipse at 80% 70%, rgba(34, 197, 94, 0.06) 0%, transparent 60%),
+        var(--color-bg-deep);
+    }
+
+    /* Glow zone: static centered, no repositioning */
+    .hiw-glow-zone {
+      top: 50%;
+      left: 50%;
+      right: auto;
+      transform: translate(-50%, -50%);
+      width: 90%;
+      height: 300px;
+    }
+
+    /* Blobs: always visible at resting scale (no activation animation) */
+    .step-blob {
+      opacity: 0.35;
+      transform: scale(1);
+    }
   }
 
   /* ── Reduced motion ── */
@@ -558,6 +673,27 @@ const steps = [
       opacity: 1;
       transform: none;
       transition: none;
+    }
+
+    .hiw-aurora {
+      display: none;
+    }
+
+    .hiw-section {
+      background:
+        radial-gradient(ellipse at 20% 30%, rgba(168, 85, 247, 0.1) 0%, transparent 60%),
+        radial-gradient(ellipse at 80% 70%, rgba(34, 197, 94, 0.06) 0%, transparent 60%),
+        var(--color-bg-deep);
+    }
+
+    .step-blob {
+      opacity: 0.35;
+      transform: scale(1);
+      transition: none;
+    }
+
+    .hiw-glow-zone {
+      display: none;
     }
   }
 </style>
