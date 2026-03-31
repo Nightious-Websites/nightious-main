@@ -1,5 +1,5 @@
 ---
-import { ViewTransitions } from 'astro:transitions'
+import { ClientRouter } from 'astro:transitions'
 import Analytics from '@vercel/analytics/astro'
 import SpeedInsights from '@vercel/speed-insights/astro'
 import SEO from '@/components/seo/SEO.astro'
@@ -13,9 +13,10 @@ interface Props {
   ogImage?: string
   ogType?: 'website' | 'article'
   noindex?: boolean
+  bodyStyle?: string
 }
 
-const { title, description, ogImage, ogType, noindex } = Astro.props
+const { title, description, ogImage, ogType, noindex, bodyStyle } = Astro.props
 const isProductionDeploy = process.env.VERCEL_ENV === 'production'
 const hasVercelRuntime = process.env.VERCEL === '1'
 ---
@@ -50,9 +51,9 @@ const hasVercelRuntime = process.env.VERCEL === '1'
 
     {hasVercelRuntime && <Analytics />}
     {hasVercelRuntime && <SpeedInsights />}
-    <ViewTransitions />
+    <ClientRouter />
   </head>
-  <body>
+  <body style={bodyStyle}>
     <a href="#main-content" class="skip-link">Skip to main content</a>
     <NavBar />
 
@@ -91,6 +92,22 @@ const hasVercelRuntime = process.env.VERCEL === '1'
     initVideoUpgrades()
     initManagedAutoplayVideos()
   }
+
+  document.addEventListener('astro:before-swap', () => {
+    // Reset video initialization flags so new page videos reinitialize
+    document.querySelectorAll('video[data-video-initialized]').forEach(v => {
+      (v as HTMLVideoElement).pause()
+      delete (v as HTMLVideoElement).dataset.videoInitialized
+    })
+    // Unload managed autoplay videos to prevent stale frame snapshots
+    document.querySelectorAll('video[data-autoplay-managed]').forEach(v => {
+      const vid = v as HTMLVideoElement
+      vid.pause()
+      vid.removeAttribute('src')
+      vid.querySelectorAll('source').forEach(s => s.remove())
+      vid.load()
+    })
+  })
 
   document.addEventListener('astro:page-load', runPageInit)
 </script>

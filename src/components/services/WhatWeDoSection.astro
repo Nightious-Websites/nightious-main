@@ -1,0 +1,221 @@
+---
+import { accentPronouns } from '@/utils/text'
+
+interface Feature {
+  icon: string
+  title: string
+  description: string
+}
+
+interface WideCard {
+  label: string
+  headline: string
+  description: string
+  chips?: string[]
+}
+
+interface Props {
+  data: {
+    wideCard: WideCard
+    features?: Feature[]
+  }
+  accentRgb: string
+}
+
+const { data, accentRgb } = Astro.props
+---
+
+<section
+  id="what-we-do"
+  class="csec reveal-section"
+  aria-labelledby="what-we-do-heading"
+  data-editorial
+>
+  <div class="section-body">
+    <!-- Left: statement card -->
+    <div class="feat-wide">
+      <div class="fw-glow" role="presentation" aria-hidden="true"></div>
+      <div class="fw-content">
+        <h2 class="fw-label" id="what-we-do-heading">{data.wideCard.label}</h2>
+        <h3 class="fw-headline" set:html={accentPronouns(data.wideCard.headline)}></h3>
+        <p class="fw-desc" set:html={data.wideCard.description}></p>
+      </div>
+    </div>
+
+    <!-- Right: feature grid -->
+    {data.features && data.features.length > 0 && (
+      <ul class="feat-grid" role="list">
+        {data.features.map(feat => (
+          <li class="feat-card">
+            <span class="feat-icon" aria-hidden="true">{feat.icon}</span>
+            <h3 class="feat-title">{feat.title}</h3>
+            <p class="feat-desc">{feat.description}</p>
+          </li>
+        ))}
+      </ul>
+    )}
+  </div>
+</section>
+
+<style>
+  .section-body {
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+    gap: 1rem;
+    align-items: stretch;
+  }
+
+  /* Statement card — stretches to match feature grid height */
+  .feat-wide {
+    position: relative;
+    overflow: hidden;
+    border-radius: 14px;
+    border: 1px solid rgba(var(--svc-accent), 0.22);
+    border-top: 1px solid rgba(var(--svc-accent), 0.40);
+    background: linear-gradient(135deg, rgba(var(--svc-accent), 0.08) 0%, rgba(5, 0, 15, 0.50) 65%);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .feat-wide::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, rgba(var(--svc-accent), 0.80), transparent 60%);
+    z-index: 1;
+  }
+
+  .fw-glow {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 160px;
+    height: 120px;
+    background: radial-gradient(ellipse at 100% 100%, rgba(var(--svc-accent), 0.14), transparent 70%);
+    pointer-events: none;
+  }
+
+  .fw-content {
+    position: relative;
+    z-index: 1;
+    flex: 1;
+    padding: 2rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .fw-label {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.10em;
+    color: rgba(var(--svc-accent), 0.70);
+    margin: 0 0 0.65rem;
+  }
+
+  .fw-headline {
+    font-size: 1.25rem;
+    font-weight: 900;
+    color: var(--color-text-primary);
+    line-height: 1.28;
+    margin: 0 0 0.85rem;
+    letter-spacing: -0.01em;
+  }
+
+  .fw-desc {
+    font-size: 0.85rem;
+    line-height: 1.65;
+    color: var(--color-text-muted);
+    margin: 0;
+  }
+
+  /* Feature grid */
+  .feat-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .feat-card {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.09);
+    border-radius: 12px;
+    padding: 1.1rem 1.2rem;
+    transition: all 0.25s ease;
+    cursor: default;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .feat-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 12px;
+    background: radial-gradient(circle at 50% 0%, rgba(var(--svc-accent), 0.08), transparent 70%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .feat-card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(var(--svc-accent), 0.35);
+    background: rgba(var(--svc-accent), 0.07);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.30), 0 0 20px rgba(var(--svc-accent), 0.10);
+  }
+
+  .feat-card:hover::before {
+    opacity: 1;
+  }
+
+  .feat-icon {
+    font-size: 1.4rem;
+    display: block;
+    margin-bottom: 0.6rem;
+  }
+
+  .feat-title {
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: var(--color-text-primary);
+    margin: 0 0 0.35rem;
+    position: relative;
+  }
+
+  .feat-desc {
+    font-size: 0.78rem;
+    color: var(--color-text-muted);
+    line-height: 1.55;
+    margin: 0;
+    position: relative;
+  }
+
+  @media (max-width: 900px) {
+    .section-body {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .feat-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+<style is:global>
+  .fw-desc strong {
+    color: var(--color-text-primary);
+    font-weight: 600;
+  }
+</style>

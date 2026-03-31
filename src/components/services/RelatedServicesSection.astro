@@ -1,0 +1,197 @@
+---
+import { entrySlug } from '@/utils/services'
+import type { CollectionEntry } from 'astro:content'
+
+interface Props {
+  relatedServices: CollectionEntry<'services'>[]
+  accentRgb: string
+}
+
+const { relatedServices, accentRgb } = Astro.props
+
+const categoryEmoji: Record<string, string> = {
+  Website: '🌐',
+  Email: '✉️',
+  Domain: '🔗',
+  AI: '🤖',
+  Marketing: '📈',
+  Computers: '💻',
+  Streaming: '🎙️',
+  Privacy: '🔒',
+  Operations: '⚙️',
+  Software: '🖥️',
+  Custom: '✨',
+  Training: '📚',
+}
+---
+
+<section
+  id="related-services"
+  class="csec reveal-section"
+  aria-labelledby="related-services-heading"
+  data-editorial
+>
+  <div class="rs-header">
+    <h2 id="related-services-heading" class="rs-heading">Related services</h2>
+    <a href="/services" class="btn-ghost rs-browse">Browse all services &rarr;</a>
+  </div>
+
+  {relatedServices.length > 0 ? (
+    <ul class="rs-grid" role="list">
+      {relatedServices.map(rel => {
+        const relSlug = entrySlug(rel.id)
+        const relEmoji = categoryEmoji[rel.data.category] ?? '🔧'
+        return (
+          <li class="rs-card">
+            <a href={`/services/${relSlug}`} aria-label={`${rel.data.title} — Learn more`}>
+              <div class="rs-card-header">
+                <span class="rs-icon" aria-hidden="true">{relEmoji}</span>
+                <div class="rs-icon-glow" aria-hidden="true"></div>
+              </div>
+              <div class="rs-card-body">
+                <h3 class="rs-title">{rel.data.title}</h3>
+                <span class="rs-category">{rel.data.category}</span>
+                <span class="rs-learn">Learn more <span class="rs-arrow" aria-hidden="true">&rarr;</span></span>
+              </div>
+            </a>
+          </li>
+        )
+      })}
+    </ul>
+  ) : (
+    <p style="color: var(--color-text-muted); font-size: 0.88rem;">No related services found.</p>
+  )}
+</section>
+
+<style>
+  .rs-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.25rem;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .rs-browse {
+    font-size: 0.78rem !important;
+    padding: 0.45rem 1rem !important;
+    flex-shrink: 0;
+  }
+
+  .rs-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.85rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .rs-card {
+    border-radius: 14px;
+    overflow: hidden;
+    background: rgba(10, 5, 32, 0.60);
+    border: 1px solid rgba(var(--svc-accent), 0.15);
+    transition: all 0.25s ease;
+  }
+
+  .rs-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(var(--svc-accent), 0.35);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35), 0 0 24px rgba(var(--svc-accent), 0.10);
+  }
+
+  .rs-card a {
+    text-decoration: none;
+    display: block;
+    color: inherit;
+  }
+
+  .rs-card-header {
+    height: 80px;
+    position: relative;
+    background: linear-gradient(135deg, rgba(var(--svc-accent), 0.20), rgba(var(--svc-accent), 0.08));
+    border-bottom: 1px solid rgba(var(--svc-accent), 0.12);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .rs-icon {
+    font-size: 1.75rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  .rs-icon-glow {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at center, rgba(var(--svc-accent), 0.15), transparent 70%);
+    animation: rs-pulse 3s ease-in-out infinite;
+  }
+
+  @keyframes rs-pulse {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1; }
+  }
+
+  .rs-card-body {
+    padding: 0.85rem 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+
+  .rs-title {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--color-text-primary);
+    margin: 0 0 0.25rem;
+  }
+
+  .rs-heading {
+    font-size: 1rem;
+    font-weight: 800;
+    color: var(--color-text-primary);
+    letter-spacing: -0.01em;
+    margin: 0;
+  }
+
+  .rs-category {
+    display: block;
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+    margin-bottom: 0.5rem;
+  }
+
+  .rs-learn {
+    font-size: 0.75rem;
+    color: rgb(var(--svc-accent));
+    display: flex;
+    align-items: center;
+    gap: 0.2rem;
+    margin-top: 0.25rem;
+  }
+
+  .rs-arrow {
+    transition: transform 0.2s ease;
+    display: inline-block;
+  }
+
+  .rs-card:hover .rs-arrow {
+    transform: translateX(4px);
+  }
+
+  @media (max-width: 768px) {
+    .rs-grid {
+      grid-template-columns: 1fr;
+    }
+    .rs-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.75rem;
+    }
+  }
+</style>

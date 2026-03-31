@@ -8,6 +8,7 @@ import HudBrackets from '@/components/ui/HudBrackets.astro'
 import { getAllServices, entrySlug } from '@/utils/services'
 import { getServiceTheme, serviceThemes } from '@/utils/serviceTheme'
 import { getCollection } from 'astro:content'
+import ServiceEditorial from '@/components/services/ServiceEditorial.astro'
 
 export async function getStaticPaths() {
   const services = await getCollection('services')
@@ -21,24 +22,6 @@ const { entry } = Astro.props
 const { Content } = await entry.render()
 const slug = entrySlug(entry.id)
 const theme = getServiceTheme(slug)
-
-// Compute layout variant from alphabetical index
-const allSlugs = [
-  'ai-integration',
-  'computer-services',
-  'custom-services',
-  'digital-marketing',
-  'domain-solutions',
-  'email-solutions',
-  'online-privacy',
-  'organizational-effectiveness',
-  'software-services',
-  'streaming-consultation',
-  'training-documentation',
-  'website-solutions',
-]
-const slugIndex = allSlugs.indexOf(slug)
-const layoutVariant = (slugIndex >= 0 ? slugIndex : 0) % 4
 
 // Get related services
 const allServices = await getAllServices()
@@ -61,13 +44,6 @@ const categoryEmoji: Record<string, string> = {
 
 const emoji = categoryEmoji[entry.data.category] ?? '🔧'
 
-// Stat bar items for variant 3
-const statItems = [
-  { label: 'Delivery', value: 'Fast' },
-  { label: 'Support', value: '24/7' },
-  { label: 'Approach', value: 'Custom' },
-  { label: 'Clients', value: '50+' },
-]
 ---
 
 <ServiceLayout
@@ -75,632 +51,156 @@ const statItems = [
   description={entry.data.description}
   slug={slug}
   category={entry.data.category}
+  serviceImage={entry.data.images?.img1}
+  keywords={entry.data.sections?.whatWeDo?.wideCard?.chips}
+  accentRgb={theme.colorRgb}
 >
+  <div style={`--btn-from: ${theme.colorDark}; --btn-to: ${theme.colorDark}; --btn-ghost-hover-bg: rgba(${theme.colorRgb}, 0.10); --btn-ghost-hover-border: rgba(${theme.colorRgb}, 0.55); --scan-color-mid: rgba(${theme.colorRgb}, 0.40); --scan-color-end: rgba(${theme.colorRgb}, 0.25);`}>
   {/* ═══════════════════════════════════════════════════════════
-      HERO — Variant 0: Split Hero Left
-      Aurora fills full section. Left: glass-strong content panel.
-      Right: geometric SVGs floating over aurora.
+      HERO — Unified: Split — left hook + CTAs / right stat cards
      ═══════════════════════════════════════════════════════════ */}
-  {layoutVariant === 0 && (
-    <section
-      class="svc-hero relative overflow-hidden"
-      style="min-height: 560px;"
-      aria-label={`${entry.data.title} hero`}
-      data-variant="0"
+  <section
+    class="svc-hero relative overflow-hidden"
+    style={`min-height: 680px;`}
+    aria-label={`${entry.data.title} hero`}
+  >
+    {/* Video background */}
+    <video
+      class="absolute inset-0 w-full h-full object-cover pointer-events-none"
+      style="z-index: 0;"
+      autoplay muted loop playsinline
+      data-autoplay-managed="true"
+      data-video-upgrade="true"
+      aria-hidden="true"
+      tabindex="-1"
+      preload="none"
+      poster={theme.heroImage}
+      transition:name={`svc-hero-video-${slug}`}
+      transition:animate="none"
     >
-      {/* Video background */}
-      <video
-        class="absolute inset-0 w-full h-full object-cover pointer-events-none"
-        style="z-index: 0;"
-        autoplay muted loop playsinline
-        data-autoplay-managed="true"
-        data-video-upgrade="true"
-        aria-hidden="true"
-        tabindex="-1"
-        preload="none"
-        poster={theme.heroImage}
-      >
-        <source src={`/videos/service-${slug}.webm`} type="video/webm" />
-        <source src={`/videos/service-${slug}.mp4`} type="video/mp4" />
-      </video>
-      {/* Video overlay */}
-      <div class="absolute inset-0 pointer-events-none" style="background: rgba(2,0,10,0.62); z-index: 0;" aria-hidden="true"></div>
+      <source src={`/videos/service-${slug}.webm`} type="video/webm" />
+      <source src={`/videos/service-${slug}.mp4`} type="video/mp4" />
+    </video>
+    {/* Video overlay */}
+    <div class="absolute inset-0 pointer-events-none" style="background: rgba(2,0,10,0.62); z-index: 0;" aria-hidden="true"></div>
 
-      {/* Aurora base layer */}
-      <AuroraBackground variant="subtle" colors="accent" accentRgb={theme.colorRgb} zIndex={0} />
+    {/* Deep bg base */}
+    <div class="absolute inset-0" style="background: var(--color-bg-deep); z-index: -1;" aria-hidden="true"></div>
 
-      {/* Deep bg base */}
-      <div class="absolute inset-0" style="background: var(--color-bg-deep); z-index: -1;" aria-hidden="true"></div>
+    {/* Aurora base layer */}
+    <AuroraBackground variant="subtle" colors="accent" accentRgb={theme.colorRgb} zIndex={0} />
 
-      {/* Particles */}
-      <ConstellationParticles density="low" colors="purple-only" zIndex={2} />
+    {/* Particles */}
+    <ConstellationParticles density="low" colors="accent" accentRgb={theme.colorRgb} zIndex={2} />
 
-      {/* HUD brackets */}
-      <HudBrackets color={`rgba(${theme.colorRgb}, 0.35)`} zIndex={20} />
+    {/* HUD brackets */}
+    <HudBrackets color={`rgba(${theme.colorRgb}, 0.35)`} zIndex={20} />
 
-      {/* Scan line */}
-      <div class="scan-line" style="z-index: 4;" aria-hidden="true"></div>
+    {/* Scan line */}
+    <div class="scan-line" style="z-index: 4;" aria-hidden="true"></div>
 
-      <div class="relative grid grid-cols-1 lg:grid-cols-2" style="min-height: 560px; z-index: 10;">
+    {/* ── Content layer: offset by navbar height (h-16 = 4rem) so justify-center works on visible area ── */}
+    <div class="absolute left-0 right-0 bottom-0 flex flex-col" style="top: 4rem; z-index: 10;">
 
-        {/* Left — glass-strong content panel */}
-        <div class="relative flex items-center" style="z-index: 10;">
-          {/* Subtle tinted glass backdrop on the left half */}
+      {/* Main content: left text + right context card */}
+      <div class="flex-1 max-w-7xl mx-auto px-6 lg:px-12 w-full grid svc-hero-grid">
+
+        {/* Left column */}
+        <div class="flex flex-col justify-center py-12 pr-10">
+
+          {/* Service icon badge */}
           <div
-            class="absolute inset-0 glass-strong"
-            style={`border-radius: 0; background: rgba(2,0,10,0.55); backdrop-filter: blur(28px); -webkit-backdrop-filter: blur(28px);`}
-            aria-hidden="true"
-          ></div>
-          {/* Accent edge glow on right border */}
-          <div
-            class="absolute top-0 right-0 bottom-0"
-            style={`width: 1px; background: linear-gradient(to bottom, transparent, rgba(${theme.colorRgb}, 0.5) 40%, rgba(${theme.colorRgb}, 0.5) 60%, transparent); z-index: 1;`}
-            aria-hidden="true"
-          ></div>
-
-          <div class="relative pt-28 pb-16 px-6 sm:px-10 lg:px-14 w-full" style="z-index: 10;">
-            {/* Breadcrumb */}
-            <nav aria-label="Breadcrumb" class="mb-8 svc-hero-el" style="opacity: 0;">
-              <ol class="flex items-center gap-2 text-xs" style="color: var(--color-text-muted);">
-                <li><a href="/" class="hover:text-white transition-colors">Home</a></li>
-                <li aria-hidden="true">/</li>
-                <li><a href="/services" class="hover:text-white transition-colors">Services</a></li>
-                <li aria-hidden="true">/</li>
-                <li style={`color: ${theme.colorLight};`} aria-current="page">{entry.data.title}</li>
-              </ol>
-            </nav>
-
-            <div class="max-w-lg">
-              {/* Service icon */}
-              <div
-                class="svc-hero-el w-14 h-14 rounded-xl flex items-center justify-center text-2xl mb-5 mt-4"
-                style={`opacity: 0; background: rgba(${theme.colorRgb}, 0.15); border: 1px solid rgba(${theme.colorRgb}, 0.3); box-shadow: 0 0 24px rgba(${theme.colorRgb}, 0.15);`}
-                aria-hidden="true"
-              >
-                {emoji}
-              </div>
-
-              {/* Headline */}
-              <h1
-                class="svc-hero-el font-display text-glow text-4xl md:text-5xl mb-4"
-                style={`opacity: 0; color: var(--text-primary-aurora); font-weight: 900; line-height: 1.08; letter-spacing: -0.025em; text-shadow: 0 0 40px rgba(${theme.colorRgb}, 0.4), 0 0 80px rgba(168,85,247,0.2);`}
-              >
-                {entry.data.title}
-              </h1>
-
-              {/* Gradient divider */}
-              <div class="svc-hero-el gradient-divider mb-5 ml-0" style={`opacity: 0; background: linear-gradient(90deg, rgba(${theme.colorRgb}, 0.8), rgba(168,85,247,0.3)); margin-left: 0; transform-origin: left;`} aria-hidden="true"></div>
-
-              {/* Tagline */}
-              <p class="svc-hero-el text-lg leading-relaxed mb-8" style="opacity: 0; color: var(--text-muted-aurora);">
-                {entry.data.tagline}
-              </p>
-
-              {/* CTA */}
-              <div class="svc-hero-el flex flex-wrap items-center gap-4" style="opacity: 0;">
-                <a href="/contact" class="btn-primary text-base">
-                  Get a Free Quote
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                </a>
-                <a href="#service-details" class="btn-ghost text-sm" style={`border-color: rgba(${theme.colorRgb}, 0.35); color: ${theme.colorLight};`}>
-                  What's included &darr;
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Right — geometric SVGs floating over aurora */}
-        <div class="relative overflow-hidden svc-hero-geo-panel" style="min-height: 320px;">
-          {/* Extra accent glow from the right */}
-          <div
-            class="absolute inset-0 pointer-events-none"
-            style={`background: radial-gradient(ellipse at 65% 50%, rgba(${theme.colorRgb}, 0.14) 0%, transparent 65%);`}
-            aria-hidden="true"
-          ></div>
-
-          {/* Geometric overlay — floating circles */}
-          <svg
-            class="absolute inset-0 w-full h-full pointer-events-none svc-geo-overlay"
-            style="z-index: 3; opacity: 0.18;"
-            aria-hidden="true"
-            xmlns="http://www.w3.org/2000/svg"
-            preserveAspectRatio="xMidYMid slice"
-          >
-            <circle cx="70%" cy="30%" r="18%" fill="none" stroke={theme.color} stroke-width="0.8" class="geo-spin" style="transform-origin: 70% 30%;" />
-            <circle cx="80%" cy="60%" r="12%" fill="none" stroke={theme.color} stroke-width="0.5" class="geo-spin-reverse" style="transform-origin: 80% 60%;" />
-            <circle cx="55%" cy="70%" r="8%" fill="none" stroke={theme.color} stroke-width="0.5" class="geo-spin" style="transform-origin: 55% 70%;" />
-            <circle cx="65%" cy="45%" r="3%" fill={theme.color} fill-opacity="0.15" class="geo-pulse" />
-            <circle cx="85%" cy="25%" r="2%" fill={theme.color} fill-opacity="0.1" class="geo-pulse" />
-            <line x1="40%" y1="0" x2="100%" y2="80%" stroke={theme.color} stroke-width="0.4" stroke-dasharray="6 14" opacity="0.5" />
-            <line x1="20%" y1="100%" x2="90%" y2="10%" stroke={theme.color} stroke-width="0.3" stroke-dasharray="4 16" opacity="0.3" />
-          </svg>
-
-          {/* Topo contour lines — flowing SVG paths */}
-          <svg
-            class="absolute inset-0 w-full h-full pointer-events-none"
-            style="z-index: 2;"
-            aria-hidden="true"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 400 400"
-            preserveAspectRatio="xMidYMid slice"
-          >
-            <path class="topo-line" style={`stroke: rgba(${theme.colorRgb}, 0.28); animation-delay: 0s;`} d="M-20,60 C60,38 110,82 180,60 S310,38 380,60 S460,82 520,60" />
-            <path class="topo-line" style={`stroke: rgba(${theme.colorRgb}, 0.2); animation-delay: 2s;`} d="M-20,135 C50,113 115,157 185,135 S315,113 385,135 S465,157 530,135" />
-            <path class="topo-line" style={`stroke: rgba(${theme.colorRgb}, 0.32); animation-delay: 1s;`} d="M-20,205 C55,183 120,227 190,205 S320,183 390,205 S470,227 535,205" />
-            <path class="topo-line" style={`stroke: rgba(${theme.colorRgb}, 0.18); animation-delay: 3s;`} d="M-20,275 C58,253 118,297 190,275 S318,253 390,275 S468,297 535,275" />
-            <path class="topo-line" style={`stroke: rgba(${theme.colorRgb}, 0.24); animation-delay: 1.5s;`} d="M-20,345 C62,323 122,367 192,345 S325,323 395,345 S475,367 540,345" />
-          </svg>
-
-          {/* HUD corner annotation */}
-          <div
-            class="absolute bottom-8 right-8 font-display text-xs tracking-widest"
-            style={`color: rgba(${theme.colorRgb}, 0.5); z-index: 5; letter-spacing: 0.2em; font-size: 9px;`}
+            class="svc-hero-el"
+            style={`opacity: 0; display: inline-flex; align-items: center; justify-content: center; margin-bottom: 1.25rem; width: 44px; height: 44px; background: rgba(${theme.colorRgb}, 0.10); border: 1px solid rgba(${theme.colorRgb}, 0.28); border-radius: 12px; box-shadow: 0 0 18px rgba(${theme.colorRgb}, 0.18);`}
             aria-hidden="true"
           >
-            {entry.data.category.toUpperCase()} / SYS
-          </div>
-        </div>
-      </div>
-    </section>
-  )}
-
-  {/* ═══════════════════════════════════════════════════════════
-      HERO — Variant 1: Centered Hero
-      Full-width aurora with particles and concentric ring SVGs.
-     ═══════════════════════════════════════════════════════════ */}
-  {layoutVariant === 1 && (
-    <section
-      class="svc-hero relative overflow-hidden"
-      style="min-height: 560px;"
-      aria-label={`${entry.data.title} hero`}
-      data-variant="1"
-    >
-      {/* Video background */}
-      <video
-        class="absolute inset-0 w-full h-full object-cover pointer-events-none"
-        style="z-index: 0;"
-        autoplay muted loop playsinline
-        data-autoplay-managed="true"
-        data-video-upgrade="true"
-        aria-hidden="true"
-        tabindex="-1"
-        preload="none"
-        poster={theme.heroImage}
-      >
-        <source src={`/videos/service-${slug}.webm`} type="video/webm" />
-        <source src={`/videos/service-${slug}.mp4`} type="video/mp4" />
-      </video>
-      {/* Video overlay */}
-      <div class="absolute inset-0 pointer-events-none" style="background: rgba(2,0,10,0.62); z-index: 0;" aria-hidden="true"></div>
-
-      {/* Deep bg base */}
-      <div class="absolute inset-0" style="background: var(--color-bg-deep); z-index: -1;" aria-hidden="true"></div>
-
-      {/* Aurora base layer */}
-      <AuroraBackground variant="subtle" colors="accent" accentRgb={theme.colorRgb} zIndex={0} />
-
-      {/* Particles */}
-      <ConstellationParticles density="low" colors="purple-only" zIndex={2} />
-
-      {/* HUD brackets */}
-      <HudBrackets color={`rgba(${theme.colorRgb}, 0.35)`} zIndex={20} />
-
-      {/* Scan line */}
-      <div class="scan-line" style="z-index: 4;" aria-hidden="true"></div>
-
-      {/* Geometric SVG — concentric rings from top */}
-      <svg
-        class="absolute inset-0 w-full h-full pointer-events-none svc-geo-overlay"
-        style="z-index: 3; opacity: 0.14;"
-        aria-hidden="true"
-        xmlns="http://www.w3.org/2000/svg"
-        preserveAspectRatio="xMidYMid slice"
-      >
-        <defs>
-          <radialGradient id={`rg-v1-${slug}`} cx="50%" cy="0%" r="70%">
-            <stop offset="0%" stop-color={theme.color} stop-opacity="0.6" />
-            <stop offset="100%" stop-color={theme.color} stop-opacity="0" />
-          </radialGradient>
-        </defs>
-        <circle cx="50%" cy="-10%" r="45%" fill="none" stroke={theme.color} stroke-width="1" class="geo-spin" style="transform-origin: 50% -10%;" />
-        <circle cx="50%" cy="-10%" r="30%" fill="none" stroke={theme.color} stroke-width="0.5" class="geo-spin-reverse" style="transform-origin: 50% -10%;" />
-        <circle cx="50%" cy="-10%" r="15%" fill="none" stroke={theme.color} stroke-width="0.5" class="geo-spin" style="transform-origin: 50% -10%;" />
-        <line x1="0" y1="60%" x2="100%" y2="60%" stroke={theme.color} stroke-width="0.5" stroke-dasharray="4 8" opacity="0.5" />
-        <line x1="50%" y1="0" x2="50%" y2="100%" stroke={theme.color} stroke-width="0.5" stroke-dasharray="4 16" opacity="0.4" />
-        <polyline points="0,0 60,0 60,60" fill="none" stroke={theme.color} stroke-width="1" />
-        <line x1="100%" y1="0" x2="100%" y2="60" stroke={theme.color} stroke-width="1" />
-        <line x1="100%" y1="0" x2="94%" y2="0" stroke={theme.color} stroke-width="1" />
-      </svg>
-
-      <div class="relative pt-32 pb-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center" style="z-index: 10;">
-        {/* Breadcrumb */}
-        <nav aria-label="Breadcrumb" class="mb-8 svc-hero-el" style="opacity: 0;">
-          <ol class="flex items-center justify-center gap-2 text-xs" style="color: var(--color-text-muted);">
-            <li><a href="/" class="hover:text-white transition-colors">Home</a></li>
-            <li aria-hidden="true">/</li>
-            <li><a href="/services" class="hover:text-white transition-colors">Services</a></li>
-            <li aria-hidden="true">/</li>
-            <li style={`color: ${theme.colorLight};`} aria-current="page">{entry.data.title}</li>
-          </ol>
-        </nav>
-
-        <div class="max-w-3xl mx-auto">
-          {/* Service icon */}
-          <div
-            class="svc-hero-el w-16 h-16 rounded-2xl flex items-center justify-center text-3xl mb-5 mx-auto"
-            style={`opacity: 0; background: rgba(${theme.colorRgb}, 0.15); border: 1px solid rgba(${theme.colorRgb}, 0.3); box-shadow: 0 0 32px rgba(${theme.colorRgb}, 0.2);`}
-            aria-hidden="true"
-          >
-            {emoji}
+            <span style="font-size: 1.25rem; line-height: 1;">{emoji}</span>
           </div>
 
-          {/* Headline */}
+          {/* Hook — h1, dominant type */}
           <h1
-            class="svc-hero-el font-display text-glow text-4xl md:text-5xl lg:text-6xl mb-5"
-            style={`opacity: 0; color: var(--text-primary-aurora); font-weight: 900; line-height: 1.06; letter-spacing: -0.03em; text-shadow: 0 0 40px rgba(${theme.colorRgb}, 0.45), 0 0 80px rgba(168,85,247,0.2);`}
+            class="svc-hero-el font-display"
+            style={`opacity: 0; font-size: clamp(2.1rem, 4.8vw, 3.2rem); font-weight: 900; line-height: 1.05; letter-spacing: -0.03em; color: #f0e6ff; margin-bottom: 1.2rem; text-shadow: 0 0 50px rgba(${theme.colorRgb}, 0.35);`}
           >
-            {entry.data.title}
+            {entry.data.sections?.hero?.hook ?? entry.data.title}
           </h1>
 
-          {/* Gradient divider — centered */}
-          <div class="svc-hero-el gradient-divider mb-6" style={`opacity: 0; background: linear-gradient(90deg, rgba(${theme.colorRgb}, 0.8), rgba(168,85,247,0.3)); transform-origin: center;`} aria-hidden="true"></div>
+          {/* Accent rule */}
+          <div
+            class="svc-hero-el svc-hero-rule"
+            style={`opacity: 0; background: linear-gradient(90deg, rgba(${theme.colorRgb}, 0.6), transparent); margin-bottom: 1.2rem;`}
+            aria-hidden="true"
+          ></div>
 
           {/* Tagline */}
-          <p class="svc-hero-el text-lg md:text-xl leading-relaxed mb-8" style="opacity: 0; color: var(--text-muted-aurora);">
+          <p
+            class="svc-hero-el"
+            style={`opacity: 0; font-size: 0.925rem; color: var(--color-text-muted); line-height: 1.72; max-width: 36ch; margin-bottom: 2rem;`}
+          >
             {entry.data.tagline}
           </p>
 
-          {/* CTA */}
-          <div class="svc-hero-el flex flex-wrap items-center justify-center gap-4" style="opacity: 0;">
-            <a href="/contact" class="btn-primary text-base">
+          {/* CTAs */}
+          <div class="svc-hero-el flex flex-wrap items-center gap-3" style="opacity: 0;">
+            <a href="/contact" class="btn-primary">
               Get a Free Quote
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </a>
-            <a href="#service-details" class="btn-ghost text-sm" style={`border-color: rgba(${theme.colorRgb}, 0.35); color: ${theme.colorLight};`}>
+            <a href="#what-we-do" class="btn-ghost text-sm" style={`border-color: rgba(${theme.colorRgb}, 0.35); color: ${theme.colorLight};`}>
               What's included &darr;
             </a>
           </div>
-        </div>
-      </div>
-    </section>
-  )}
 
-  {/* ═══════════════════════════════════════════════════════════
-      HERO — Variant 2: Split Hero Right (mirror of Variant 0)
-      Left: geometric SVGs over aurora. Right: glass-strong content.
-     ═══════════════════════════════════════════════════════════ */}
-  {layoutVariant === 2 && (
-    <section
-      class="svc-hero relative overflow-hidden"
-      style="min-height: 560px;"
-      aria-label={`${entry.data.title} hero`}
-      data-variant="2"
-    >
-      {/* Video background */}
-      <video
-        class="absolute inset-0 w-full h-full object-cover pointer-events-none"
-        style="z-index: 0;"
-        autoplay muted loop playsinline
-        data-autoplay-managed="true"
-        data-video-upgrade="true"
-        aria-hidden="true"
-        tabindex="-1"
-        preload="none"
-        poster={theme.heroImage}
-      >
-        <source src={`/videos/service-${slug}.webm`} type="video/webm" />
-        <source src={`/videos/service-${slug}.mp4`} type="video/mp4" />
-      </video>
-      {/* Video overlay */}
-      <div class="absolute inset-0 pointer-events-none" style="background: rgba(2,0,10,0.62); z-index: 0;" aria-hidden="true"></div>
 
-      {/* Deep bg base */}
-      <div class="absolute inset-0" style="background: var(--color-bg-deep); z-index: -1;" aria-hidden="true"></div>
-
-      {/* Aurora base layer */}
-      <AuroraBackground variant="subtle" colors="accent" accentRgb={theme.colorRgb} zIndex={0} />
-
-      {/* Particles */}
-      <ConstellationParticles density="low" colors="purple-only" zIndex={2} />
-
-      {/* HUD brackets */}
-      <HudBrackets color={`rgba(${theme.colorRgb}, 0.35)`} zIndex={20} />
-
-      {/* Scan line */}
-      <div class="scan-line" style="z-index: 4;" aria-hidden="true"></div>
-
-      <div class="relative grid grid-cols-1 lg:grid-cols-2" style="min-height: 560px; z-index: 10;">
-
-        {/* Left — geometric SVGs floating over aurora */}
-        <div class="relative overflow-hidden order-2 lg:order-1" style="min-height: 320px;">
-          {/* Accent glow left side */}
-          <div
-            class="absolute inset-0 pointer-events-none"
-            style={`background: radial-gradient(ellipse at 35% 50%, rgba(${theme.colorRgb}, 0.14) 0%, transparent 65%);`}
-            aria-hidden="true"
-          ></div>
-
-          {/* Geometric overlay — diagonal lines and dots */}
-          <svg
-            class="absolute inset-0 w-full h-full pointer-events-none svc-geo-overlay"
-            style="z-index: 3; opacity: 0.18;"
-            aria-hidden="true"
-            xmlns="http://www.w3.org/2000/svg"
-            preserveAspectRatio="xMidYMid slice"
-          >
-            <line x1="0" y1="0" x2="100%" y2="100%" stroke={theme.color} stroke-width="0.5" stroke-dasharray="6 10" />
-            <line x1="20%" y1="0" x2="100%" y2="80%" stroke={theme.color} stroke-width="0.5" stroke-dasharray="6 10" />
-            <line x1="0" y1="20%" x2="80%" y2="100%" stroke={theme.color} stroke-width="0.5" stroke-dasharray="6 10" />
-            <line x1="40%" y1="0" x2="100%" y2="60%" stroke={theme.color} stroke-width="0.3" stroke-dasharray="4 12" />
-            <circle cx="25%" cy="35%" r="3" fill={theme.color} fill-opacity="0.3" class="geo-pulse" />
-            <circle cx="45%" cy="55%" r="2.5" fill={theme.color} fill-opacity="0.25" class="geo-pulse" />
-            <circle cx="15%" cy="70%" r="2" fill={theme.color} fill-opacity="0.2" class="geo-pulse" />
-            <circle cx="60%" cy="25%" r="2" fill={theme.color} fill-opacity="0.2" class="geo-pulse" />
-          </svg>
-
-          {/* Diagonal spotlight sweep beam */}
-          <div
-            class="spotlight-beam"
-            aria-hidden="true"
-            style={`background: linear-gradient(90deg, transparent, rgba(${theme.colorRgb}, 0.13), transparent);`}
-          ></div>
-
-          {/* HUD corner annotation */}
-          <div
-            class="absolute bottom-8 left-8 font-display text-xs tracking-widest"
-            style={`color: rgba(${theme.colorRgb}, 0.5); z-index: 5; letter-spacing: 0.2em; font-size: 9px;`}
-            aria-hidden="true"
-          >
-            SYS / {entry.data.category.toUpperCase()}
-          </div>
         </div>
 
-        {/* Right — glass-strong content panel */}
-        <div class="relative flex items-center order-1 lg:order-2" style="z-index: 10;">
-          {/* Glass backdrop */}
-          <div
-            class="absolute inset-0"
-            style={`background: rgba(2,0,10,0.55); backdrop-filter: blur(28px); -webkit-backdrop-filter: blur(28px);`}
-            aria-hidden="true"
-          ></div>
-          {/* Accent edge glow on left border */}
-          <div
-            class="absolute top-0 left-0 bottom-0"
-            style={`width: 1px; background: linear-gradient(to bottom, transparent, rgba(${theme.colorRgb}, 0.5) 40%, rgba(${theme.colorRgb}, 0.5) 60%, transparent); z-index: 1;`}
-            aria-hidden="true"
-          ></div>
-
-          <div class="relative pt-28 pb-16 px-6 sm:px-10 lg:px-14 w-full" style="z-index: 10;">
-            {/* Breadcrumb */}
-            <nav aria-label="Breadcrumb" class="mb-8 svc-hero-el" style="opacity: 0;">
-              <ol class="flex items-center gap-2 text-xs" style="color: var(--color-text-muted);">
-                <li><a href="/" class="hover:text-white transition-colors">Home</a></li>
-                <li aria-hidden="true">/</li>
-                <li><a href="/services" class="hover:text-white transition-colors">Services</a></li>
-                <li aria-hidden="true">/</li>
-                <li style={`color: ${theme.colorLight};`} aria-current="page">{entry.data.title}</li>
-              </ol>
-            </nav>
-
-            <div class="max-w-lg">
-              {/* Service icon */}
-              <div
-                class="svc-hero-el w-14 h-14 rounded-xl flex items-center justify-center text-2xl mb-5 mt-4"
-                style={`opacity: 0; background: rgba(${theme.colorRgb}, 0.15); border: 1px solid rgba(${theme.colorRgb}, 0.3); box-shadow: 0 0 24px rgba(${theme.colorRgb}, 0.15);`}
-                aria-hidden="true"
-              >
-                {emoji}
-              </div>
-
-              {/* Headline */}
-              <h1
-                class="svc-hero-el font-display text-glow text-4xl md:text-5xl mb-4"
-                style={`opacity: 0; color: var(--text-primary-aurora); font-weight: 900; line-height: 1.08; letter-spacing: -0.025em; text-shadow: 0 0 40px rgba(${theme.colorRgb}, 0.4), 0 0 80px rgba(168,85,247,0.2);`}
-              >
-                {entry.data.title}
-              </h1>
-
-              {/* Gradient divider */}
-              <div class="svc-hero-el gradient-divider mb-5 ml-0" style={`opacity: 0; background: linear-gradient(90deg, rgba(${theme.colorRgb}, 0.8), rgba(168,85,247,0.3)); margin-left: 0; transform-origin: left;`} aria-hidden="true"></div>
-
-              {/* Tagline */}
-              <p class="svc-hero-el text-lg leading-relaxed mb-8" style="opacity: 0; color: var(--text-muted-aurora);">
-                {entry.data.tagline}
-              </p>
-
-              {/* CTA */}
-              <div class="svc-hero-el flex flex-wrap items-center gap-4" style="opacity: 0;">
-                <a href="/contact" class="btn-primary text-base">
-                  Get a Free Quote
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                </a>
-                <a href="#service-details" class="btn-ghost text-sm" style={`border-color: rgba(${theme.colorRgb}, 0.35); color: ${theme.colorLight};`}>
-                  What's included &darr;
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  )}
-
-  {/* ═══════════════════════════════════════════════════════════
-      HERO — Variant 3: Compact Aurora Hero
-      Aurora hero with HUD-style horizontal stat bar below content.
-     ═══════════════════════════════════════════════════════════ */}
-  {layoutVariant === 3 && (
-    <section
-      class="svc-hero relative overflow-hidden"
-      style="min-height: 600px;"
-      aria-label={`${entry.data.title} hero`}
-      data-variant="3"
-    >
-      {/* Video background */}
-      <video
-        class="absolute inset-0 w-full h-full object-cover pointer-events-none"
-        style="z-index: 0;"
-        autoplay muted loop playsinline
-        data-autoplay-managed="true"
-        data-video-upgrade="true"
-        aria-hidden="true"
-        tabindex="-1"
-        preload="none"
-        poster={theme.heroImage}
-      >
-        <source src={`/videos/service-${slug}.webm`} type="video/webm" />
-        <source src={`/videos/service-${slug}.mp4`} type="video/mp4" />
-      </video>
-      {/* Video overlay */}
-      <div class="absolute inset-0 pointer-events-none" style="background: rgba(2,0,10,0.62); z-index: 0;" aria-hidden="true"></div>
-
-      {/* Deep bg base */}
-      <div class="absolute inset-0" style="background: var(--color-bg-deep); z-index: -1;" aria-hidden="true"></div>
-
-      {/* Aurora base layer */}
-      <AuroraBackground variant="subtle" colors="accent" accentRgb={theme.colorRgb} zIndex={0} />
-
-      {/* Particles */}
-      <ConstellationParticles density="low" colors="purple-only" zIndex={2} />
-
-      {/* HUD brackets */}
-      <HudBrackets color={`rgba(${theme.colorRgb}, 0.35)`} zIndex={20} />
-
-      {/* Scan line */}
-      <div class="scan-line" style="z-index: 4;" aria-hidden="true"></div>
-
-      {/* Horizontal scan sweep for grid wave effect */}
-      <div
-        class="v3-scan-sweep"
-        aria-hidden="true"
-        style={`background: linear-gradient(to bottom, transparent, rgba(${theme.colorRgb}, 0.07), transparent);`}
-      ></div>
-
-      {/* Geometric overlay — grid/matrix */}
-      <svg
-        class="absolute inset-0 w-full h-full pointer-events-none svc-geo-overlay"
-        style="z-index: 3; opacity: 0.07;"
-        aria-hidden="true"
-        xmlns="http://www.w3.org/2000/svg"
-        preserveAspectRatio="xMidYMid slice"
-      >
-        <defs>
-          <pattern id={`grid-v3-${slug}`} width="60" height="60" patternUnits="userSpaceOnUse">
-            <path d="M 60 0 L 0 0 0 60" fill="none" stroke={theme.color} stroke-width="0.4" />
-          </pattern>
-        </defs>
-        <rect width="100%" height="100%" fill={`url(#grid-v3-${slug})`} />
-        <circle cx="20%" cy="40%" r="2" fill={theme.color} fill-opacity="0.4" class="geo-wave" style="animation-delay: 0s;" />
-        <circle cx="50%" cy="20%" r="2" fill={theme.color} fill-opacity="0.3" class="geo-wave" style="animation-delay: 0.9s;" />
-        <circle cx="80%" cy="60%" r="2" fill={theme.color} fill-opacity="0.3" class="geo-wave" style="animation-delay: 1.8s;" />
-        <circle cx="35%" cy="75%" r="1.5" fill={theme.color} fill-opacity="0.25" class="geo-wave" style="animation-delay: 2.7s;" />
-      </svg>
-
-      {/* Hero content — bottom-left aligned */}
-      <div class="relative flex flex-col justify-between" style={`z-index: 10; min-height: 600px;`}>
-        <div class="pt-32 pb-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-          {/* Breadcrumb */}
-          <nav aria-label="Breadcrumb" class="mb-8 svc-hero-el" style="opacity: 0;">
-            <ol class="flex items-center gap-2 text-xs" style="color: var(--color-text-muted);">
-              <li><a href="/" class="hover:text-white transition-colors">Home</a></li>
-              <li aria-hidden="true">/</li>
-              <li><a href="/services" class="hover:text-white transition-colors">Services</a></li>
-              <li aria-hidden="true">/</li>
-              <li style={`color: ${theme.colorLight};`} aria-current="page">{entry.data.title}</li>
-            </ol>
-          </nav>
-
-          <div class="max-w-2xl">
-            {/* Status pill + icon row */}
-            <div class="flex items-center gap-4 mb-6 svc-hero-el" style="opacity: 0;">
-              <div
-                class="w-14 h-14 rounded-xl flex items-center justify-center text-2xl flex-shrink-0"
-                style={`background: rgba(${theme.colorRgb}, 0.15); border: 1px solid rgba(${theme.colorRgb}, 0.3); box-shadow: 0 0 24px rgba(${theme.colorRgb}, 0.15);`}
-                aria-hidden="true"
-              >
-                {emoji}
-              </div>
-            </div>
-
-            {/* Headline */}
-            <h1
-              class="svc-hero-el font-display text-glow text-5xl md:text-6xl lg:text-7xl mb-4"
-              style={`opacity: 0; color: var(--text-primary-aurora); font-weight: 900; line-height: 1.06; letter-spacing: -0.03em; text-shadow: 0 0 60px rgba(${theme.colorRgb}, 0.4), 0 0 100px rgba(168,85,247,0.15);`}
+        {/* Right column: "What's included" feature preview */}
+        {entry.data.sections?.whatWeDo?.features && (
+          <div class="svc-hero-el flex flex-col justify-center py-12 pl-8" style="opacity: 0;">
+            <div
+              class="svc-feat-panel"
+              style={`border-color: rgba(${theme.colorRgb}, 0.22);`}
             >
-              {entry.data.title}
-            </h1>
-
-            {/* Gradient divider */}
-            <div class="svc-hero-el gradient-divider mb-5 ml-0" style={`opacity: 0; background: linear-gradient(90deg, rgba(${theme.colorRgb}, 0.8), rgba(168,85,247,0.3)); margin-left: 0; transform-origin: left;`} aria-hidden="true"></div>
-
-            {/* Tagline */}
-            <p class="svc-hero-el text-lg md:text-xl leading-relaxed mb-8" style="opacity: 0; color: var(--text-muted-aurora);">
-              {entry.data.tagline}
-            </p>
-
-            {/* CTA */}
-            <div class="svc-hero-el flex flex-wrap items-center gap-4" style="opacity: 0;">
-              <a href="/contact" class="btn-primary text-base">
-                Get a Free Quote
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              </a>
-              <a href="#service-details" class="btn-ghost text-sm" style={`border-color: rgba(${theme.colorRgb}, 0.35); color: ${theme.colorLight};`}>
-                What's included &darr;
-              </a>
+              <div
+                class="svc-feat-panel-line"
+                style={`background: linear-gradient(90deg, rgba(${theme.colorRgb}, 0.75), transparent 65%);`}
+                aria-hidden="true"
+              ></div>
+              <p class="svc-feat-panel-title" style={`color: rgba(${theme.colorRgb}, 0.60);`}>What's included</p>
+              <ul class="svc-feat-list">
+                {entry.data.sections.whatWeDo.features.map(feat => (
+                  <li class="svc-feat-item">
+                    <span aria-hidden="true">{feat.icon}</span>
+                    <span>{feat.title}</span>
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
-        </div>
+        )}
 
-        {/* HUD stat bar — anchored to bottom of hero */}
-        <div
-          class="svc-v3-stat-bar svc-hero-el relative"
-          style={`opacity: 0; z-index: 15; border-top: 1px solid rgba(${theme.colorRgb}, 0.18);`}
-          aria-hidden="true"
-        >
-          <div
-            class="absolute inset-0"
-            style={`background: rgba(2,0,10,0.65); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);`}
-          ></div>
-          <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-2 sm:grid-cols-4">
-              {statItems.map((stat, i) => (
-                <div
-                  class="svc-v3-stat-item"
-                  style={`border-right: ${i < statItems.length - 1 ? `1px solid rgba(${theme.colorRgb}, 0.12)` : 'none'};`}
-                >
-                  <span
-                    class="font-display svc-v3-stat-value"
-                    style={`color: ${theme.colorLight}; text-shadow: 0 0 16px rgba(${theme.colorRgb}, 0.5);`}
-                  >{stat.value}</span>
-                  <span class="svc-v3-stat-label font-display">{stat.label}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
       </div>
-    </section>
-  )}
 
+    </div>
+  </section>
   {/* ═══════════════════════════════════════════════════════════
       SECTION BRIDGE — Gradient transition from hero to content
      ═══════════════════════════════════════════════════════════ */}
-  <div class="svc-bridge relative" aria-hidden="true">
-    <div
-      class="absolute inset-0"
-      style={`background: linear-gradient(to bottom, var(--color-bg-deep) 0%, var(--color-bg-section) 100%);`}
-    ></div>
-    <div
-      class="absolute inset-0"
-      style={`background: radial-gradient(ellipse 80% 100% at 50% 0%, rgba(${theme.colorRgb}, 0.05) 0%, transparent 70%);`}
-    ></div>
-    <div style="height: 4rem;"></div>
-  </div>
-
   {/* ═══════════════════════════════════════════════════════════
-      SERVICE OVERVIEW — glass-strong panel with aurora behind
+      EDITORIAL BODY — E2 layout with left-rail nav + content stage
+      Renders when entry.data.sections is present (ported services).
+      Falls back to legacy sections for unported services.
      ═══════════════════════════════════════════════════════════ */}
+  {entry.data.sections ? (
+    <ServiceEditorial
+      accentRgb={theme.colorRgb}
+      sections={entry.data.sections}
+      images={entry.data.images}
+      relatedServices={related}
+    />
+  ) : (
+  <>
+  {/* ── LEGACY: SERVICE OVERVIEW ── */}
   <section class="svc-overview relative py-16 overflow-hidden" aria-label="Service overview">
     {/* Minimal aurora behind this section */}
     <AuroraBackground variant="minimal" colors="accent" accentRgb={theme.colorRgb} zIndex={0} />
@@ -995,11 +495,16 @@ const statItems = [
       </div>
     </section>
   )}
+  </>
+  )}
 
   <CtaSection
     heading={`Ready to talk about ${entry.data.title}?`}
     sub={`Tell us what you need. We'll get back to you as soon as possible with a clear plan.`}
+    image={theme.ctaImage}
+    transitionName={`svc-cta-img-${slug}`}
   />
+  </div>
 </ServiceLayout>
 
 <noscript>
@@ -1106,111 +611,78 @@ const statItems = [
     opacity: 1;
   }
 
-  /* ── Variant 3 stat bar ── */
-  .svc-v3-stat-bar {
-    background: transparent;
-    margin-top: auto;
-  }
-  .svc-v3-stat-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 14px 0;
-    gap: 2px;
-  }
-  .svc-v3-stat-value {
-    font-size: 1.1rem;
-    font-weight: 700;
-    letter-spacing: 0.05em;
-  }
-  .svc-v3-stat-label {
-    font-size: 8px;
-    letter-spacing: 0.2em;
-    color: var(--text-dim-aurora);
-    text-transform: uppercase;
+  /* ── Unified hero layout ── */
+  .svc-hero-grid {
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    align-items: stretch;
   }
 
-  /* ── Variant 0: Topo contour lines ── */
-  @keyframes topo-flow {
-    0% { stroke-dashoffset: 500; }
-    100% { stroke-dashoffset: -500; }
-  }
-  .topo-line {
-    fill: none;
-    stroke-width: 0.8;
-    stroke-dasharray: 280 80;
-    animation: topo-flow 14s linear infinite;
+  .svc-hero-rule {
+    height: 2px;
+    width: 3rem;
+    border-radius: 2px;
   }
 
-  /* ── Variant 1: Ring breathe (opacity-only — no transform conflict with geo-spin) ── */
-  @keyframes ring-breathe {
-    0%, 100% { opacity: 0.08; }
-    50% { opacity: 0.26; }
-  }
-  [data-variant="1"] .svc-geo-overlay circle.geo-spin {
-    animation: spin-slow 90s linear infinite, ring-breathe 5s ease-in-out infinite;
-  }
-  [data-variant="1"] .svc-geo-overlay circle.geo-spin-reverse {
-    animation: spin-slow-reverse 120s linear infinite, ring-breathe 5s ease-in-out 2s infinite;
+  @media (max-width: 768px) {
+    .svc-hero-grid {
+      grid-template-columns: 1fr;
+    }
+    .svc-hero-grid > :last-child {
+      display: none;
+    }
   }
 
-  /* ── Variant 2: Diagonal spotlight sweep ── */
-  @keyframes spotlight-sweep {
-    0%   { transform: translateX(-120%) rotate(-15deg); opacity: 0; }
-    15%  { opacity: 1; }
-    85%  { opacity: 0.55; }
-    100% { transform: translateX(240%) rotate(-15deg); opacity: 0; }
+  /* ── Right column: glass feature preview panel ── */
+  .svc-feat-panel {
+    background: rgba(8, 4, 22, 0.52);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid;
+    border-radius: 18px;
+    overflow: hidden;
+    position: relative;
+    padding: 1.25rem 1.4rem;
   }
-  .spotlight-beam {
+
+  .svc-feat-panel-line {
     position: absolute;
-    top: -30%;
-    left: 0;
-    width: 65px;
-    height: 200%;
-    pointer-events: none;
-    z-index: 4;
-    animation: spotlight-sweep 7s ease-in-out infinite;
-  }
-
-  /* ── Variant 3: Grid wave + horizontal scan ── */
-  @keyframes grid-wave {
-    0%, 100% { opacity: 0.1; }
-    50% { opacity: 0.65; filter: drop-shadow(0 0 5px currentColor); }
-  }
-  .geo-wave {
-    animation: grid-wave 3.5s ease-in-out infinite;
-  }
-
-  @keyframes v3-scan {
-    0%   { transform: translateY(-100%); opacity: 0; }
-    8%   { opacity: 1; }
-    92%  { opacity: 0.5; }
-    100% { transform: translateY(700px); opacity: 0; }
-  }
-  .v3-scan-sweep {
-    position: absolute;
+    top: 0;
     left: 0;
     right: 0;
-    top: 0;
-    height: 110px;
-    pointer-events: none;
-    z-index: 3;
-    animation: v3-scan 7s linear infinite;
+    height: 1px;
+  }
+
+  .svc-feat-panel-title {
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin: 0 0 0.85rem;
+  }
+
+  .svc-feat-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+  }
+
+  .svc-feat-item {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.82rem;
+    color: var(--color-text-primary);
+    font-weight: 500;
   }
 
   @media (prefers-reduced-motion: reduce) {
     .geo-spin,
     .geo-spin-reverse,
-    .geo-pulse,
-    .topo-line,
-    .spotlight-beam,
-    .geo-wave,
-    .v3-scan-sweep {
-      animation: none;
-    }
-
-    [data-variant="1"] .svc-geo-overlay circle.geo-spin,
-    [data-variant="1"] .svc-geo-overlay circle.geo-spin-reverse {
+    .geo-pulse {
       animation: none;
     }
 

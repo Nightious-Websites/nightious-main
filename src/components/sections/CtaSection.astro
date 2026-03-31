@@ -2,11 +2,15 @@
 interface Props {
   heading?: string
   sub?: string
+  image?: string
+  transitionName?: string
 }
 
 const {
   heading = 'Ready to get started?',
   sub = 'Tell us what you need. We\'ll get back to you as soon as possible with a clear plan — no obligation.',
+  image = '/images/photos/home-cta.webp',
+  transitionName,
 } = Astro.props
 ---
 
@@ -17,12 +21,14 @@ const {
   <!-- Background image -->
   <div class="absolute inset-0 z-0" aria-hidden="true">
     <img
-      src="/images/photos/home-cta.webp"
+      src={image}
       alt=""
       class="w-full h-full object-cover object-center"
       loading="lazy"
       width="1920"
       height="1080"
+      transition:name={transitionName}
+      transition:animate="none"
     />
     <div class="absolute inset-0" style="background: linear-gradient(to bottom, rgba(5,0,15,0.85) 0%, rgba(5,0,15,0.75) 50%, rgba(5,0,15,0.85) 100%);"></div>
   </div>

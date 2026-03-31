@@ -4,9 +4,11 @@ interface Props {
   description: string
   slug: string
   category?: string
+  image?: string
+  keywords?: string[]
 }
 
-const { title, description, slug, category } = Astro.props
+const { title, description, slug, category, image, keywords } = Astro.props
 
 const schema = {
   "@context": "https://schema.org",
@@ -22,6 +24,8 @@ const schema = {
   },
   "areaServed": "Worldwide",
   "serviceType": category ?? "Technology Services",
+  ...(image ? { "image": `https://nightious.com${image}` } : {}),
+  ...(keywords?.length ? { "knowsAbout": keywords } : {}),
 }
 ---
 

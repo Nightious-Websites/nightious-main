@@ -9,9 +9,20 @@ interface Props {
   slug: string
   category?: string
   ogImage?: string
+  serviceImage?: string
+  keywords?: string[]
+  accentRgb?: string
 }
 
-const { title, description, slug, category, ogImage = '/images/og/og-service-page.png' } = Astro.props
+const { title, description, slug, category, ogImage = '/images/og/og-service-page.png', serviceImage, keywords, accentRgb } = Astro.props
+
+let bodyStyle: string | undefined
+if (accentRgb) {
+  const [r, g, b] = accentRgb.split(', ').map(Number)
+  const bgDeep    = `rgb(${Math.max(1,Math.round(r*.035))},${Math.max(1,Math.round(g*.035))},${Math.max(1,Math.round(b*.035))})`
+  const bgSection = `rgb(${Math.max(1,Math.round(r*.055))},${Math.max(1,Math.round(g*.055))},${Math.max(1,Math.round(b*.055))})`
+  bodyStyle = `--color-bg-deep:${bgDeep};--color-bg-section:${bgSection};`
+}
 
 // Keep page title under 60 chars — short names get the full suffix; long ones drop "for Small Businesses"
 const suffix = ' for Small Businesses | Nightious'
@@ -30,8 +41,9 @@ const breadcrumbItems = [
   title={pageTitle}
   description={description}
   ogImage={ogImage}
+  bodyStyle={bodyStyle}
 >
-  <SchemaService title={title} description={description} slug={slug} category={category} />
+  <SchemaService title={title} description={description} slug={slug} category={category} image={serviceImage} keywords={keywords} />
   <SchemaBreadcrumb items={breadcrumbItems} />
   <slot />
 </BaseLayout>

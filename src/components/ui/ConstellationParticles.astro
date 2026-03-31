@@ -1,13 +1,15 @@
 ---
 interface Props {
   density?: 'high' | 'medium' | 'low'
-  colors?:  'purple-emerald' | 'purple-only'
+  colors?:  'purple-emerald' | 'purple-only' | 'accent'
+  accentRgb?: string
   zIndex?:  number
 }
 
 const {
   density = 'high',
   colors  = 'purple-emerald',
+  accentRgb = '',
   zIndex  = 3,
 } = Astro.props
 
@@ -43,7 +45,7 @@ const containerId = `constellation-particles-${uid}`
   }
 </style>
 
-<script define:vars={{ containerId, count, colors }}>
+<script define:vars={{ containerId, count, colors, accentRgb }}>
   function spawnParticles() {
     const container = document.getElementById(containerId)
     if (!container) return
@@ -64,7 +66,9 @@ const containerId = `constellation-particles-${uid}`
 
       // Color selection based on prop
       let bgColor
-      if (colors === 'purple-only') {
+      if (colors === 'accent' && accentRgb) {
+        bgColor = `rgba(${accentRgb},${opacity})`
+      } else if (colors === 'purple-only') {
         bgColor = `rgba(168,85,247,${opacity})`
       } else {
         // purple-emerald: ~40% emerald, ~60% purple
