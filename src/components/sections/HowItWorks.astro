@@ -750,6 +750,7 @@ const steps = [
     ctx.globalCompositeOperation = 'source-over'
   }
 
+  // Must match accentRgb values in frontmatter steps array
   const GLOW_COLORS = [
     '168, 85, 247',
     '129, 140, 248',
@@ -810,7 +811,7 @@ const steps = [
     const glowZone = document.getElementById('hiw-glow-zone')
     if (glowZone && cards[index]) {
       const card = cards[index] as HTMLElement
-      const targetTop = card.offsetTop + card.offsetHeight / 2 - 125
+      const targetTop = card.offsetTop + card.offsetHeight / 2 - glowZone.offsetHeight / 2
       gsap.to(glowZone, {
         top: targetTop,
         duration: 0.6,
