@@ -110,4 +110,8 @@ const hasVercelRuntime = process.env.VERCEL === '1'
   })
 
   document.addEventListener('astro:page-load', runPageInit)
+
+  window.addEventListener('load', () => {
+    document.dispatchEvent(new Event('astro:page-load'))
+  }, { once: true })
 </script>
