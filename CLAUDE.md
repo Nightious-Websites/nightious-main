@@ -1,56 +1,39 @@
----
-tags: [nightious, project, astro, tailwind, typescript]
-client: Nightious
-stack: Astro 5, Tailwind v4, TypeScript, GSAP
-status: pre-launch
----
+# Nightious Instructions
 
-# Nightious — Project Reference
-IT & digital solutions company. Website: nightious.com
-> Workspace conventions: `Websites/CLAUDE.md`. Paths below are relative to project root.
+Astro 5 + Tailwind v4 + TypeScript + GSAP site for `nightious.com`. Keep changes production-focused: SEO, accessibility, responsive behavior, and page speed.
 
 ## Commands
-`npm run dev` · `npm run build` · `npm run preview` — no test runner, `astro build` is the correctness check.
 
-## Gotchas
-`entry.id` includes `.md` — use `entrySlug()` from `@/utils/services`. Never add `slug` to Zod schemas.
-
-## Serena MCP — Required at Session Start
-Activate before touching code: `activate_project` (nightious) → `check_onboarding_performed`. Query `serena-workflow` in QMD for the full tool substitution guide and token benchmark instructions.
+- `npm run dev` - local server
+- `npm run build` - baseline correctness check; no separate unit test runner
+- `npm run preview` - serve built site
 
 ## Workflow
-1. Check `.claude/queue.md`
-2. Search with `/qmd-mastery:qmd` skill
-3. Write back — update queue + write findings to `docs/`
 
-→ Query `orchestrator-protocol` for preflight, routing, and workflow details.
+- Check `git status --short --branch` first; never revert unrelated user changes.
+- Read relevant files before editing; keep patches narrow and aligned with existing components, utilities, tokens, and motion patterns.
+- Verify visual/routing changes in browser or preview when practical.
+- For page adds/removes/renames in `src/pages/`, update SEO discovery surfaces: `public/llms.txt`, page SEO metadata, canonical/OG images, schema/breadcrumbs, and nav/footer links as applicable. Change `astro.config.mjs` for sitemap/robots behavior; generated `sitemap-index.xml` and `robots.txt` are not edited directly.
 
-## Key Paths
+## Map
 
-| What | QMD Collection |
-|------|----------------|
-| Knowledge | `.claude/docs/` → `nightious-docs` |
-| Rules | `.claude/rules/` → `nightious-rules` |
-| Queue | `.claude/queue.md` |
-| Brainstorms | `.claude/brainstorms/` |
+- Routes: `src/pages/`
+- Layouts: `src/layouts/`
+- Components: `src/components/`
+- Service content: `src/content/services/`
+- Service helpers: `src/utils/services.ts`, `src/utils/serviceTheme.ts`
+- Public assets: `public/`
+- Imported optimized assets: `src/assets/`
 
-## SEO Files — Maintenance Rules
+## Gotchas
 
-| File | How generated | When to update |
-|------|--------------|----------------|
-| `sitemap-index.xml` | Auto at `astro build` | Edit `astro.config.mjs` `sitemap()` options |
-| `robots.txt` | Auto at `astro build` | Edit `astro.config.mjs` `robotsTxt()` options |
-| `public/llms.txt` | **Static — manual** | Update whenever a page is added, removed, or renamed |
+- Service entry IDs include `.md`; use `entrySlug()` from `@/utils/services`.
+- Do not add `slug` to service Zod schemas.
+- `public/llms.txt` is static and manual.
+- Hero backgrounds are image-based with CSS/canvas motion; do not reintroduce video backgrounds unless asked.
 
-**Rule:** Any time you add or remove a page in `src/pages/`, open `public/llms.txt` and add/remove the corresponding entry. Match the section: core pages → `## Pages`, audience bundle pages → `## Audience Pages`, service pages → `## Services`. Query `seo rules` in QMD for the full maintenance spec.
+## Style
 
-## QMD Lookup (query for details)
-
-| Topic | Query |
-|-------|-------|
-| Site architecture | `site-overview` |
-| Orchestrator protocol | `orchestrator-protocol` |
-| Design system | `color-tokens` or `design-system` |
-| SEO | `seo rules` |
-| Astro gotchas | `astro-v5-gotchas` |
-| Known issues | `known-issues` |
+- Match the dark glass/aurora system.
+- Keep copy concise and customer-facing.
+- Use semantic HTML, accessible names, and reduced-motion support.
