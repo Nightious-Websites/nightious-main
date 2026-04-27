@@ -10,10 +10,12 @@ interface Props {
   accentRgb: string
   serviceCount: number
   animStyle?: 'network' | 'waveform' | 'orbs'
-  bgVideo?: string
+  bgImage?: string
+  bgPoster?: string
 }
 
-const { audience, headline, tagline, accentRgb, serviceCount, animStyle, bgVideo } = Astro.props
+const { audience, headline, tagline, accentRgb, serviceCount, animStyle, bgImage, bgPoster } = Astro.props
+const heroImage = bgImage ?? bgPoster
 ---
 
 <section
@@ -21,20 +23,19 @@ const { audience, headline, tagline, accentRgb, serviceCount, animStyle, bgVideo
   aria-label={`Services for ${audience}`}
   id="bundle-hero-section"
 >
-  {/* Video background */}
-  {bgVideo && (
+  {/* Motion-treated still background */}
+  {heroImage && (
     <>
-      <video
-        class="absolute inset-0 w-full h-full object-cover pointer-events-none"
-        style="z-index: 0;"
-        autoplay muted loop playsinline
+      <img
+        class="hero-motion-bg"
+        src={heroImage}
+        alt=""
         aria-hidden="true"
-        tabindex="-1"
-        preload="none"
-      >
-        <source src={bgVideo} type="video/webm" />
-        <source src={bgVideo.replace('.webm', '.mp4')} type="video/mp4" />
-      </video>
+        loading="eager"
+        decoding="async"
+        fetchpriority="high"
+        style="z-index: 0;"
+      />
       <div class="absolute inset-0 pointer-events-none" style="background: rgba(2,0,10,0.62); z-index: 1;" aria-hidden="true"></div>
     </>
   )}

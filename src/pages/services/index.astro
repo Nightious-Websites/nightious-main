@@ -45,19 +45,18 @@ const breadcrumbItems = [
     aria-label="Services hero"
     id="services-hero-section"
   >
-    <!-- Video background -->
-    <video
-      class="absolute inset-0 w-full h-full object-cover pointer-events-none"
-      style="z-index: 0;"
-      autoplay muted loop playsinline
+    <!-- Motion-treated still background -->
+    <img
+      class="hero-motion-bg"
+      src="/images/hero-poster.webp"
+      alt=""
       aria-hidden="true"
-      tabindex="-1"
-      preload="none"
-    >
-      <source src="/videos/hero-inner.webm" type="video/webm" />
-      <source src="/videos/hero-inner.mp4" type="video/mp4" />
-    </video>
-    <!-- Video overlay -->
+      loading="eager"
+      decoding="async"
+      fetchpriority="high"
+      style="z-index: 0;"
+    />
+    <!-- Image overlay -->
     <div class="absolute inset-0 pointer-events-none" style="background: rgba(2,0,10,0.6); z-index: 0;" aria-hidden="true"></div>
 
     <!-- Aurora blobs -->

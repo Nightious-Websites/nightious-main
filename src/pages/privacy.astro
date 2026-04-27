@@ -14,19 +14,18 @@ import AuroraBackground from '@/components/ui/AuroraBackground.astro'
     aria-label="Privacy policy hero"
     id="privacy-hero"
   >
-    <!-- Video background -->
-    <video
-      class="absolute inset-0 w-full h-full object-cover pointer-events-none"
-      style="z-index: 0;"
-      autoplay muted loop playsinline
+    <!-- Motion-treated still background -->
+    <img
+      class="hero-motion-bg"
+      src="/images/hero-poster.webp"
+      alt=""
       aria-hidden="true"
-      tabindex="-1"
-      preload="none"
-    >
-      <source src="/videos/hero-inner.webm" type="video/webm" />
-      <source src="/videos/hero-inner.mp4" type="video/mp4" />
-    </video>
-    <!-- Video overlay — heavier for readability on legal pages -->
+      loading="eager"
+      decoding="async"
+      fetchpriority="high"
+      style="z-index: 0;"
+    />
+    <!-- Image overlay — heavier for readability on legal pages -->
     <div class="absolute inset-0 pointer-events-none" style="background: rgba(2,0,10,0.72); z-index: 0;" aria-hidden="true"></div>
 
     <AuroraBackground variant="minimal" colors="purple-emerald" />

@@ -67,7 +67,7 @@ const emoji = categoryEmoji[entry.data.category] ?? '🔧'
     {/* Image background */}
     <img
       src={theme.heroImage}
-      class="absolute inset-0 w-full h-full object-cover pointer-events-none"
+      class="hero-motion-bg"
       style="z-index: 0;"
       alt=""
       aria-hidden="true"
@@ -78,7 +78,7 @@ const emoji = categoryEmoji[entry.data.category] ?? '🔧'
       transition:name={`svc-hero-image-${slug}`}
       transition:animate="none"
     />
-    {/* Video overlay */}
+    {/* Image overlay */}
     <div class="absolute inset-0 pointer-events-none" style="background: rgba(2,0,10,0.62); z-index: 0;" aria-hidden="true"></div>
 
     {/* Deep bg base */}

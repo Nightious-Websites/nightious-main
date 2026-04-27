@@ -20,18 +20,17 @@ import logoCompleteColor from '@/assets/images/logos/logo-complete-color.png'
     aria-label="404 error"
     id="e404-section"
   >
-    <!-- Background video -->
+    <!-- Motion-treated still background -->
     <div class="absolute inset-0 z-0" aria-hidden="true">
-      <video
-        class="w-full h-full object-cover object-center pointer-events-none"
-        autoplay muted loop playsinline
+      <img
+        class="hero-motion-bg"
+        src="/images/hero-poster.webp"
+        alt=""
         aria-hidden="true"
-        tabindex="-1"
-        preload="none"
-      >
-        <source src="/videos/hero-404.webm" type="video/webm" />
-        <source src="/videos/hero-404.mp4" type="video/mp4" />
-      </video>
+        loading="eager"
+        decoding="async"
+        fetchpriority="high"
+      />
       <!-- Deep dark overlay -->
       <div
         class="absolute inset-0"

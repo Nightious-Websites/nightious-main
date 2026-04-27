@@ -8,16 +8,37 @@ export function shouldDisableAutoplay(): boolean {
 export function initManagedAutoplayVideos(): void {
   if (typeof window === 'undefined' || shouldDisableAutoplay()) return
 
-  const video = document.querySelector<HTMLVideoElement>('video[data-autoplay-managed="true"]')
-  if (!video) return
+  const videos = document.querySelectorAll<HTMLVideoElement>(
+    'video[data-hero-video="true"], video[data-autoplay-managed="true"], video[autoplay][muted]'
+  )
+  if (!videos.length) return
 
-  video.play().catch(() => {})
+  videos.forEach((video) => {
+    if (video.dataset.videoInitialized === 'true' && video.readyState > 0) {
+      video.play().catch(() => {})
+      return
+    }
+
+    video.dataset.videoInitialized = 'true'
+
+    if (video.preload === 'none') {
+      video.preload = 'metadata'
+    }
+
+    if (video.readyState === 0) {
+      video.load()
+    }
+
+    video.play().catch(() => {})
+  })
 }
 
 export function initVideoUpgrades(): void {
   if (typeof window === 'undefined') return
 
-  const targets = document.querySelectorAll<HTMLVideoElement>('video[data-video-upgrade="true"]')
+  const targets = document.querySelectorAll<HTMLVideoElement>(
+    'video[data-video-upgrade="true"], video[data-hero-video="true"]'
+  )
   if (!targets.length) return
 
   if (shouldDisableAutoplay()) {

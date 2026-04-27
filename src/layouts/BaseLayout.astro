@@ -95,17 +95,9 @@ const hasVercelRuntime = process.env.VERCEL === '1'
 
   document.addEventListener('astro:before-swap', () => {
     // Reset video initialization flags so new page videos reinitialize
-    document.querySelectorAll('video[data-video-initialized]').forEach(v => {
+    document.querySelectorAll('video[data-video-initialized], video[data-hero-video]').forEach(v => {
       (v as HTMLVideoElement).pause()
       delete (v as HTMLVideoElement).dataset.videoInitialized
-    })
-    // Unload managed autoplay videos to prevent stale frame snapshots
-    document.querySelectorAll('video[data-autoplay-managed]').forEach(v => {
-      const vid = v as HTMLVideoElement
-      vid.pause()
-      vid.removeAttribute('src')
-      vid.querySelectorAll('source').forEach(s => s.remove())
-      vid.load()
     })
   })
 

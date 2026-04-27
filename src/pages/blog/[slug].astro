@@ -66,6 +66,18 @@ function formatDate(date: Date): string {
     aria-label="Post hero"
     id="post-hero"
   >
+    <img
+      class="hero-motion-bg"
+      src={entry.data.image ?? '/images/heroes/hero-blog.webp'}
+      alt=""
+      aria-hidden="true"
+      loading="eager"
+      decoding="async"
+      fetchpriority="high"
+      style="z-index: 0;"
+    />
+    <div class="absolute inset-0 pointer-events-none" style="background: rgba(2,0,10,0.76); z-index: 0;" aria-hidden="true"></div>
+
     <AuroraBackground variant="minimal" colors="purple-emerald" />
 
     <!-- Subtle grid texture -->

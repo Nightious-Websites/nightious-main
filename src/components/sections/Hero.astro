@@ -6,22 +6,16 @@
   aria-label="Hero"
   id="hero-section"
 >
-  <!-- Video background -->
-  <video
-    class="hero-video"
-    autoplay
-    muted
-    loop
-    playsinline
-    data-autoplay-managed="true"
-    data-video-upgrade="true"
+  <!-- Static background -->
+  <img
+    class="hero-motion-bg"
+    src="/images/hero-poster.webp"
+    alt=""
     aria-hidden="true"
-    tabindex="-1"
-    poster="/images/hero-poster.webp"
-  >
-    <source src="/videos/hero-bg.webm" type="video/webm" />
-    <source src="/videos/hero-bg.mp4" type="video/mp4" />
-  </video>
+    decoding="async"
+    fetchpriority="high"
+    style="z-index: 0;"
+  />
 
   <!-- Deep overlay — brings video into our dark palette -->
   <div
