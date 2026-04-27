@@ -410,7 +410,7 @@ if (!RGB_RE.test(accentRgb)) {
                       href={`/services/${service.slug}`}
                       class="text-xs font-medium inline-flex items-center gap-1 transition-opacity hover:opacity-70 mt-auto"
                       style={`color: rgba(${accentRgb}, 0.9);`}
-                    >Explore <span aria-hidden="true">&rarr;</span></a>
+                    >Explore {service.title} <span aria-hidden="true">&rarr;</span></a>
                   </div>
                 </div>
               ))}

@@ -64,23 +64,20 @@ const emoji = categoryEmoji[entry.data.category] ?? '🔧'
     style={`min-height: 680px;`}
     aria-label={`${entry.data.title} hero`}
   >
-    {/* Video background */}
-    <video
+    {/* Image background */}
+    <img
+      src={theme.heroImage}
       class="absolute inset-0 w-full h-full object-cover pointer-events-none"
       style="z-index: 0;"
-      autoplay muted loop playsinline
-      data-autoplay-managed="true"
-      data-video-upgrade="true"
+      alt=""
       aria-hidden="true"
-      tabindex="-1"
-      preload="none"
-      poster={theme.heroImage}
-      transition:name={`svc-hero-video-${slug}`}
+      loading="eager"
+      fetchpriority="high"
+      width="1920"
+      height="1080"
+      transition:name={`svc-hero-image-${slug}`}
       transition:animate="none"
-    >
-      <source src={`/videos/service-${slug}.webm`} type="video/webm" />
-      <source src={`/videos/service-${slug}.mp4`} type="video/mp4" />
-    </video>
+    />
     {/* Video overlay */}
     <div class="absolute inset-0 pointer-events-none" style="background: rgba(2,0,10,0.62); z-index: 0;" aria-hidden="true"></div>
 

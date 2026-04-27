@@ -11,8 +11,8 @@ relatedSlugs:
   - organizational-effectiveness
 
 images:
-  img1: "/images/services/ai-integration-img1.jpg"
-  img2: "/images/services/ai-integration-img2.jpg"
+  img1: "/images/photos/service-ai-integration-1.webp"
+  img2: "/images/photos/service-ai-integration-cta.webp"
 
 sections:
   hero:
