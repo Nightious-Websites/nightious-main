@@ -32,6 +32,7 @@ pnpm-debug.log*
 # OMC / Claude Code internal state
 .omc/
 .claude/
+AGENTS.md
 .mcp.json
 .serena/
 
