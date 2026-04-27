@@ -4,6 +4,7 @@ dist/
 
 # generated types
 .astro/
+*.tsbuildinfo
 
 # dependencies
 node_modules/
@@ -36,13 +37,20 @@ pnpm-debug.log*
 
 # Lighthouse CI reports (local audit artifacts)
 .lighthouseci/
+localhost*.report.html
+localhost*.report.json
 *.report.html
 *.report.json
 manifest.json
 
+# test and coverage artifacts
+coverage/
+playwright-report/
+test-results/
+
 # Logo source files (design assets, not deployed web assets)
 Nightious_Logos/
-.vercel
+.vercel/
 
 # Superpowers generated scripts and brainstorm artifacts
 .superpowers/
